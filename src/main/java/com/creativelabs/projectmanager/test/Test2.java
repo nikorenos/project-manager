@@ -28,6 +28,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 
 /**
@@ -213,11 +214,18 @@ public class Test2 extends Application {
 
         welcomeUser.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
-
         ListView<String> lvList = new ListView<>();
+
+        ObservableList<String> items = FXCollections.observableArrayList ();
+        items.add(task1.getTitle());
+        items.add(task2.getTitle());
+        items.add(task3.getTitle());
+
+
+        /*ListView<String> lvList = new ListView<>();
         ObservableList<String> items = FXCollections.observableArrayList (
                 "Hot dog", "Hamburger", "French fries",
-                "Carrot sticks", "Chicken salad");
+                "Carrot sticks", "Chicken salad");*/
         lvList.setItems(items);
         lvList.setMaxHeight(Control.USE_PREF_SIZE);
         lvList.setPrefWidth(350.0);
@@ -261,16 +269,9 @@ public class Test2 extends Application {
         Button btnExit2 = new Button("Exit");
         btnSubmit.setStyle("-fx-font-size: 15pt;");
 
-        Label lblName = new Label("User name:");
-        TextField tfName = new TextField();
-        Label lblPwd = new Label("Password:");
-        PasswordField pfPwd = new PasswordField();
+
 
         hbButtons.getChildren().addAll(btnSubmit, btnClear, btnExit2);
-        grid.add(lblName, 0, 0);
-        grid.add(tfName, 1, 0);
-        grid.add(lblPwd, 0, 1);
-        grid.add(pfPwd, 1, 1);
         grid.add(hbButtons, 0, 2, 2, 1);
 
         /* Uncomment the following statements to bottom-align the buttons */

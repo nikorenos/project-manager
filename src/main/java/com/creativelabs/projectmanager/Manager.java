@@ -1,12 +1,15 @@
 package com.creativelabs.projectmanager;
 
+import com.creativelabs.projectmanager.tasks.Board;
+import com.creativelabs.projectmanager.tasks.Task;
+import com.creativelabs.projectmanager.tasks.TaskList;
+import com.creativelabs.projectmanager.tasks.User;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import static javafx.geometry.HPos.RIGHT;
-
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -20,6 +23,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.time.LocalDate;
 
 public class Manager extends Application {
 
@@ -42,11 +47,14 @@ public class Manager extends Application {
         return password;
     }
 
-    public void createBoard(Stage createNewBoard) {
+    // Define buttons here for access by multiple methods
+    private final Button btnApply = new Button("Apply");
+    private final Button btnContinue = new Button("Continue");
+    private final Button btnExit = new Button("Exit");
 
-        Button btnApply = new Button("Apply");
-        Button btnContinue = new Button("Continue");
-        Button btnExit = new Button("Exit");
+
+
+    public void createBoard(Stage createNewBoard) {
 
         btnExit.setStyle("-fx-font-size: 15pt;");
 
@@ -68,32 +76,93 @@ public class Manager extends Application {
         createNewBoard.setTitle("Project " + getProject());
         createNewBoard.setScene(scene);
         createNewBoard.show();
-
-
-
-
-        //createNewBoard.setScene(sceneCreateNewProject);
-        //createNewBoard.show();
-
-
     }
 
     private Pane sizingSample() {
 
+        //users
+        User user1 = new User("developer1");
+        User user2 = new User("projectmanager1");
+        User user3 = new User("developer2");
+        User user4 = new User("developer3");
+        //tasks
+        Task task1 = new Task("Microservice for taking temperature",
+                "Write and test the microservice taking\n" +
+                        "the temperaure from external service",
+                user1,
+                user2,
+                LocalDate.now().minusDays(20),
+                LocalDate.now().plusDays(30));
+        Task task2 = new Task("HQLs for analysis",
+                "Prepare some HQL queries for analysis",
+                user1,
+                user2,
+                LocalDate.now().minusDays(20),
+                LocalDate.now().minusDays(5));
+        Task task3 = new Task("Temperatures entity",
+                "Prepare entity for temperatures",
+                user3,
+                user2,
+                LocalDate.now().minusDays(20),
+                LocalDate.now().plusDays(15));
+        Task task4 = new Task("Own logger",
+                "Refactor company logger to meet our needs",
+                user3,
+                user2,
+                LocalDate.now().minusDays(10),
+                LocalDate.now().plusDays(25));
+        Task task5 = new Task("Optimize searching",
+                "Archive data searching has to be optimized",
+                user4,
+                user2,
+                LocalDate.now(),
+                LocalDate.now().plusDays(5));
+        Task task6 = new Task("Use Streams",
+                "use Streams rather than for-loops in predictions",
+                user4,
+                user2,
+                LocalDate.now().minusDays(15),
+                LocalDate.now().minusDays(2));
+        //taskLists
+        TaskList taskListToDo = new TaskList("To do");
+        taskListToDo.addTask(task1);
+        taskListToDo.addTask(task3);
+        TaskList taskListInProgress = new TaskList("In progress");
+        taskListInProgress.addTask(task5);
+        taskListInProgress.addTask(task4);
+        taskListInProgress.addTask(task2);
+        TaskList taskListDone = new TaskList("Done");
+        taskListDone.addTask(task6);
+
+        //board
+        Board project = new Board("Project Weather Prediction");
+        project.addTaskList(taskListToDo);
+        project.addTaskList(taskListInProgress);
+        project.addTaskList(taskListDone);
+
         BorderPane border = new BorderPane();
-        border.setPadding(new Insets(50, 50, 20, 20));
+        border.setPadding(new Insets(30, 150, 20, 120));
+
+
+        Text welcomeUser = new Text(project.getName());
+
+        welcomeUser.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
         ListView<String> lvList = new ListView<>();
-        ObservableList<String> items = FXCollections.observableArrayList (
-                "Hot dog", "Hamburger", "French fries",
-                "Carrot sticks", "Chicken salad");
+
+        ObservableList<String> items = FXCollections.observableArrayList ();
+        items.add(task1.getTitle());
+        items.add(task2.getTitle());
+        items.add(task3.getTitle());
+
         lvList.setItems(items);
         lvList.setMaxHeight(Control.USE_PREF_SIZE);
-        lvList.setPrefWidth(150.0);
+        lvList.setPrefWidth(350.0);
 
+        border.setTop(welcomeUser);
         border.setLeft(lvList);
-        //border.setRight(createButtonColumn());
-        //border.setBottom(createButtonRow());  // Uses a tile pane for sizing
+        border.setRight(createButtonColumn());
+        border.setBottom(createButtonRow());  // Uses a tile pane for sizing
 //        border.setBottom(createButtonBox());  // Uses an HBox, no sizing
 
         return border;
@@ -125,16 +194,9 @@ public class Manager extends Application {
         Button btnExit2 = new Button("Exit");
         btnSubmit.setStyle("-fx-font-size: 15pt;");
 
-        Label lblName = new Label("User name:");
-        TextField tfName = new TextField();
-        Label lblPwd = new Label("Password:");
-        PasswordField pfPwd = new PasswordField();
+
 
         hbButtons.getChildren().addAll(btnSubmit, btnClear, btnExit2);
-        grid.add(lblName, 0, 0);
-        grid.add(tfName, 1, 0);
-        grid.add(lblPwd, 0, 1);
-        grid.add(pfPwd, 1, 1);
         grid.add(hbButtons, 0, 2, 2, 1);
 
         /* Uncomment the following statements to bottom-align the buttons */
@@ -205,6 +267,66 @@ public class Manager extends Application {
 
 
     }
+
+    private VBox createButtonColumn() {
+
+        Button btnAdd = new Button("Add");
+        Button btnDelete = new Button("Delete");
+        Button btnMoveUp = new Button("Move Up");
+        Button btnMoveDown = new Button("Move Down");
+
+        // Comment out the following statements to see the default button sizes
+        btnAdd.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        btnDelete.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        btnMoveUp.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        btnMoveDown.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        btnMoveDown.setMinWidth(Control.USE_PREF_SIZE);
+
+        VBox vbButtons = new VBox();
+        vbButtons.setSpacing(10);
+        vbButtons.setPadding(new Insets(0, 20, 10, 20));
+
+        vbButtons.getChildren().addAll(
+                btnAdd, btnDelete, btnMoveUp, btnMoveDown);
+
+        return vbButtons;
+    }
+
+    /*
+     * Creates a row of buttons and makes them all the same size.
+     */
+    private TilePane createButtonRow() {
+
+        // Let buttons grow, otherwise they will be different sizes based
+        // on the length of the label
+        btnApply.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        btnContinue.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        btnExit.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+        TilePane tileButtons = new TilePane(Orientation.HORIZONTAL);
+        tileButtons.setPadding(new Insets(20, 10, 20, 0));
+        tileButtons.setHgap(10.0);
+        tileButtons.setVgap(8.0); // In case window is reduced and buttons
+        // require another row
+        tileButtons.getChildren().addAll(btnApply, btnContinue, btnExit);
+
+        return tileButtons;
+    }
+
+    /*
+     * Creates a row of buttons with the default sizes.
+     */
+    private HBox createButtonBox() {
+
+        HBox hbButtons = new HBox();
+        hbButtons.setSpacing(10);
+        hbButtons.setPadding(new Insets(20, 10, 20, 0));
+        hbButtons.getChildren().addAll(btnApply, btnContinue, btnExit);
+
+        return hbButtons;
+    }
+
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -293,11 +415,11 @@ public class Manager extends Application {
 
 
 
-
-
         Scene scene = new Scene(grid, 300, 275);
         primaryStage.setScene(scene);
         primaryStage.show();
+
+
 
 
 
