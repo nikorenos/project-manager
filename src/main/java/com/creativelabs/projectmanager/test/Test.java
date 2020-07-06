@@ -1,5 +1,5 @@
 
-package com.creativelabs.projectmanager;
+package com.creativelabs.projectmanager.test;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;

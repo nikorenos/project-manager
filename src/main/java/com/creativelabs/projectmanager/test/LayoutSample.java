@@ -1,4 +1,4 @@
-package com.creativelabs.projectmanager;
+package com.creativelabs.projectmanager.test;
 
 /*
  * Copyright (c) 2012 , 2014, Oracle and/or its affiliates.

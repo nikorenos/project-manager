@@ -1,19 +1,20 @@
 package com.creativelabs.projectmanager;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import static javafx.geometry.HPos.RIGHT;
+
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -28,8 +29,122 @@ public class Manager extends Application {
     }
 
     String nick = "nick";
+    String project = "Test";
+    String password = "1234";
+
     public String getNick() {
         return nick;
+    }
+    public String getProject() {
+        return project;
+    }
+    public String getPassword() {
+        return password;
+    }
+
+    public void createBoard(Stage createNewBoard) {
+
+        Button btnApply = new Button("Apply");
+        Button btnContinue = new Button("Continue");
+        Button btnExit = new Button("Exit");
+
+        btnExit.setStyle("-fx-font-size: 15pt;");
+
+        // Use tab pane with one tab for sizing UI and one tab for alignment UI
+        TabPane tabs = new TabPane();
+        Tab tabSize = new Tab();
+        tabSize.setText("Tasks");
+        tabSize.setContent(sizingSample());
+
+        Tab tabAlign = new Tab();
+        tabAlign.setText("Users");
+        tabAlign.setContent(alignmentSample());
+
+        tabs.getTabs().addAll(tabSize, tabAlign);
+        tabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+
+        Scene scene = new Scene(tabs, 800, 600); // Manage scene size
+
+        createNewBoard.setTitle("Project " + getProject());
+        createNewBoard.setScene(scene);
+        createNewBoard.show();
+
+
+
+
+        //createNewBoard.setScene(sceneCreateNewProject);
+        //createNewBoard.show();
+
+
+    }
+
+    private Pane sizingSample() {
+
+        BorderPane border = new BorderPane();
+        border.setPadding(new Insets(50, 50, 20, 20));
+
+        ListView<String> lvList = new ListView<>();
+        ObservableList<String> items = FXCollections.observableArrayList (
+                "Hot dog", "Hamburger", "French fries",
+                "Carrot sticks", "Chicken salad");
+        lvList.setItems(items);
+        lvList.setMaxHeight(Control.USE_PREF_SIZE);
+        lvList.setPrefWidth(150.0);
+
+        border.setLeft(lvList);
+        //border.setRight(createButtonColumn());
+        //border.setBottom(createButtonRow());  // Uses a tile pane for sizing
+//        border.setBottom(createButtonBox());  // Uses an HBox, no sizing
+
+        return border;
+    }
+
+    private Pane alignmentSample() {
+
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);  // Override default
+        grid.setHgap(10);
+        grid.setVgap(12);
+
+        // Use column constraints to set properties for columns in the grid
+        ColumnConstraints column1 = new ColumnConstraints();
+        column1.setHalignment(HPos.RIGHT);  // Override default
+        grid.getColumnConstraints().add(column1);
+
+        ColumnConstraints column2 = new ColumnConstraints();
+        column2.setHalignment(HPos.LEFT);  // Override default
+        grid.getColumnConstraints().add(column2);
+
+        HBox hbButtons = new HBox();
+        hbButtons.setSpacing(10.0);
+        hbButtons.setAlignment(Pos.CENTER);  // Aligns HBox and controls in HBox
+
+
+        Button btnSubmit = new Button("Submit");
+        Button btnClear = new Button("Clear");
+        Button btnExit2 = new Button("Exit");
+        btnSubmit.setStyle("-fx-font-size: 15pt;");
+
+        Label lblName = new Label("User name:");
+        TextField tfName = new TextField();
+        Label lblPwd = new Label("Password:");
+        PasswordField pfPwd = new PasswordField();
+
+        hbButtons.getChildren().addAll(btnSubmit, btnClear, btnExit2);
+        grid.add(lblName, 0, 0);
+        grid.add(tfName, 1, 0);
+        grid.add(lblPwd, 0, 1);
+        grid.add(pfPwd, 1, 1);
+        grid.add(hbButtons, 0, 2, 2, 1);
+
+        /* Uncomment the following statements to bottom-align the buttons */
+//        hbButtons.setAlignment(Pos.BOTTOM_CENTER);
+//        GridPane innergrid = new GridPane();
+//        innergrid.setAlignment(Pos.CENTER);
+//        innergrid.add(hbButtons, 0, 0);
+//        grid.add(innergrid, 0, 2, 2, 1);
+
+        return grid;
     }
 
 
@@ -54,7 +169,37 @@ public class Manager extends Application {
         gridCreateProject.add(projectNameTextField, 1, 1);
         Scene sceneCreateNewProject = new Scene(gridCreateProject, 400, 475);
 
-        createNewProject.setTitle("Welcome " + getNick());
+        Button btnCreateProject = new Button("Create");
+        HBox hbBtnApply = new HBox(10);
+        hbBtnApply.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtnApply.getChildren().add(btnCreateProject);
+        gridCreateProject.add(hbBtnApply, 1, 4);
+
+        final Text actiontarget = new Text();
+        gridCreateProject.add(actiontarget, 0, 6);
+        gridCreateProject.setColumnSpan(actiontarget, 2);
+        gridCreateProject.setHalignment(actiontarget, RIGHT);
+        actiontarget.setId("actiontarget");
+
+        btnCreateProject.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+                if (projectNameTextField.getText().length() < 3) {
+                    actiontarget.setFill(Color.FIREBRICK);
+                    actiontarget.setText("Enter project name!");
+                } else {                    
+                    project = projectNameTextField.getText();
+                    System.out.println(project);
+                    createNewProject.hide();
+                    Stage newBoard = new Stage();
+                    createBoard(newBoard);
+                }
+
+            }
+        });
+
+        createNewProject.setTitle("Welcome " + getNick() + " " + getPassword());
         createNewProject.setScene(sceneCreateNewProject);
         createNewProject.show();
 
@@ -125,48 +270,22 @@ public class Manager extends Application {
         gridCreateProject.add(projectNameTextField, 1, 1);
 
 
-        Button btnApply = new Button("Apply");
-        HBox hbBtnApply = new HBox(10);
-        hbBtnApply.setAlignment(Pos.BOTTOM_RIGHT);
-        hbBtnApply.getChildren().add(btnApply);
-        gridCreateProject.add(hbBtnApply, 1, 4);
-
-
-
         btn.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent e) {
-                if (userTextField.getText().length() < 3) {
+                if ((userTextField.getText().length() < 3) && (pwBox.getText().length() < 3)) {
                     actiontarget.setFill(Color.FIREBRICK);
                     actiontarget.setText("Enter username and password!");
                 } else {
                     nick = userTextField.getText();
-                    System.out.println(nick);
+                    password = pwBox.getText();
+                    //System.out.println(nick);
                     primaryStage.hide();
                     //stage2.show();
                     //primaryStage.setScene(scene2);
                     Stage createNewProject = new Stage();
                     createNewProject(createNewProject);
-                }
-
-            }
-        });
-
-
-        btnApply.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent e) {
-                if (userTextField.getText().length() < 3) {
-                    actiontarget.setFill(Color.FIREBRICK);
-                    actiontarget.setText(nick);
-                } else {
-                    nick = userTextField.getText();
-                    System.out.println(nick);
-                    //primaryStage.hide();
-                    //stage2.show();
-                    //primaryStage.setScene(scene2);
                 }
 
             }

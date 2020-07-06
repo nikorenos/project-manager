@@ -1,7 +1,10 @@
 
-package com.creativelabs.projectmanager;
+package com.creativelabs.projectmanager.test;
 
-import java.util.Iterator;
+import com.creativelabs.projectmanager.tasks.Board;
+import com.creativelabs.projectmanager.tasks.Task;
+import com.creativelabs.projectmanager.tasks.TaskList;
+import com.creativelabs.projectmanager.tasks.User;
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -19,7 +22,12 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.time.LocalDate;
 
 
 /**
@@ -43,23 +51,89 @@ public class Test2 extends Application {
     @Override
     public void start(Stage primaryStage) {
 
+        //users
+        User user1 = new User("developer1");
+        User user2 = new User("projectmanager1");
+        User user3 = new User("developer2");
+        User user4 = new User("developer3");
+        //tasks
+        Task task1 = new Task("Microservice for taking temperature",
+                "Write and test the microservice taking\n" +
+                        "the temperaure from external service",
+                user1,
+                user2,
+                LocalDate.now().minusDays(20),
+                LocalDate.now().plusDays(30));
+        Task task2 = new Task("HQLs for analysis",
+                "Prepare some HQL queries for analysis",
+                user1,
+                user2,
+                LocalDate.now().minusDays(20),
+                LocalDate.now().minusDays(5));
+        Task task3 = new Task("Temperatures entity",
+                "Prepare entity for temperatures",
+                user3,
+                user2,
+                LocalDate.now().minusDays(20),
+                LocalDate.now().plusDays(15));
+        Task task4 = new Task("Own logger",
+                "Refactor company logger to meet our needs",
+                user3,
+                user2,
+                LocalDate.now().minusDays(10),
+                LocalDate.now().plusDays(25));
+        Task task5 = new Task("Optimize searching",
+                "Archive data searching has to be optimized",
+                user4,
+                user2,
+                LocalDate.now(),
+                LocalDate.now().plusDays(5));
+        Task task6 = new Task("Use Streams",
+                "use Streams rather than for-loops in predictions",
+                user4,
+                user2,
+                LocalDate.now().minusDays(15),
+                LocalDate.now().minusDays(2));
+        //taskLists
+        TaskList taskListToDo = new TaskList("To do");
+        taskListToDo.addTask(task1);
+        taskListToDo.addTask(task3);
+        TaskList taskListInProgress = new TaskList("In progress");
+        taskListInProgress.addTask(task5);
+        taskListInProgress.addTask(task4);
+        taskListInProgress.addTask(task2);
+        TaskList taskListDone = new TaskList("Done");
+        taskListDone.addTask(task6);
+
+        //board
+        Board project = new Board("Project Weather Prediction");
+        project.addTaskList(taskListToDo);
+        project.addTaskList(taskListInProgress);
+        project.addTaskList(taskListDone);
+
+
+
+
+
+
         // Make Exit button bigger by using larger font for label
         btnExit.setStyle("-fx-font-size: 15pt;");
+
 
         // Use tab pane with one tab for sizing UI and one tab for alignment UI
         TabPane tabs = new TabPane();
         Tab tabSize = new Tab();
-        tabSize.setText("Sizing");
+        tabSize.setText("Tasks");
         tabSize.setContent(sizingSample());
 
         Tab tabAlign = new Tab();
-        tabAlign.setText("Alignment");
+        tabAlign.setText("Users");
         tabAlign.setContent(alignmentSample());
 
         tabs.getTabs().addAll(tabSize, tabAlign);
         tabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
-        Scene scene = new Scene(tabs, 300, 400); // Manage scene size
+        Scene scene = new Scene(tabs, 800, 600); // Manage scene size
         primaryStage.setTitle("Sizing and Aligning");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -71,8 +145,74 @@ public class Test2 extends Application {
      */
     private Pane sizingSample() {
 
+        //users
+        User user1 = new User("developer1");
+        User user2 = new User("projectmanager1");
+        User user3 = new User("developer2");
+        User user4 = new User("developer3");
+        //tasks
+        Task task1 = new Task("Microservice for taking temperature",
+                "Write and test the microservice taking\n" +
+                        "the temperaure from external service",
+                user1,
+                user2,
+                LocalDate.now().minusDays(20),
+                LocalDate.now().plusDays(30));
+        Task task2 = new Task("HQLs for analysis",
+                "Prepare some HQL queries for analysis",
+                user1,
+                user2,
+                LocalDate.now().minusDays(20),
+                LocalDate.now().minusDays(5));
+        Task task3 = new Task("Temperatures entity",
+                "Prepare entity for temperatures",
+                user3,
+                user2,
+                LocalDate.now().minusDays(20),
+                LocalDate.now().plusDays(15));
+        Task task4 = new Task("Own logger",
+                "Refactor company logger to meet our needs",
+                user3,
+                user2,
+                LocalDate.now().minusDays(10),
+                LocalDate.now().plusDays(25));
+        Task task5 = new Task("Optimize searching",
+                "Archive data searching has to be optimized",
+                user4,
+                user2,
+                LocalDate.now(),
+                LocalDate.now().plusDays(5));
+        Task task6 = new Task("Use Streams",
+                "use Streams rather than for-loops in predictions",
+                user4,
+                user2,
+                LocalDate.now().minusDays(15),
+                LocalDate.now().minusDays(2));
+        //taskLists
+        TaskList taskListToDo = new TaskList("To do");
+        taskListToDo.addTask(task1);
+        taskListToDo.addTask(task3);
+        TaskList taskListInProgress = new TaskList("In progress");
+        taskListInProgress.addTask(task5);
+        taskListInProgress.addTask(task4);
+        taskListInProgress.addTask(task2);
+        TaskList taskListDone = new TaskList("Done");
+        taskListDone.addTask(task6);
+
+        //board
+        Board project = new Board("Project Weather Prediction");
+        project.addTaskList(taskListToDo);
+        project.addTaskList(taskListInProgress);
+        project.addTaskList(taskListDone);
+
         BorderPane border = new BorderPane();
-        border.setPadding(new Insets(20, 0, 20, 20));
+        border.setPadding(new Insets(30, 150, 20, 120));
+
+
+        Text welcomeUser = new Text(project.getName());
+
+        welcomeUser.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+
 
         ListView<String> lvList = new ListView<>();
         ObservableList<String> items = FXCollections.observableArrayList (
@@ -80,8 +220,9 @@ public class Test2 extends Application {
                 "Carrot sticks", "Chicken salad");
         lvList.setItems(items);
         lvList.setMaxHeight(Control.USE_PREF_SIZE);
-        lvList.setPrefWidth(150.0);
+        lvList.setPrefWidth(350.0);
 
+        border.setTop(welcomeUser);
         border.setLeft(lvList);
         border.setRight(createButtonColumn());
         border.setBottom(createButtonRow());  // Uses a tile pane for sizing
