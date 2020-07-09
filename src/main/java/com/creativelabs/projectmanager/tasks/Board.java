@@ -2,6 +2,7 @@ package com.creativelabs.projectmanager.tasks;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public final class Board {
@@ -99,7 +100,19 @@ public final class Board {
         project.addTaskList(taskListInProgress);
         project.addTaskList(taskListDone);
 
-        System.out.println(project);
+        //System.out.println(project);
+        System.out.println(task1.getTitle() + " " + task1.getDescription());
+
+        UserList userList1 = new UserList("Team");
+        LinkedList<String> test = new LinkedList<>();
+        test.add("hej");
+
+        for (int i = 0; i <5; i++ ) {
+            User user = new User("developer1");
+            userList1.addUser(user);
+        }
+        System.out.println(userList1.getUsersList().get(0));
+        System.out.println(test.get(0));
 
 
     }

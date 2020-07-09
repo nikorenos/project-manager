@@ -1,9 +1,6 @@
 package com.creativelabs.projectmanager;
 
-import com.creativelabs.projectmanager.tasks.Board;
-import com.creativelabs.projectmanager.tasks.Task;
-import com.creativelabs.projectmanager.tasks.TaskList;
-import com.creativelabs.projectmanager.tasks.User;
+import com.creativelabs.projectmanager.tasks.*;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,6 +33,7 @@ public class Manager extends Application {
     String nick = "nick";
     String project = "Test";
     String password = "1234";
+    UserList userList1 = new UserList("Team");
 
     public String getNick() {
         return nick;
@@ -80,7 +78,7 @@ public class Manager extends Application {
 
     private Pane sizingSample() {
 
-        //users
+        /*//users
         User user1 = new User("developer1");
         User user2 = new User("projectmanager1");
         User user3 = new User("developer2");
@@ -138,22 +136,22 @@ public class Manager extends Application {
         Board project = new Board("Project Weather Prediction");
         project.addTaskList(taskListToDo);
         project.addTaskList(taskListInProgress);
-        project.addTaskList(taskListDone);
+        project.addTaskList(taskListDone);*/
 
         BorderPane border = new BorderPane();
         border.setPadding(new Insets(30, 150, 20, 120));
 
 
-        Text welcomeUser = new Text(project.getName());
+        Text welcomeUser = new Text("project name"); //project.getName()
 
         welcomeUser.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
         ListView<String> lvList = new ListView<>();
 
         ObservableList<String> items = FXCollections.observableArrayList ();
-        items.add(task1.getTitle());
-        items.add(task2.getTitle());
-        items.add(task3.getTitle());
+        //items.add(task1.getTitle());
+        //items.add(task2.getTitle());
+        //items.add(task3.getTitle());
 
         lvList.setItems(items);
         lvList.setMaxHeight(Control.USE_PREF_SIZE);
@@ -406,6 +404,10 @@ public class Manager extends Application {
                     primaryStage.hide();
                     //stage2.show();
                     //primaryStage.setScene(scene2);
+                    //int n = 1;
+                    //String user = "user" + n;
+                    User user = new User(nick);
+                    userList1.addUser(user);
                     Stage createNewProject = new Stage();
                     createNewProject(createNewProject);
                 }

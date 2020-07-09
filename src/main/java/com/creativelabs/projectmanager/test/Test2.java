@@ -246,10 +246,23 @@ public class Test2 extends Application {
     private Pane alignmentSample() {
 
         GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);  // Override default
+        grid.setAlignment(Pos.TOP_LEFT);  // Override default
         grid.setHgap(10);
-        grid.setVgap(12);
+        grid.setVgap(10);
 
+        Text scenetitle = new Text("Users list:");
+        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        grid.add(scenetitle, 3, 2, 2, 1);
+
+        Text userName = new Text("nick");
+        userName.setFont(Font.font("Tahoma", FontWeight.NORMAL, 18));
+        grid.add(userName, 5, 3, 2, 1);
+
+        Text userName2 = new Text("john");
+        userName2.setFont(Font.font("Tahoma", FontWeight.NORMAL, 18));
+        grid.add(userName2, 5, 4, 2, 1);
+
+        /*
         // Use column constraints to set properties for columns in the grid
         ColumnConstraints column1 = new ColumnConstraints();
         column1.setHalignment(HPos.RIGHT);  // Override default
@@ -272,7 +285,7 @@ public class Test2 extends Application {
 
 
         hbButtons.getChildren().addAll(btnSubmit, btnClear, btnExit2);
-        grid.add(hbButtons, 0, 2, 2, 1);
+        grid.add(hbButtons, 0, 2, 2, 1);*/
 
         /* Uncomment the following statements to bottom-align the buttons */
 //        hbButtons.setAlignment(Pos.BOTTOM_CENTER);
