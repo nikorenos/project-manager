@@ -5,19 +5,25 @@ import com.creativelabs.projectmanager.tasks.UserList;
 
 import java.io.FileWriter;   // Import the FileWriter class
 import java.io.IOException;  // Import the IOException class to handle errors
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ListWriteToFile {
 
-    public void listWriteToFile(UserList list){
+    public void writeToFile(UserList list){
         try {
             FileWriter myWriter = new FileWriter("src/main/resources/files/userlist1.txt");
 
-            for (int n = 0; n < list.getUsersList().size(); n++) {
-                //myWriter.write(list[n] + "\n");
+            List<String> temporaryList = list.getUsersList().stream()
+                    .map(s -> s.getUsername())
+                    .collect(Collectors.toList());
+            for (String userName : temporaryList) {
+                myWriter.write(userName + "\n");
             }
-            myWriter.write("John\n");
-            myWriter.write("Andy\n");
-            //myWriter.write("Andy");
+
+            //myWriter.write("John\n");
+            //myWriter.write("Andy\n");
+
             myWriter.close();
             System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {

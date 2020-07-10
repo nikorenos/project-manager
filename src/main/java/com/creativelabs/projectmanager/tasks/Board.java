@@ -1,9 +1,13 @@
 package com.creativelabs.projectmanager.tasks;
 
+import com.creativelabs.projectmanager.fileshandling.ListWriteToFile;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 public final class Board {
     private final List<TaskList> taskLists = new ArrayList<>();
@@ -107,14 +111,20 @@ public final class Board {
         LinkedList<String> test = new LinkedList<>();
         test.add("hej");
 
-        for (int i = 0; i <5; i++ ) {
-            User user = new User("developer1");
+        for (int i = 0; i <15; i++ ) {
+            User user = new User("developer" + i);
             userList1.addUser(user);
         }
         System.out.println(userList1.getUsersList().get(0));
         System.out.println(test.get(0));
 
+        System.out.println("test:");
+        userList1.getUsersList().stream()
+                .map(s -> s.getUsername())
+                .forEach(System.out::println);
 
+        ListWriteToFile listWriteToFile = new ListWriteToFile();
+        listWriteToFile.writeToFile(userList1);
     }
 
 
