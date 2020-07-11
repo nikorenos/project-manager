@@ -1,34 +1,32 @@
 
 package com.creativelabs.projectmanager.test;
 
-import com.creativelabs.projectmanager.tasks.Board;
-import com.creativelabs.projectmanager.tasks.Task;
-import com.creativelabs.projectmanager.tasks.TaskList;
-import com.creativelabs.projectmanager.tasks.User;
+import com.creativelabs.projectmanager.tasks.*;
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
-import javafx.scene.control.Control;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.Scene;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
 
 
 /**
@@ -53,10 +51,10 @@ public class Test2 extends Application {
     public void start(Stage primaryStage) {
 
         //users
-        User user1 = new User("developer1");
-        User user2 = new User("projectmanager1");
-        User user3 = new User("developer2");
-        User user4 = new User("developer3");
+        User user1 = new User("developer1","1234","developer1@example.com");
+        User user2 = new User("developer2","1234","developer2@example.com");
+        User user3 = new User("developer3","1234","developer3@example.com");
+        User user4 = new User("developer4","1234","developer4@example.com");
         //tasks
         Task task1 = new Task("Microservice for taking temperature",
                 "Write and test the microservice taking\n" +
@@ -147,10 +145,10 @@ public class Test2 extends Application {
     private Pane sizingSample() {
 
         //users
-        User user1 = new User("developer1");
-        User user2 = new User("projectmanager1");
-        User user3 = new User("developer2");
-        User user4 = new User("developer3");
+        User user1 = new User("developer1","1234","developer1@example.com");
+        User user2 = new User("developer2","1234","developer2@example.com");
+        User user3 = new User("developer3","1234","developer3@example.com");
+        User user4 = new User("developer4","1234","developer4@example.com");
         //tasks
         Task task1 = new Task("Microservice for taking temperature",
                 "Write and test the microservice taking\n" +
@@ -216,6 +214,7 @@ public class Test2 extends Application {
 
         ListView<String> lvList = new ListView<>();
 
+
         ObservableList<String> items = FXCollections.observableArrayList ();
         items.add(task1.getTitle());
         items.add(task2.getTitle());
@@ -243,15 +242,59 @@ public class Test2 extends Application {
      * Creates the UI for the alignment sample, which demonstrates ways to manage
      * the alignment of controls when you don't want the default alignment.
      */
-    private Pane alignmentSample() {
+
+    private Pane alignmentSample(){
 
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.TOP_LEFT);  // Override default
         grid.setHgap(10);
         grid.setVgap(10);
 
-        Text scenetitle = new Text("Users list:");
+        /*File myObj = new File("src/main/resources/files/userlist1.txt");
+        Scanner myReader = null;
+        try {
+            myReader = new Scanner(myObj);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        UserList userList1 = new UserList("Golden Gate Team:");
+        while (myReader.hasNextLine()) {
+            String data = myReader.nextLine();
+            User user = new User(data);
+            userList1.addUser(user);
+        }
+
+        List<String> temporaryList = userList1.getUsersList().stream()
+                .map(s -> s.getUsername())
+                .collect(Collectors.toList());
+
+        Text scenetitle = new Text(userList1.getUsersListName());
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        grid.add(scenetitle, 4, 2, 2, 1);
+
+
+        for (int n = 0; n < temporaryList.size(); n++) {
+            Text userName = new Text(temporaryList.get(n));
+            userName.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+            grid.add(userName, 5, 3 + n, 2, 1);
+        }*/
+
+        TextArea textArea = new TextArea();
+        textArea.setPrefRowCount(4);
+        textArea.setEditable(true);
+        textArea.textProperty().addListener((observable, oldValue, newValue) -> {
+            String text = textArea.getText();
+        });
+        textArea.setText(textArea.getText());
+        ScrollPane scrollPane = new ScrollPane(textArea);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        HBox.setHgrow(scrollPane, Priority.ALWAYS);
+        grid.add(scrollPane, 9, 3, 2, 1);
+
+        /*scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(scenetitle, 3, 2, 2, 1);
 
         Text userName = new Text("nick");
@@ -260,7 +303,7 @@ public class Test2 extends Application {
 
         Text userName2 = new Text("john");
         userName2.setFont(Font.font("Tahoma", FontWeight.NORMAL, 18));
-        grid.add(userName2, 5, 4, 2, 1);
+        grid.add(userName2, 5, 4, 2, 1);*/
 
         /*
         // Use column constraints to set properties for columns in the grid

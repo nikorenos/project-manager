@@ -15,7 +15,7 @@ public class ListWriteToFile {
             FileWriter myWriter = new FileWriter("src/main/resources/files/userlist1.txt");
 
             List<String> temporaryList = list.getUsersList().stream()
-                    .map(s -> s.getUsername())
+                    .map(s -> s.getUsername() + " " + s.getPassword() + " " + s.getEmail())
                     .collect(Collectors.toList());
             for (String userName : temporaryList) {
                 myWriter.write(userName + "\n");

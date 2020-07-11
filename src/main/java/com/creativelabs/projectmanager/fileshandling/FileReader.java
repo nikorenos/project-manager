@@ -29,7 +29,7 @@ public class FileReader {
         UserList userList1 = new UserList("Team");
 
         for (int i = 0; i <5; i++ ) {
-            User user = new User("developer3");
+            User user = new User("developer" +i,"1234","developer1@example.com");
             userList1.addUser(user);
         }
         System.out.println(userList1);

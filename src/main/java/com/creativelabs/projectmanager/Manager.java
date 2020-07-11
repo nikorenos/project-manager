@@ -406,7 +406,7 @@ public class Manager extends Application {
                     //primaryStage.setScene(scene2);
                     //int n = 1;
                     //String user = "user" + n;
-                    User user = new User(nick);
+                    User user = new User(nick,"1234","developer1@example.com");
                     userList1.addUser(user);
                     Stage createNewProject = new Stage();
                     createNewProject(createNewProject);

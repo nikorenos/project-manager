@@ -1,7 +1,9 @@
 package com.creativelabs.projectmanager.tasks;
 
 import com.creativelabs.projectmanager.fileshandling.ListWriteToFile;
+import com.creativelabs.projectmanager.fileshandling.ReadFile;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -45,10 +47,11 @@ public final class Board {
     public static void main(String[] args) {
 
         //users
-        User user1 = new User("developer1");
-        User user2 = new User("projectmanager1");
-        User user3 = new User("developer2");
-        User user4 = new User("developer3");
+        User user1 = new User("developer1","1234","developer1@example.com");
+        User user2 = new User("developer2","1234","developer2@example.com");
+        User user3 = new User("developer3","1234","developer3@example.com");
+        User user4 = new User("developer4","1234","developer4@example.com");
+
         //tasks
         Task task1 = new Task("Microservice for taking temperature",
                 "Write and test the microservice taking\n" +
@@ -111,8 +114,8 @@ public final class Board {
         LinkedList<String> test = new LinkedList<>();
         test.add("hej");
 
-        for (int i = 0; i <15; i++ ) {
-            User user = new User("developer" + i);
+        for (int i = 0; i <7; i++ ) {
+            User user = new User("developer" +i,"1234","developer1@example.com");
             userList1.addUser(user);
         }
         System.out.println(userList1.getUsersList().get(0));
@@ -125,6 +128,13 @@ public final class Board {
 
         ListWriteToFile listWriteToFile = new ListWriteToFile();
         listWriteToFile.writeToFile(userList1);
+
+        ReadFile readFile = new ReadFile();
+        String path = "src/main/resources/files/userlist1.txt";
+        File myObj = new File(path);
+        System.out.println("file to list test:");
+        System.out.println(readFile.fileToList(myObj).getUsersList().get(0).getUsername());
+        System.out.println(readFile.fileToList(myObj).getUsersList().size());
     }
 
 

@@ -8,6 +8,43 @@ import java.io.FileNotFoundException;  // Import this class to handle errors
 import java.util.Scanner; // Import the Scanner class to read text files
 
 public class ReadFile {
+
+    public int sum () {
+        int n=6;
+        return n;
+    }
+
+    public UserList fileToList (File obj) {
+
+        Scanner myReader = null;
+        UserList userList1 = new UserList("User list");
+        try {
+            myReader = new Scanner(obj);
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        while (myReader.hasNextLine()) {
+            String data = myReader.nextLine();
+            String findStr = " ";
+            int index = data.indexOf(findStr);
+
+            String nick = data.substring(0, index);
+            data = data.substring(index +1, data.length());
+
+            String password = data.substring(0, data.indexOf(findStr));
+            String email = data.substring(data.indexOf(findStr) +1, data.length());
+            User user = new User(nick,password,email);
+            userList1.addUser(user);
+                /*System.out.println(nick);
+                System.out.println(password);
+                System.out.println(email);*/
+        }
+        myReader.close();
+
+    return userList1;
+    }
+
     public static void main(String[] args) {
         try {
             File myObj = new File("src/main/resources/files/userlist1.txt");
@@ -15,9 +52,19 @@ public class ReadFile {
             UserList userList1 = new UserList("Team");
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
-                User user = new User(data);
+                String findStr = " ";
+                int index = data.indexOf(findStr);
+
+                String nick = data.substring(0, index);
+                data = data.substring(index +1, data.length());
+
+                String password = data.substring(0, data.indexOf(findStr));
+                String email = data.substring(data.indexOf(findStr) +1, data.length());
+                User user = new User(nick,password,email);
                 userList1.addUser(user);
-                System.out.println(userList1);
+                /*System.out.println(nick);
+                System.out.println(password);
+                System.out.println(email);*/
             }
             myReader.close();
         } catch (FileNotFoundException e) {
