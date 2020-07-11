@@ -1,6 +1,8 @@
 package com.creativelabs.projectmanager.test;
 
+import com.creativelabs.projectmanager.fileshandling.ListWriteToFile;
 import com.creativelabs.projectmanager.fileshandling.ReadFile;
+import com.creativelabs.projectmanager.tasks.User;
 import com.creativelabs.projectmanager.tasks.UserList;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
@@ -34,39 +36,22 @@ public class TableViewSample extends Application {
     ReadFile readFile = new ReadFile();
     String path = "src/main/resources/files/userlist1.txt";
     File myObj = new File(path);
-    UserList userList = new UserList("User list");
-    String nick = readFile.fileToList(myObj).getUsersList().get(0).getUsername();
-    String password = readFile.fileToList(myObj).getUsersList().get(0).getPassword();
-    String email = readFile.fileToList(myObj).getUsersList().get(0).getEmail();
-    int listSize = readFile.fileToList(myObj).getUsersList().size();
+    UserList userList = readFile.fileToList(myObj);
 
-    /*ObservableList<String> items = FXCollections.observableArrayList ();
-        items.add(task1.getTitle());
-        items.add(task2.getTitle());
-        items.add(task3.getTitle());*/
-
-
-    private TableView<Person> table = new TableView<Person>();
-    /*for(int n = 0; n < listSize; n++) {
-
-    }*/
-    private final ObservableList<Person> data2 = FXCollections.observableArrayList();
-
-    public ObservableList<Person> giveMePeople() {
+    public ObservableList<Person> convertListToObservable(UserList list) {
         ObservableList<Person> data = FXCollections.observableArrayList();
-        for(int n = 0; n < listSize; n++) {
+        for(int n = 0; n < list.getUsersList().size(); n++) {
+            String nick = list.getUsersList().get(n).getUsername();
+            String password = list.getUsersList().get(n).getPassword();
+            String email = list.getUsersList().get(n).getEmail();
             data.add(new Person(nick, password, email));
         }
         return data;
     }
 
+    private TableView<Person> table = new TableView<Person>();
+    private final ObservableList<Person> data = convertListToObservable(userList);
 
-
-    private final ObservableList<Person> data =
-            FXCollections.observableArrayList(
-                    new Person(nick, password, email),
-                    new Person("Isabella", "Johnson", "isabella.johnson@example.com"),
-                    new Person("Michael", "Brown", "michael.brown@example.com"));
     final HBox hb = new HBox();
 
     public static void main(String[] args) {
@@ -154,6 +139,7 @@ public class TableViewSample extends Application {
         addEmail.setPromptText("Email");
 
         final Button addButton = new Button("Add");
+        ListWriteToFile listWriteToFile = new ListWriteToFile();
         addButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -161,6 +147,9 @@ public class TableViewSample extends Application {
                         addFirstName.getText(),
                         addLastName.getText(),
                         addEmail.getText()));
+                userList.addUser(new User(addFirstName.getText(), addLastName.getText(), addEmail.getText()));
+                listWriteToFile.writeToFile(userList);
+
                 addFirstName.clear();
                 addLastName.clear();
                 addEmail.clear();

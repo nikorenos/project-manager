@@ -115,7 +115,7 @@ public final class Board {
         test.add("hej");
 
         for (int i = 0; i <7; i++ ) {
-            User user = new User("developer" +i,"1234","developer1@example.com");
+            User user = new User("developer" +i,"1234","developer" + i + "@example.com");
             userList1.addUser(user);
         }
         System.out.println(userList1.getUsersList().get(0));
@@ -135,6 +135,7 @@ public final class Board {
         System.out.println("file to list test:");
         System.out.println(readFile.fileToList(myObj).getUsersList().get(0).getUsername());
         System.out.println(readFile.fileToList(myObj).getUsersList().size());
+
     }
 
 
