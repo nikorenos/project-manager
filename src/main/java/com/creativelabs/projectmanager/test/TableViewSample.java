@@ -23,6 +23,7 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -65,6 +66,8 @@ public class TableViewSample extends Application {
         stage.setWidth(450);
         stage.setHeight(550);
 
+        GridPane grid = new GridPane();
+
         final Label label = new Label("Address Book");
         label.setFont(new Font("Arial", 20));
 
@@ -76,7 +79,7 @@ public class TableViewSample extends Application {
                     }
                 };
 
-        TableColumn firstNameCol = new TableColumn("First Name");
+        TableColumn firstNameCol = new TableColumn("Username");
         firstNameCol.setMinWidth(100);
         firstNameCol.setCellValueFactory(
                 new PropertyValueFactory<Person, String>("firstName"));
@@ -93,7 +96,7 @@ public class TableViewSample extends Application {
         );
 
 
-        TableColumn lastNameCol = new TableColumn("Last Name");
+        TableColumn lastNameCol = new TableColumn("Password");
         lastNameCol.setMinWidth(100);
         lastNameCol.setCellValueFactory(
                 new PropertyValueFactory<Person, String>("lastName"));
@@ -129,11 +132,11 @@ public class TableViewSample extends Application {
         table.getColumns().addAll(firstNameCol, lastNameCol, emailCol);
 
         final TextField addFirstName = new TextField();
-        addFirstName.setPromptText("First Name");
+        addFirstName.setPromptText("Username");
         addFirstName.setMaxWidth(firstNameCol.getPrefWidth());
         final TextField addLastName = new TextField();
         addLastName.setMaxWidth(lastNameCol.getPrefWidth());
-        addLastName.setPromptText("Last Name");
+        addLastName.setPromptText("Password");
         final TextField addEmail = new TextField();
         addEmail.setMaxWidth(emailCol.getPrefWidth());
         addEmail.setPromptText("Email");
@@ -176,7 +179,7 @@ public class TableViewSample extends Application {
         private final SimpleStringProperty lastName;
         private final SimpleStringProperty email;
 
-        private Person(String fName, String lName, String email) {
+        Person(String fName, String lName, String email) {
             this.firstName = new SimpleStringProperty(fName);
             this.lastName = new SimpleStringProperty(lName);
             this.email = new SimpleStringProperty(email);
@@ -207,7 +210,7 @@ public class TableViewSample extends Application {
         }
     }
 
-    class EditingCell extends TableCell<Person, String> {
+    static class EditingCell extends TableCell<Person, String> {
 
         private TextField textField;
 

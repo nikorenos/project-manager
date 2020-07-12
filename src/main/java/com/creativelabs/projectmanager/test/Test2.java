@@ -1,17 +1,23 @@
 
 package com.creativelabs.projectmanager.test;
 
+import com.creativelabs.projectmanager.fileshandling.ListWriteToFile;
+import com.creativelabs.projectmanager.fileshandling.ReadFile;
 import com.creativelabs.projectmanager.tasks.*;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.Scene;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -19,6 +25,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -243,6 +250,7 @@ public class Test2 extends Application {
      * the alignment of controls when you don't want the default alignment.
      */
 
+
     private Pane alignmentSample(){
 
         GridPane grid = new GridPane();
@@ -250,34 +258,6 @@ public class Test2 extends Application {
         grid.setHgap(10);
         grid.setVgap(10);
 
-        /*File myObj = new File("src/main/resources/files/userlist1.txt");
-        Scanner myReader = null;
-        try {
-            myReader = new Scanner(myObj);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        UserList userList1 = new UserList("Golden Gate Team:");
-        while (myReader.hasNextLine()) {
-            String data = myReader.nextLine();
-            User user = new User(data);
-            userList1.addUser(user);
-        }
-
-        List<String> temporaryList = userList1.getUsersList().stream()
-                .map(s -> s.getUsername())
-                .collect(Collectors.toList());
-
-        Text scenetitle = new Text(userList1.getUsersListName());
-        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        grid.add(scenetitle, 4, 2, 2, 1);
-
-
-        for (int n = 0; n < temporaryList.size(); n++) {
-            Text userName = new Text(temporaryList.get(n));
-            userName.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-            grid.add(userName, 5, 3 + n, 2, 1);
-        }*/
 
         TextArea textArea = new TextArea();
         textArea.setPrefRowCount(4);
@@ -294,48 +274,7 @@ public class Test2 extends Application {
         HBox.setHgrow(scrollPane, Priority.ALWAYS);
         grid.add(scrollPane, 9, 3, 2, 1);
 
-        /*scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        grid.add(scenetitle, 3, 2, 2, 1);
 
-        Text userName = new Text("nick");
-        userName.setFont(Font.font("Tahoma", FontWeight.NORMAL, 18));
-        grid.add(userName, 5, 3, 2, 1);
-
-        Text userName2 = new Text("john");
-        userName2.setFont(Font.font("Tahoma", FontWeight.NORMAL, 18));
-        grid.add(userName2, 5, 4, 2, 1);*/
-
-        /*
-        // Use column constraints to set properties for columns in the grid
-        ColumnConstraints column1 = new ColumnConstraints();
-        column1.setHalignment(HPos.RIGHT);  // Override default
-        grid.getColumnConstraints().add(column1);
-
-        ColumnConstraints column2 = new ColumnConstraints();
-        column2.setHalignment(HPos.LEFT);  // Override default
-        grid.getColumnConstraints().add(column2);
-
-        HBox hbButtons = new HBox();
-        hbButtons.setSpacing(10.0);
-        hbButtons.setAlignment(Pos.CENTER);  // Aligns HBox and controls in HBox
-
-
-        Button btnSubmit = new Button("Submit");
-        Button btnClear = new Button("Clear");
-        Button btnExit2 = new Button("Exit");
-        btnSubmit.setStyle("-fx-font-size: 15pt;");
-
-
-
-        hbButtons.getChildren().addAll(btnSubmit, btnClear, btnExit2);
-        grid.add(hbButtons, 0, 2, 2, 1);*/
-
-        /* Uncomment the following statements to bottom-align the buttons */
-//        hbButtons.setAlignment(Pos.BOTTOM_CENTER);
-//        GridPane innergrid = new GridPane();
-//        innergrid.setAlignment(Pos.CENTER);
-//        innergrid.add(hbButtons, 0, 0);
-//        grid.add(innergrid, 0, 2, 2, 1);
 
         return grid;
     }
