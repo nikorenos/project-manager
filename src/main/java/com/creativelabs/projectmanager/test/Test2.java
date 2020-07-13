@@ -1,39 +1,22 @@
 
 package com.creativelabs.projectmanager.test;
 
-import com.creativelabs.projectmanager.fileshandling.ListWriteToFile;
-import com.creativelabs.projectmanager.fileshandling.ReadFile;
 import com.creativelabs.projectmanager.tasks.*;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
-import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.Scene;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.stream.Collectors;
 
 
 /**
@@ -56,69 +39,6 @@ public class Test2 extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
-        //users
-        User user1 = new User("developer1","1234","developer1@example.com");
-        User user2 = new User("developer2","1234","developer2@example.com");
-        User user3 = new User("developer3","1234","developer3@example.com");
-        User user4 = new User("developer4","1234","developer4@example.com");
-        //tasks
-        Task task1 = new Task("Microservice for taking temperature",
-                "Write and test the microservice taking\n" +
-                        "the temperaure from external service",
-                user1,
-                user2,
-                LocalDate.now().minusDays(20),
-                LocalDate.now().plusDays(30));
-        Task task2 = new Task("HQLs for analysis",
-                "Prepare some HQL queries for analysis",
-                user1,
-                user2,
-                LocalDate.now().minusDays(20),
-                LocalDate.now().minusDays(5));
-        Task task3 = new Task("Temperatures entity",
-                "Prepare entity for temperatures",
-                user3,
-                user2,
-                LocalDate.now().minusDays(20),
-                LocalDate.now().plusDays(15));
-        Task task4 = new Task("Own logger",
-                "Refactor company logger to meet our needs",
-                user3,
-                user2,
-                LocalDate.now().minusDays(10),
-                LocalDate.now().plusDays(25));
-        Task task5 = new Task("Optimize searching",
-                "Archive data searching has to be optimized",
-                user4,
-                user2,
-                LocalDate.now(),
-                LocalDate.now().plusDays(5));
-        Task task6 = new Task("Use Streams",
-                "use Streams rather than for-loops in predictions",
-                user4,
-                user2,
-                LocalDate.now().minusDays(15),
-                LocalDate.now().minusDays(2));
-        //taskLists
-        TaskList taskListToDo = new TaskList("To do");
-        taskListToDo.addTask(task1);
-        taskListToDo.addTask(task3);
-        TaskList taskListInProgress = new TaskList("In progress");
-        taskListInProgress.addTask(task5);
-        taskListInProgress.addTask(task4);
-        taskListInProgress.addTask(task2);
-        TaskList taskListDone = new TaskList("Done");
-        taskListDone.addTask(task6);
-
-        //board
-        Board project = new Board("Project Weather Prediction");
-        project.addTaskList(taskListToDo);
-        project.addTaskList(taskListInProgress);
-        project.addTaskList(taskListDone);
-
-
-
 
 
 
@@ -151,71 +71,13 @@ public class Test2 extends Application {
      */
     private Pane sizingSample() {
 
-        //users
-        User user1 = new User("developer1","1234","developer1@example.com");
-        User user2 = new User("developer2","1234","developer2@example.com");
-        User user3 = new User("developer3","1234","developer3@example.com");
-        User user4 = new User("developer4","1234","developer4@example.com");
-        //tasks
-        Task task1 = new Task("Microservice for taking temperature",
-                "Write and test the microservice taking\n" +
-                        "the temperaure from external service",
-                user1,
-                user2,
-                LocalDate.now().minusDays(20),
-                LocalDate.now().plusDays(30));
-        Task task2 = new Task("HQLs for analysis",
-                "Prepare some HQL queries for analysis",
-                user1,
-                user2,
-                LocalDate.now().minusDays(20),
-                LocalDate.now().minusDays(5));
-        Task task3 = new Task("Temperatures entity",
-                "Prepare entity for temperatures",
-                user3,
-                user2,
-                LocalDate.now().minusDays(20),
-                LocalDate.now().plusDays(15));
-        Task task4 = new Task("Own logger",
-                "Refactor company logger to meet our needs",
-                user3,
-                user2,
-                LocalDate.now().minusDays(10),
-                LocalDate.now().plusDays(25));
-        Task task5 = new Task("Optimize searching",
-                "Archive data searching has to be optimized",
-                user4,
-                user2,
-                LocalDate.now(),
-                LocalDate.now().plusDays(5));
-        Task task6 = new Task("Use Streams",
-                "use Streams rather than for-loops in predictions",
-                user4,
-                user2,
-                LocalDate.now().minusDays(15),
-                LocalDate.now().minusDays(2));
-        //taskLists
-        TaskList taskListToDo = new TaskList("To do");
-        taskListToDo.addTask(task1);
-        taskListToDo.addTask(task3);
-        TaskList taskListInProgress = new TaskList("In progress");
-        taskListInProgress.addTask(task5);
-        taskListInProgress.addTask(task4);
-        taskListInProgress.addTask(task2);
-        TaskList taskListDone = new TaskList("Done");
-        taskListDone.addTask(task6);
 
-        //board
-        Board project = new Board("Project Weather Prediction");
-        project.addTaskList(taskListToDo);
-        project.addTaskList(taskListInProgress);
-        project.addTaskList(taskListDone);
 
         BorderPane border = new BorderPane();
         border.setPadding(new Insets(30, 150, 20, 120));
 
 
-        Text welcomeUser = new Text(project.getName());
+        Text welcomeUser = new Text("project");
 
         welcomeUser.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 
@@ -223,9 +85,9 @@ public class Test2 extends Application {
 
 
         ObservableList<String> items = FXCollections.observableArrayList ();
-        items.add(task1.getTitle());
-        items.add(task2.getTitle());
-        items.add(task3.getTitle());
+        //items.add(task1.getTitle());
+        //items.add(task2.getTitle());
+        //items.add(task3.getTitle());
 
 
         /*ListView<String> lvList = new ListView<>();

@@ -8,7 +8,7 @@ import java.io.IOException;  // Import the IOException class to handle errors
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ListWriteToFile {
+public class UsersListWriteToFile {
 
     public void writeToFile(UserList list){
         try {
@@ -21,9 +21,6 @@ public class ListWriteToFile {
                 myWriter.write(userName + "\n");
             }
 
-            //myWriter.write("John\n");
-            //myWriter.write("Andy\n");
-
             myWriter.close();
             System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
@@ -32,17 +29,5 @@ public class ListWriteToFile {
         }
 
     }
-    public static void main(String[] args) {
-        try {
-            FileWriter myWriter = new FileWriter("src/main/resources/files/userlist1.txt");
-            myWriter.write("John\n");
-            myWriter.write("Andy\n");
-            //myWriter.write("Andy");
-            myWriter.close();
-            System.out.println("Successfully wrote to the file.");
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
+
 }

@@ -1,27 +1,32 @@
 package com.creativelabs.projectmanager;
 
+import com.creativelabs.projectmanager.fileshandling.ReadFileToTasksList;
+import com.creativelabs.projectmanager.fileshandling.UsersListWriteToFile;
+import com.creativelabs.projectmanager.fileshandling.ReadFileToUsersList;
 import com.creativelabs.projectmanager.tasks.*;
+import com.creativelabs.projectmanager.test.TableViewSample;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import static javafx.geometry.HPos.RIGHT;
-import javafx.geometry.HPos;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
-import java.time.LocalDate;
+import java.io.File;
 
 public class Manager extends Application {
 
@@ -50,6 +55,42 @@ public class Manager extends Application {
     private final Button btnContinue = new Button("Continue");
     private final Button btnExit = new Button("Exit");
 
+    ReadFileToUsersList readFileToUsersList = new ReadFileToUsersList();
+    String path = "src/main/resources/files/userlist1.txt";
+    File myObj = new File(path);
+    UserList userList = readFileToUsersList.fileToList(myObj);
+
+    ReadFileToTasksList readFileToTasksList = new ReadFileToTasksList();
+    String pathTasks = "src/main/resources/files/tasklist0.txt";
+    File myObjTasks = new File(pathTasks);
+    TaskList tasksList = readFileToTasksList.fileToList(myObjTasks);
+
+    private TableView<TableViewSample.Person> table = new TableView<TableViewSample.Person>();
+    private ObservableList<TableViewSample.Person> data = convertUsersListToObservable(userList);
+    private final ObservableList<TableViewSample.Person> dataTasks = convertTasksListToObservable(tasksList);
+
+    final HBox hb = new HBox();
+
+    public ObservableList<TableViewSample.Person> convertUsersListToObservable(UserList list) {
+        ObservableList<TableViewSample.Person> data = FXCollections.observableArrayList();
+        for(int n = 0; n < list.getUsersList().size(); n++) {
+            String nick = list.getUsersList().get(n).getUsername();
+            String password = list.getUsersList().get(n).getPassword();
+            String email = list.getUsersList().get(n).getEmail();
+            data.add(new TableViewSample.Person(nick, password, email));
+        }
+        return data;
+    }
+    public ObservableList<TableViewSample.Person> convertTasksListToObservable(TaskList list) {
+        ObservableList<TableViewSample.Person> data = FXCollections.observableArrayList();
+        for(int n = 0; n < list.getTasks().size(); n++) {
+            String id = list.getTasks().get(n).getId();
+            String title = list.getTasks().get(n).getTitle();
+            String type = list.getTasks().get(n).getType();
+            data.add(new TableViewSample.Person(id, title, type));
+        }
+        return data;
+    }
 
 
     public void createBoard(Stage createNewBoard) {
@@ -60,11 +101,11 @@ public class Manager extends Application {
         TabPane tabs = new TabPane();
         Tab tabSize = new Tab();
         tabSize.setText("Tasks");
-        tabSize.setContent(sizingSample());
+        tabSize.setContent(tabTasks());
 
         Tab tabAlign = new Tab();
         tabAlign.setText("Users");
-        tabAlign.setContent(alignmentSample());
+        tabAlign.setContent(tabUsers());
 
         tabs.getTabs().addAll(tabSize, tabAlign);
         tabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
@@ -76,103 +117,231 @@ public class Manager extends Application {
         createNewBoard.show();
     }
 
-    private Pane sizingSample() {
+    private Pane tabTasks() {
 
-        /*//users
-        User user1 = new User("developer1");
-        User user2 = new User("projectmanager1");
-        User user3 = new User("developer2");
-        User user4 = new User("developer3");
-        //tasks
-        Task task1 = new Task("Microservice for taking temperature",
-                "Write and test the microservice taking\n" +
-                        "the temperaure from external service",
-                user1,
-                user2,
-                LocalDate.now().minusDays(20),
-                LocalDate.now().plusDays(30));
-        Task task2 = new Task("HQLs for analysis",
-                "Prepare some HQL queries for analysis",
-                user1,
-                user2,
-                LocalDate.now().minusDays(20),
-                LocalDate.now().minusDays(5));
-        Task task3 = new Task("Temperatures entity",
-                "Prepare entity for temperatures",
-                user3,
-                user2,
-                LocalDate.now().minusDays(20),
-                LocalDate.now().plusDays(15));
-        Task task4 = new Task("Own logger",
-                "Refactor company logger to meet our needs",
-                user3,
-                user2,
-                LocalDate.now().minusDays(10),
-                LocalDate.now().plusDays(25));
-        Task task5 = new Task("Optimize searching",
-                "Archive data searching has to be optimized",
-                user4,
-                user2,
-                LocalDate.now(),
-                LocalDate.now().plusDays(5));
-        Task task6 = new Task("Use Streams",
-                "use Streams rather than for-loops in predictions",
-                user4,
-                user2,
-                LocalDate.now().minusDays(15),
-                LocalDate.now().minusDays(2));
-        //taskLists
-        TaskList taskListToDo = new TaskList("To do");
-        taskListToDo.addTask(task1);
-        taskListToDo.addTask(task3);
-        TaskList taskListInProgress = new TaskList("In progress");
-        taskListInProgress.addTask(task5);
-        taskListInProgress.addTask(task4);
-        taskListInProgress.addTask(task2);
-        TaskList taskListDone = new TaskList("Done");
-        taskListDone.addTask(task6);
+        TableView tableTasks = new TableView();
 
-        //board
-        Board project = new Board("Project Weather Prediction");
-        project.addTaskList(taskListToDo);
-        project.addTaskList(taskListInProgress);
-        project.addTaskList(taskListDone);*/
-
-        BorderPane border = new BorderPane();
-        border.setPadding(new Insets(30, 150, 20, 120));
-
-
-        Text welcomeUser = new Text("project name"); //project.getName()
-
-        welcomeUser.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-
-        ListView<String> lvList = new ListView<>();
-
-        ObservableList<String> items = FXCollections.observableArrayList ();
-        //items.add(task1.getTitle());
-        //items.add(task2.getTitle());
-        //items.add(task3.getTitle());
-
-        lvList.setItems(items);
-        lvList.setMaxHeight(Control.USE_PREF_SIZE);
-        lvList.setPrefWidth(350.0);
-
-        border.setTop(welcomeUser);
-        border.setLeft(lvList);
-        border.setRight(createButtonColumn());
-        border.setBottom(createButtonRow());  // Uses a tile pane for sizing
-//        border.setBottom(createButtonBox());  // Uses an HBox, no sizing
-
-        return border;
-    }
-
-    private Pane alignmentSample() {
 
         GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);  // Override default
+        grid.setAlignment(Pos.TOP_LEFT);  // Override default
         grid.setHgap(10);
-        grid.setVgap(12);
+        grid.setVgap(10);
 
+        final Label label = new Label("Tasks");
+        label.setFont(new Font("Arial", 20));
+
+        table.setEditable(false);
+        Callback<TableColumn, TableCell> cellFactory =
+                new Callback<TableColumn, TableCell>() {
+                    public TableCell call(TableColumn p) {
+                        return new TableViewSample.EditingCell();
+                    }
+                };
+
+        TableColumn firstNameCol = new TableColumn("Id");
+        firstNameCol.setMinWidth(100);
+        firstNameCol.setCellValueFactory(
+                new PropertyValueFactory<TableViewSample.Person, String>("firstName"));
+        firstNameCol.setCellFactory(cellFactory);
+        firstNameCol.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<TableViewSample.Person, String>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<TableViewSample.Person, String> t) {
+                        ((TableViewSample.Person) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setFirstName(t.getNewValue());
+                    }
+                }
+        );
+
+
+        TableColumn lastNameCol = new TableColumn("Title");
+        lastNameCol.setMinWidth(200);
+        lastNameCol.setCellValueFactory(
+                new PropertyValueFactory<TableViewSample.Person, String>("lastName"));
+        lastNameCol.setCellFactory(cellFactory);
+        lastNameCol.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<TableViewSample.Person, String>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<TableViewSample.Person, String> t) {
+                        ((TableViewSample.Person) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setLastName(t.getNewValue());
+                    }
+                }
+        );
+
+        TableColumn emailCol = new TableColumn("Type");
+        emailCol.setMinWidth(100);
+        emailCol.setCellValueFactory(
+                new PropertyValueFactory<TableViewSample.Person, String>("email"));
+        emailCol.setCellFactory(cellFactory);
+        emailCol.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<TableViewSample.Person, String>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<TableViewSample.Person, String> t) {
+                        ((TableViewSample.Person) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setEmail(t.getNewValue());
+                    }
+                }
+        );
+        /*TableColumn statusCol = new TableColumn("Status");
+        emailCol.setMinWidth(70);
+        emailCol.setCellValueFactory(
+                new PropertyValueFactory<TableViewSample.Person, String>("status"));
+        emailCol.setCellFactory(cellFactory);
+        emailCol.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<TableViewSample.Person, String>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<TableViewSample.Person, String> t) {
+                        ((TableViewSample.Person) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setEmail(t.getNewValue());
+                    }
+                }
+        );*/
+
+        table.setItems(dataTasks);
+        table.getColumns().addAll(firstNameCol, lastNameCol, emailCol);
+
+
+
+
+
+
+
+        /*final VBox vbox = new VBox();
+        vbox.setSpacing(5);
+        vbox.setPadding(new Insets(10, 0, 0, 10));
+        vbox.getChildren().addAll(label, table, hb);*/
+
+        grid.add(label, 3, 1, 2, 1);
+        grid.add(table, 3, 2, 2, 1);
+
+        return grid;
+    }
+
+
+    private Pane tabUsers() {
+
+
+        TableView tableUsers = new TableView();
+        data = convertUsersListToObservable(userList);
+
+
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.TOP_LEFT);  //Pos.CENTER
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        final Label label = new Label("List of users");
+        label.setFont(new Font("Arial", 20));
+
+        tableUsers.setEditable(true);
+        Callback<TableColumn, TableCell> cellFactory =
+                new Callback<TableColumn, TableCell>() {
+                    public TableCell call(TableColumn p) {
+                        return new TableViewSample.EditingCell();
+                    }
+                };
+
+        TableColumn firstNameCol = new TableColumn("Username");
+        firstNameCol.setMinWidth(100);
+        firstNameCol.setCellValueFactory(
+                new PropertyValueFactory<TableViewSample.Person, String>("firstName"));
+        firstNameCol.setCellFactory(cellFactory);
+        firstNameCol.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<TableViewSample.Person, String>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<TableViewSample.Person, String> t) {
+                        ((TableViewSample.Person) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setFirstName(t.getNewValue());
+                    }
+                }
+        );
+
+
+        TableColumn lastNameCol = new TableColumn("Password");
+        lastNameCol.setMinWidth(100);
+        lastNameCol.setCellValueFactory(
+                new PropertyValueFactory<TableViewSample.Person, String>("lastName"));
+        lastNameCol.setCellFactory(cellFactory);
+        lastNameCol.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<TableViewSample.Person, String>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<TableViewSample.Person, String> t) {
+                        ((TableViewSample.Person) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setLastName(t.getNewValue());
+                    }
+                }
+        );
+
+        TableColumn emailCol = new TableColumn("Email");
+        emailCol.setMinWidth(200);
+        emailCol.setCellValueFactory(
+                new PropertyValueFactory<TableViewSample.Person, String>("email"));
+        emailCol.setCellFactory(cellFactory);
+        emailCol.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<TableViewSample.Person, String>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<TableViewSample.Person, String> t) {
+                        ((TableViewSample.Person) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setEmail(t.getNewValue());
+                    }
+                }
+        );
+
+        tableUsers.setItems(data);
+        tableUsers.getColumns().addAll(firstNameCol, lastNameCol, emailCol);
+
+        final TextField addFirstName = new TextField();
+        addFirstName.setPromptText("Username");
+        addFirstName.setMaxWidth(firstNameCol.getPrefWidth());
+        final TextField addLastName = new TextField();
+        addLastName.setMaxWidth(lastNameCol.getPrefWidth());
+        addLastName.setPromptText("Password");
+        final TextField addEmail = new TextField();
+        addEmail.setMaxWidth(emailCol.getPrefWidth());
+        addEmail.setPromptText("Email");
+
+        final Button addButton = new Button("Add");
+        UsersListWriteToFile usersListWriteToFile = new UsersListWriteToFile();
+        addButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                data.add(new TableViewSample.Person(
+                        addFirstName.getText(),
+                        addLastName.getText(),
+                        addEmail.getText()));
+                userList.addUser(new User(addFirstName.getText(), addLastName.getText(), addEmail.getText()));
+                usersListWriteToFile.writeToFile(userList);
+
+                addFirstName.clear();
+                addLastName.clear();
+                addEmail.clear();
+            }
+        });
+
+        hb.getChildren().addAll(addFirstName, addLastName, addEmail, addButton);
+        hb.setSpacing(3);
+
+
+        grid.add(label, 3, 1, 2, 1);
+        grid.add(tableUsers, 3, 2, 2, 1);
+        grid.add(hb, 4, 4, 2, 1);
+
+
+
+
+
+        //((Group) scene.getRoot()).getChildren().addAll(vbox);
+
+
+        /*
         // Use column constraints to set properties for columns in the grid
         ColumnConstraints column1 = new ColumnConstraints();
         column1.setHalignment(HPos.RIGHT);  // Override default
@@ -195,14 +364,8 @@ public class Manager extends Application {
 
 
         hbButtons.getChildren().addAll(btnSubmit, btnClear, btnExit2);
-        grid.add(hbButtons, 0, 2, 2, 1);
+        grid.add(hbButtons, 0, 2, 2, 1);*/
 
-        /* Uncomment the following statements to bottom-align the buttons */
-//        hbButtons.setAlignment(Pos.BOTTOM_CENTER);
-//        GridPane innergrid = new GridPane();
-//        innergrid.setAlignment(Pos.CENTER);
-//        innergrid.add(hbButtons, 0, 0);
-//        grid.add(innergrid, 0, 2, 2, 1);
 
         return grid;
     }
@@ -338,7 +501,7 @@ public class Manager extends Application {
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
-        Text scenetitle = new Text("Hello!");
+        Text scenetitle = new Text("Hello");
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(scenetitle, 0, 0, 2, 1);
 
@@ -353,6 +516,12 @@ public class Manager extends Application {
 
         PasswordField pwBox = new PasswordField();
         grid.add(pwBox, 1, 2);
+
+        Label email = new Label("Email:");
+        grid.add(email, 0, 3);
+
+        TextField emailBox = new TextField();
+        grid.add(emailBox, 1, 3);
 
         Button btn = new Button("Sign in");
         HBox hbBtn = new HBox(10);
@@ -394,23 +563,23 @@ public class Manager extends Application {
 
             @Override
             public void handle(ActionEvent e) {
-                if ((userTextField.getText().length() < 3) && (pwBox.getText().length() < 3)) {
+                if ((userTextField.getText().length() < 3) || (pwBox.getText().length() < 3) || (emailBox.getText().length() < 3)) {
                     actiontarget.setFill(Color.FIREBRICK);
-                    actiontarget.setText("Enter username and password!");
+                    actiontarget.setText("Enter username, password and mail!");
                 } else {
-                    nick = userTextField.getText();
-                    password = pwBox.getText();
-                    //System.out.println(nick);
                     primaryStage.hide();
-                    //stage2.show();
-                    //primaryStage.setScene(scene2);
-                    //int n = 1;
-                    //String user = "user" + n;
-                    User user = new User(nick,"1234","developer1@example.com");
-                    userList1.addUser(user);
+
+                    UsersListWriteToFile usersListWriteToFile = new UsersListWriteToFile();
+                    userList.addUser(new User(userTextField.getText(),pwBox.getText(),emailBox.getText()));
+                    usersListWriteToFile.writeToFile(userList);
+
                     Stage createNewProject = new Stage();
                     createNewProject(createNewProject);
                 }
+
+                /*primaryStage.hide();
+                Stage newBoard = new Stage();
+                createBoard(newBoard);*/
 
             }
         });
@@ -464,3 +633,5 @@ public class Manager extends Application {
 
     }
 }
+
+

@@ -6,22 +6,33 @@ import java.time.temporal.ChronoUnit;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 public final class Task {
+    private final String id;
     private final String title;
     private final String description;
-    private final User assignedUser;
-    private final User creator;
+    private final String type;
+    private final String status;
+    private final String assignedUser;
+    private final String creator;
     private final LocalDate created;
     private final LocalDate deadline;
 
-    public Task(final String title, final String description,
-                final User assignedUser, final User creator,
+    public Task(final String id, final String title, final String description,
+                final String type, final String status,
+                final String assignedUser, final String creator,
                 final LocalDate created, final LocalDate deadline) {
+        this.id = id;
         this.title = title;
         this.description = description;
+        this.type = type;
+        this.status = status;
         this.assignedUser = assignedUser;
         this.creator = creator;
         this.created = created;
         this.deadline = deadline;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getTitle() {
@@ -32,11 +43,19 @@ public final class Task {
         return description;
     }
 
-    public User getAssignedUser() {
+    public String getType() {
+        return type;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getAssignedUser() {
         return assignedUser;
     }
 
-    public User getCreator() {
+    public String getCreator() {
         return creator;
     }
 
@@ -54,12 +73,26 @@ public final class Task {
     @Override
     public String toString() {
         return "Task{" +
-                "title='" + title + '\'' +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
+                ", type='" + type + '\'' +
+                ", status='" + status + '\'' +
                 ", assignedUser=" + assignedUser +
                 ", creator=" + creator +
                 ", created=" + created +
                 ", deadline=" + deadline +
-                '}' + "\n";
+                '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Task task = (Task) o;
+
+        return id != null ? id.equals(task.id) : task.id == null;
+    }
+
 }

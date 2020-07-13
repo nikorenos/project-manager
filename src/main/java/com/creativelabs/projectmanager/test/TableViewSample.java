@@ -1,7 +1,7 @@
 package com.creativelabs.projectmanager.test;
 
-import com.creativelabs.projectmanager.fileshandling.ListWriteToFile;
-import com.creativelabs.projectmanager.fileshandling.ReadFile;
+import com.creativelabs.projectmanager.fileshandling.UsersListWriteToFile;
+import com.creativelabs.projectmanager.fileshandling.ReadFileToUsersList;
 import com.creativelabs.projectmanager.tasks.User;
 import com.creativelabs.projectmanager.tasks.UserList;
 import javafx.application.Application;
@@ -34,7 +34,7 @@ import java.io.File;
 
 public class TableViewSample extends Application {
 
-    ReadFile readFile = new ReadFile();
+    ReadFileToUsersList readFile = new ReadFileToUsersList();
     String path = "src/main/resources/files/userlist1.txt";
     File myObj = new File(path);
     UserList userList = readFile.fileToList(myObj);
@@ -142,7 +142,7 @@ public class TableViewSample extends Application {
         addEmail.setPromptText("Email");
 
         final Button addButton = new Button("Add");
-        ListWriteToFile listWriteToFile = new ListWriteToFile();
+        UsersListWriteToFile usersListWriteToFile = new UsersListWriteToFile();
         addButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -151,7 +151,7 @@ public class TableViewSample extends Application {
                         addLastName.getText(),
                         addEmail.getText()));
                 userList.addUser(new User(addFirstName.getText(), addLastName.getText(), addEmail.getText()));
-                listWriteToFile.writeToFile(userList);
+                usersListWriteToFile.writeToFile(userList);
 
                 addFirstName.clear();
                 addLastName.clear();
@@ -179,7 +179,7 @@ public class TableViewSample extends Application {
         private final SimpleStringProperty lastName;
         private final SimpleStringProperty email;
 
-        Person(String fName, String lName, String email) {
+        public Person(String fName, String lName, String email) {
             this.firstName = new SimpleStringProperty(fName);
             this.lastName = new SimpleStringProperty(lName);
             this.email = new SimpleStringProperty(email);
@@ -210,7 +210,7 @@ public class TableViewSample extends Application {
         }
     }
 
-    static class EditingCell extends TableCell<Person, String> {
+    public static class EditingCell extends TableCell<Person, String> {
 
         private TextField textField;
 
