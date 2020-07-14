@@ -117,7 +117,7 @@ public class Manager extends Application {
         tabs.getTabs().addAll(tabSize, tabAlign);
         tabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
-        Scene scene = new Scene(tabs, 800, 600); // Manage scene size
+        Scene scene = new Scene(tabs, 1000, 600); // Manage scene size
 
         createNewBoard.setTitle("Project " + getProject());
         createNewBoard.setScene(scene);
@@ -146,7 +146,7 @@ public class Manager extends Application {
                 };
 
         TableColumn idCol = new TableColumn("Id");
-        idCol.setMinWidth(50);
+        idCol.setMinWidth(100);
         idCol.setCellValueFactory(
                 new PropertyValueFactory<TaskInTable, String>("id"));
         idCol.setCellFactory(cellFactory);
@@ -243,7 +243,7 @@ public class Manager extends Application {
         );
 
         TableColumn createdCol = new TableColumn("Created");
-        createdCol.setMinWidth(100);
+        createdCol.setMinWidth(150);
         createdCol.setCellValueFactory(
                 new PropertyValueFactory<TaskInTable, String>("created"));
         createdCol.setCellFactory(cellFactory);
@@ -258,9 +258,25 @@ public class Manager extends Application {
                 }
         );
 
+        TableColumn deadlineCol = new TableColumn("Deadline");
+        deadlineCol.setMinWidth(150);
+        deadlineCol.setCellValueFactory(
+                new PropertyValueFactory<TaskInTable, String>("deadline"));
+        deadlineCol.setCellFactory(cellFactory);
+        deadlineCol.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<TaskInTable, String>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<TaskInTable, String> t) {
+                        ((TaskInTable) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setDeadline(t.getNewValue());
+                    }
+                }
+        );
+
 
         tableTasks.setItems(dataTasks);
-        tableTasks.getColumns().addAll(idCol, titleCol, typeCol, statusCol, assigneeCol, creatorCol, createdCol);
+        tableTasks.getColumns().addAll(idCol, titleCol, typeCol, statusCol, assigneeCol, creatorCol, createdCol, deadlineCol);
 
         grid.add(label, 3, 1, 2, 1);
         grid.add(tableTasks, 3, 2, 2, 1);
