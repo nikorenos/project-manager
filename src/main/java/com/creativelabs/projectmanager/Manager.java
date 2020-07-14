@@ -3,8 +3,10 @@ package com.creativelabs.projectmanager;
 import com.creativelabs.projectmanager.fileshandling.ReadFileToTasksList;
 import com.creativelabs.projectmanager.fileshandling.UsersListWriteToFile;
 import com.creativelabs.projectmanager.fileshandling.ReadFileToUsersList;
+import com.creativelabs.projectmanager.table.EditingCell;
+import com.creativelabs.projectmanager.table.UserInTable;
+import com.creativelabs.projectmanager.table.TaskInTable;
 import com.creativelabs.projectmanager.tasks.*;
-import com.creativelabs.projectmanager.test.TableViewSample;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,10 +37,10 @@ public class Manager extends Application {
 
     }
 
-    String nick = "nick";
-    String project = "Test";
-    String password = "1234";
-    UserList userList1 = new UserList("Team");
+    private String nick = "nick";
+    private String project = "Test";
+    private String password = "1234";
+    private UserList userList1 = new UserList("Team");
 
     public String getNick() {
         return nick;
@@ -65,29 +67,29 @@ public class Manager extends Application {
     File myObjTasks = new File(pathTasks);
     TaskList tasksList = readFileToTasksList.fileToList(myObjTasks);
 
-    private TableView<TableViewSample.Person> table = new TableView<TableViewSample.Person>();
-    private ObservableList<TableViewSample.Person> data = convertUsersListToObservable(userList);
-    private final ObservableList<TableViewSample.Person> dataTasks = convertTasksListToObservable(tasksList);
+
+    private ObservableList<UserInTable> usersData = convertUsersListToObservable(userList);
+    private final ObservableList<TaskInTable> dataTasks = convertTasksListToObservable(tasksList);
 
     final HBox hb = new HBox();
 
-    public ObservableList<TableViewSample.Person> convertUsersListToObservable(UserList list) {
-        ObservableList<TableViewSample.Person> data = FXCollections.observableArrayList();
+    public ObservableList<UserInTable> convertUsersListToObservable(UserList list) {
+        ObservableList<UserInTable> data = FXCollections.observableArrayList();
         for(int n = 0; n < list.getUsersList().size(); n++) {
             String nick = list.getUsersList().get(n).getUsername();
             String password = list.getUsersList().get(n).getPassword();
             String email = list.getUsersList().get(n).getEmail();
-            data.add(new TableViewSample.Person(nick, password, email));
+            data.add(new UserInTable(nick, password, email));
         }
         return data;
     }
-    public ObservableList<TableViewSample.Person> convertTasksListToObservable(TaskList list) {
-        ObservableList<TableViewSample.Person> data = FXCollections.observableArrayList();
+    public ObservableList<TaskInTable> convertTasksListToObservable(TaskList list) {
+        ObservableList<TaskInTable> data = FXCollections.observableArrayList();
         for(int n = 0; n < list.getTasks().size(); n++) {
             String id = list.getTasks().get(n).getId();
             String title = list.getTasks().get(n).getTitle();
-            String type = list.getTasks().get(n).getType();
-            data.add(new TableViewSample.Person(id, title, type));
+            String type = list.getTasks().get(n).getDescription();
+            data.add(new TaskInTable(id, title, type));
         }
         return data;
     }
@@ -130,24 +132,24 @@ public class Manager extends Application {
         final Label label = new Label("Tasks");
         label.setFont(new Font("Arial", 20));
 
-        table.setEditable(false);
+        tableTasks.setEditable(false);
         Callback<TableColumn, TableCell> cellFactory =
                 new Callback<TableColumn, TableCell>() {
                     public TableCell call(TableColumn p) {
-                        return new TableViewSample.EditingCell();
+                        return new EditingCell();
                     }
                 };
 
         TableColumn firstNameCol = new TableColumn("Id");
         firstNameCol.setMinWidth(100);
         firstNameCol.setCellValueFactory(
-                new PropertyValueFactory<TableViewSample.Person, String>("firstName"));
+                new PropertyValueFactory<TaskInTable, String>("firstName"));
         firstNameCol.setCellFactory(cellFactory);
         firstNameCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<TableViewSample.Person, String>>() {
+                new EventHandler<TableColumn.CellEditEvent<TaskInTable, String>>() {
                     @Override
-                    public void handle(TableColumn.CellEditEvent<TableViewSample.Person, String> t) {
-                        ((TableViewSample.Person) t.getTableView().getItems().get(
+                    public void handle(TableColumn.CellEditEvent<TaskInTable, String> t) {
+                        ((TaskInTable) t.getTableView().getItems().get(
                                 t.getTablePosition().getRow())
                         ).setFirstName(t.getNewValue());
                     }
@@ -158,13 +160,13 @@ public class Manager extends Application {
         TableColumn lastNameCol = new TableColumn("Title");
         lastNameCol.setMinWidth(200);
         lastNameCol.setCellValueFactory(
-                new PropertyValueFactory<TableViewSample.Person, String>("lastName"));
+                new PropertyValueFactory<TaskInTable, String>("lastName"));
         lastNameCol.setCellFactory(cellFactory);
         lastNameCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<TableViewSample.Person, String>>() {
+                new EventHandler<TableColumn.CellEditEvent<TaskInTable, String>>() {
                     @Override
-                    public void handle(TableColumn.CellEditEvent<TableViewSample.Person, String> t) {
-                        ((TableViewSample.Person) t.getTableView().getItems().get(
+                    public void handle(TableColumn.CellEditEvent<TaskInTable, String> t) {
+                        ((TaskInTable) t.getTableView().getItems().get(
                                 t.getTablePosition().getRow())
                         ).setLastName(t.getNewValue());
                     }
@@ -172,15 +174,15 @@ public class Manager extends Application {
         );
 
         TableColumn emailCol = new TableColumn("Type");
-        emailCol.setMinWidth(100);
+        emailCol.setMinWidth(300);
         emailCol.setCellValueFactory(
-                new PropertyValueFactory<TableViewSample.Person, String>("email"));
+                new PropertyValueFactory<TaskInTable, String>("email"));
         emailCol.setCellFactory(cellFactory);
         emailCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<TableViewSample.Person, String>>() {
+                new EventHandler<TableColumn.CellEditEvent<TaskInTable, String>>() {
                     @Override
-                    public void handle(TableColumn.CellEditEvent<TableViewSample.Person, String> t) {
-                        ((TableViewSample.Person) t.getTableView().getItems().get(
+                    public void handle(TableColumn.CellEditEvent<TaskInTable, String> t) {
+                        ((TaskInTable) t.getTableView().getItems().get(
                                 t.getTablePosition().getRow())
                         ).setEmail(t.getNewValue());
                     }
@@ -189,35 +191,24 @@ public class Manager extends Application {
         /*TableColumn statusCol = new TableColumn("Status");
         emailCol.setMinWidth(70);
         emailCol.setCellValueFactory(
-                new PropertyValueFactory<TableViewSample.Person, String>("status"));
+                new PropertyValueFactory<TableTasks.TaskInTable, String>("status"));
         emailCol.setCellFactory(cellFactory);
         emailCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<TableViewSample.Person, String>>() {
+                new EventHandler<TableColumn.CellEditEvent<TableTasks.TaskInTable, String>>() {
                     @Override
-                    public void handle(TableColumn.CellEditEvent<TableViewSample.Person, String> t) {
-                        ((TableViewSample.Person) t.getTableView().getItems().get(
+                    public void handle(TableColumn.CellEditEvent<TableTasks.TaskInTable, String> t) {
+                        ((TableTasks.TaskInTable) t.getTableView().getItems().get(
                                 t.getTablePosition().getRow())
                         ).setEmail(t.getNewValue());
                     }
                 }
         );*/
 
-        table.setItems(dataTasks);
-        table.getColumns().addAll(firstNameCol, lastNameCol, emailCol);
-
-
-
-
-
-
-
-        /*final VBox vbox = new VBox();
-        vbox.setSpacing(5);
-        vbox.setPadding(new Insets(10, 0, 0, 10));
-        vbox.getChildren().addAll(label, table, hb);*/
+        tableTasks.setItems(dataTasks);
+        tableTasks.getColumns().addAll(firstNameCol, lastNameCol, emailCol);
 
         grid.add(label, 3, 1, 2, 1);
-        grid.add(table, 3, 2, 2, 1);
+        grid.add(tableTasks, 3, 2, 2, 1);
 
         return grid;
     }
@@ -225,15 +216,14 @@ public class Manager extends Application {
 
     private Pane tabUsers() {
 
-
-        TableView tableUsers = new TableView();
-        data = convertUsersListToObservable(userList);
-
-
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.TOP_LEFT);  //Pos.CENTER
         grid.setHgap(10);
         grid.setVgap(10);
+
+
+        TableView tableUsers = new TableView();
+        usersData = convertUsersListToObservable(userList);
 
         final Label label = new Label("List of users");
         label.setFont(new Font("Arial", 20));
@@ -242,20 +232,20 @@ public class Manager extends Application {
         Callback<TableColumn, TableCell> cellFactory =
                 new Callback<TableColumn, TableCell>() {
                     public TableCell call(TableColumn p) {
-                        return new TableViewSample.EditingCell();
+                        return new EditingCell();
                     }
                 };
 
         TableColumn firstNameCol = new TableColumn("Username");
         firstNameCol.setMinWidth(100);
         firstNameCol.setCellValueFactory(
-                new PropertyValueFactory<TableViewSample.Person, String>("firstName"));
+                new PropertyValueFactory<UserInTable, String>("firstName"));
         firstNameCol.setCellFactory(cellFactory);
         firstNameCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<TableViewSample.Person, String>>() {
+                new EventHandler<TableColumn.CellEditEvent<UserInTable, String>>() {
                     @Override
-                    public void handle(TableColumn.CellEditEvent<TableViewSample.Person, String> t) {
-                        ((TableViewSample.Person) t.getTableView().getItems().get(
+                    public void handle(TableColumn.CellEditEvent<UserInTable, String> t) {
+                        ((UserInTable) t.getTableView().getItems().get(
                                 t.getTablePosition().getRow())
                         ).setFirstName(t.getNewValue());
                     }
@@ -266,13 +256,13 @@ public class Manager extends Application {
         TableColumn lastNameCol = new TableColumn("Password");
         lastNameCol.setMinWidth(100);
         lastNameCol.setCellValueFactory(
-                new PropertyValueFactory<TableViewSample.Person, String>("lastName"));
+                new PropertyValueFactory<UserInTable, String>("lastName"));
         lastNameCol.setCellFactory(cellFactory);
         lastNameCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<TableViewSample.Person, String>>() {
+                new EventHandler<TableColumn.CellEditEvent<UserInTable, String>>() {
                     @Override
-                    public void handle(TableColumn.CellEditEvent<TableViewSample.Person, String> t) {
-                        ((TableViewSample.Person) t.getTableView().getItems().get(
+                    public void handle(TableColumn.CellEditEvent<UserInTable, String> t) {
+                        ((UserInTable) t.getTableView().getItems().get(
                                 t.getTablePosition().getRow())
                         ).setLastName(t.getNewValue());
                     }
@@ -282,20 +272,20 @@ public class Manager extends Application {
         TableColumn emailCol = new TableColumn("Email");
         emailCol.setMinWidth(200);
         emailCol.setCellValueFactory(
-                new PropertyValueFactory<TableViewSample.Person, String>("email"));
+                new PropertyValueFactory<UserInTable, String>("email"));
         emailCol.setCellFactory(cellFactory);
         emailCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<TableViewSample.Person, String>>() {
+                new EventHandler<TableColumn.CellEditEvent<UserInTable, String>>() {
                     @Override
-                    public void handle(TableColumn.CellEditEvent<TableViewSample.Person, String> t) {
-                        ((TableViewSample.Person) t.getTableView().getItems().get(
+                    public void handle(TableColumn.CellEditEvent<UserInTable, String> t) {
+                        ((UserInTable) t.getTableView().getItems().get(
                                 t.getTablePosition().getRow())
                         ).setEmail(t.getNewValue());
                     }
                 }
         );
 
-        tableUsers.setItems(data);
+        tableUsers.setItems(usersData);
         tableUsers.getColumns().addAll(firstNameCol, lastNameCol, emailCol);
 
         final TextField addFirstName = new TextField();
@@ -313,7 +303,7 @@ public class Manager extends Application {
         addButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                data.add(new TableViewSample.Person(
+                usersData.add(new UserInTable(
                         addFirstName.getText(),
                         addLastName.getText(),
                         addEmail.getText()));
@@ -333,8 +323,6 @@ public class Manager extends Application {
         grid.add(label, 3, 1, 2, 1);
         grid.add(tableUsers, 3, 2, 2, 1);
         grid.add(hb, 4, 4, 2, 1);
-
-
 
 
 
@@ -563,7 +551,7 @@ public class Manager extends Application {
 
             @Override
             public void handle(ActionEvent e) {
-                if ((userTextField.getText().length() < 3) || (pwBox.getText().length() < 3) || (emailBox.getText().length() < 3)) {
+                /*if ((userTextField.getText().length() < 3) || (pwBox.getText().length() < 3) || (emailBox.getText().length() < 3)) {
                     actiontarget.setFill(Color.FIREBRICK);
                     actiontarget.setText("Enter username, password and mail!");
                 } else {
@@ -575,11 +563,11 @@ public class Manager extends Application {
 
                     Stage createNewProject = new Stage();
                     createNewProject(createNewProject);
-                }
+                }*/
 
-                /*primaryStage.hide();
+                primaryStage.hide();
                 Stage newBoard = new Stage();
-                createBoard(newBoard);*/
+                createBoard(newBoard);
 
             }
         });
