@@ -29,6 +29,8 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 
 public class Manager extends Application {
 
@@ -137,7 +139,21 @@ public class Manager extends Application {
         final Label label = new Label("Tasks");
         label.setFont(new Font("Arial", 20));
 
-        tableTasks.setEditable(false);
+        Hyperlink link = new Hyperlink();
+        final String url = "http://zlotewrota.org";
+        link.setText(url);
+        link.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                try {
+                    java.awt.Desktop.getDesktop().browse(URI.create(url));
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
+
+        tableTasks.setEditable(true);
         Callback<TableColumn, TableCell> cellFactory =
                 new Callback<TableColumn, TableCell>() {
                     public TableCell call(TableColumn p) {
@@ -274,11 +290,11 @@ public class Manager extends Application {
                 }
         );
 
-
         tableTasks.setItems(dataTasks);
         tableTasks.getColumns().addAll(idCol, titleCol, typeCol, statusCol, assigneeCol, creatorCol, createdCol, deadlineCol);
 
         grid.add(label, 3, 1, 2, 1);
+        grid.add(link, 3, 4, 2, 1);
         grid.add(tableTasks, 3, 2, 2, 1);
 
         return grid;
