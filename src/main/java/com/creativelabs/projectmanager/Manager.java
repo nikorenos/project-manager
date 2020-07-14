@@ -86,10 +86,15 @@ public class Manager extends Application {
     public ObservableList<TaskInTable> convertTasksListToObservable(TaskList list) {
         ObservableList<TaskInTable> data = FXCollections.observableArrayList();
         for(int n = 0; n < list.getTasks().size(); n++) {
-            String id = list.getTasks().get(n).getId();
+            String id = "00" + list.getTasks().get(n).getId();
             String title = list.getTasks().get(n).getTitle();
-            String type = list.getTasks().get(n).getDescription();
-            data.add(new TaskInTable(id, title, type));
+            String type = list.getTasks().get(n).getType();
+            String status = list.getTasks().get(n).getStatus();
+            String assignee = list.getTasks().get(n).getAssignedUser();
+            String creator = list.getTasks().get(n).getCreator();
+            String created = String.valueOf(list.getTasks().get(n).getCreated());
+            String deadline = String.valueOf(list.getTasks().get(n).getDeadline());
+            data.add(new TaskInTable(id, title, type,status,assignee,creator,created,deadline));
         }
         return data;
     }
@@ -140,72 +145,122 @@ public class Manager extends Application {
                     }
                 };
 
-        TableColumn firstNameCol = new TableColumn("Id");
-        firstNameCol.setMinWidth(100);
-        firstNameCol.setCellValueFactory(
-                new PropertyValueFactory<TaskInTable, String>("firstName"));
-        firstNameCol.setCellFactory(cellFactory);
-        firstNameCol.setOnEditCommit(
+        TableColumn idCol = new TableColumn("Id");
+        idCol.setMinWidth(50);
+        idCol.setCellValueFactory(
+                new PropertyValueFactory<TaskInTable, String>("id"));
+        idCol.setCellFactory(cellFactory);
+        idCol.setOnEditCommit(
                 new EventHandler<TableColumn.CellEditEvent<TaskInTable, String>>() {
                     @Override
                     public void handle(TableColumn.CellEditEvent<TaskInTable, String> t) {
                         ((TaskInTable) t.getTableView().getItems().get(
                                 t.getTablePosition().getRow())
-                        ).setFirstName(t.getNewValue());
+                        ).setId(t.getNewValue());
                     }
                 }
         );
 
 
-        TableColumn lastNameCol = new TableColumn("Title");
-        lastNameCol.setMinWidth(200);
-        lastNameCol.setCellValueFactory(
-                new PropertyValueFactory<TaskInTable, String>("lastName"));
-        lastNameCol.setCellFactory(cellFactory);
-        lastNameCol.setOnEditCommit(
+        TableColumn titleCol = new TableColumn("Title");
+        titleCol.setMinWidth(100);
+        titleCol.setCellValueFactory(
+                new PropertyValueFactory<TaskInTable, String>("title"));
+        titleCol.setCellFactory(cellFactory);
+        titleCol.setOnEditCommit(
                 new EventHandler<TableColumn.CellEditEvent<TaskInTable, String>>() {
                     @Override
                     public void handle(TableColumn.CellEditEvent<TaskInTable, String> t) {
                         ((TaskInTable) t.getTableView().getItems().get(
                                 t.getTablePosition().getRow())
-                        ).setLastName(t.getNewValue());
+                        ).setTitle(t.getNewValue());
                     }
                 }
         );
 
-        TableColumn emailCol = new TableColumn("Type");
-        emailCol.setMinWidth(300);
-        emailCol.setCellValueFactory(
-                new PropertyValueFactory<TaskInTable, String>("email"));
-        emailCol.setCellFactory(cellFactory);
-        emailCol.setOnEditCommit(
+        TableColumn typeCol = new TableColumn("Type");
+        typeCol.setMinWidth(100);
+        typeCol.setCellValueFactory(
+                new PropertyValueFactory<TaskInTable, String>("type"));
+        typeCol.setCellFactory(cellFactory);
+        typeCol.setOnEditCommit(
                 new EventHandler<TableColumn.CellEditEvent<TaskInTable, String>>() {
                     @Override
                     public void handle(TableColumn.CellEditEvent<TaskInTable, String> t) {
                         ((TaskInTable) t.getTableView().getItems().get(
                                 t.getTablePosition().getRow())
-                        ).setEmail(t.getNewValue());
+                        ).setType(t.getNewValue());
                     }
                 }
         );
-        /*TableColumn statusCol = new TableColumn("Status");
-        emailCol.setMinWidth(70);
-        emailCol.setCellValueFactory(
-                new PropertyValueFactory<TableTasks.TaskInTable, String>("status"));
-        emailCol.setCellFactory(cellFactory);
-        emailCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<TableTasks.TaskInTable, String>>() {
+
+        TableColumn statusCol = new TableColumn("Status");
+        statusCol.setMinWidth(100);
+        statusCol.setCellValueFactory(
+                new PropertyValueFactory<TaskInTable, String>("status"));
+        statusCol.setCellFactory(cellFactory);
+        statusCol.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<TaskInTable, String>>() {
                     @Override
-                    public void handle(TableColumn.CellEditEvent<TableTasks.TaskInTable, String> t) {
-                        ((TableTasks.TaskInTable) t.getTableView().getItems().get(
+                    public void handle(TableColumn.CellEditEvent<TaskInTable, String> t) {
+                        ((TaskInTable) t.getTableView().getItems().get(
                                 t.getTablePosition().getRow())
-                        ).setEmail(t.getNewValue());
+                        ).setStatus(t.getNewValue());
                     }
                 }
-        );*/
+        );
+
+        TableColumn assigneeCol = new TableColumn("Assignee");
+        assigneeCol.setMinWidth(100);
+        assigneeCol.setCellValueFactory(
+                new PropertyValueFactory<TaskInTable, String>("assignee"));
+        assigneeCol.setCellFactory(cellFactory);
+        assigneeCol.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<TaskInTable, String>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<TaskInTable, String> t) {
+                        ((TaskInTable) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setAssignee(t.getNewValue());
+                    }
+                }
+        );
+
+        TableColumn creatorCol = new TableColumn("Creator");
+        creatorCol.setMinWidth(100);
+        creatorCol.setCellValueFactory(
+                new PropertyValueFactory<TaskInTable, String>("creator"));
+        creatorCol.setCellFactory(cellFactory);
+        creatorCol.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<TaskInTable, String>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<TaskInTable, String> t) {
+                        ((TaskInTable) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setCreator(t.getNewValue());
+                    }
+                }
+        );
+
+        TableColumn createdCol = new TableColumn("Created");
+        createdCol.setMinWidth(100);
+        createdCol.setCellValueFactory(
+                new PropertyValueFactory<TaskInTable, String>("created"));
+        createdCol.setCellFactory(cellFactory);
+        createdCol.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<TaskInTable, String>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<TaskInTable, String> t) {
+                        ((TaskInTable) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setCreated(t.getNewValue());
+                    }
+                }
+        );
+
 
         tableTasks.setItems(dataTasks);
-        tableTasks.getColumns().addAll(firstNameCol, lastNameCol, emailCol);
+        tableTasks.getColumns().addAll(idCol, titleCol, typeCol, statusCol, assigneeCol, creatorCol, createdCol);
 
         grid.add(label, 3, 1, 2, 1);
         grid.add(tableTasks, 3, 2, 2, 1);
@@ -551,7 +606,7 @@ public class Manager extends Application {
 
             @Override
             public void handle(ActionEvent e) {
-                /*if ((userTextField.getText().length() < 3) || (pwBox.getText().length() < 3) || (emailBox.getText().length() < 3)) {
+                if ((userTextField.getText().length() < 3) || (pwBox.getText().length() < 3) || (emailBox.getText().length() < 3)) {
                     actiontarget.setFill(Color.FIREBRICK);
                     actiontarget.setText("Enter username, password and mail!");
                 } else {
@@ -563,11 +618,11 @@ public class Manager extends Application {
 
                     Stage createNewProject = new Stage();
                     createNewProject(createNewProject);
-                }*/
+                }
 
-                primaryStage.hide();
+                /*primaryStage.hide();
                 Stage newBoard = new Stage();
-                createBoard(newBoard);
+                createBoard(newBoard);*/
 
             }
         });
@@ -576,7 +631,11 @@ public class Manager extends Application {
 
         Scene scene = new Scene(grid, 300, 275);
         primaryStage.setScene(scene);
-        primaryStage.show();
+        //primaryStage.show();
+
+        Stage newBoard = new Stage();
+        createBoard(newBoard);
+
 
 
 
