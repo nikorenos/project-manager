@@ -126,6 +126,67 @@ public class Manager extends Application {
         createNewBoard.show();
     }
 
+    public void createTask(Stage stage) {
+
+        GridPane grid = new GridPane();
+               
+
+        Label taskName = new Label("Task name:");
+        taskName.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        TextField taskNameTextField = new TextField();
+
+
+        Button btnCreateTask = new Button("Create");
+        HBox hbBtnApply = new HBox(10);
+        hbBtnApply.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtnApply.getChildren().add(btnCreateTask);
+
+
+        //info when text is too short
+        final Text actiontarget = new Text();
+        grid.setColumnSpan(actiontarget, 2);
+        grid.setHalignment(actiontarget, RIGHT);
+        actiontarget.setId("actiontarget");
+
+        btnCreateTask.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+                if (taskNameTextField.getText().length() < 3) {
+                    actiontarget.setFill(Color.FIREBRICK);
+                    actiontarget.setText("Enter project name!");
+                } else {
+                    dataTasks.add(new TaskInTable(
+                            taskNameTextField.getText(),
+                            "test",
+                            "test",
+                            "test",
+                            "test",
+                            "test",
+                            "test",
+                            "test"));
+                    //userList.addUser(new User(addFirstName.getText(), addLastName.getText(), addEmail.getText()));
+                    //usersListWriteToFile.writeToFile(userList);
+
+                    stage.hide();
+                }
+
+
+            }
+        });
+
+        grid.add(taskName, 2, 5);
+        grid.add(taskNameTextField, 3, 6);
+        grid.add(hbBtnApply, 3, 7);
+        grid.add(actiontarget, 2, 12);
+
+        Scene scene = new Scene(grid, 600, 400); // Manage scene size
+        stage.setTitle("Create task");
+        stage.setScene(scene);
+        stage.show();
+    }
+
     private Pane tabTasks() {
 
         TableView tableTasks = new TableView();
@@ -138,6 +199,17 @@ public class Manager extends Application {
 
         final Label label = new Label("Tasks");
         label.setFont(new Font("Arial", 20));
+
+        final Button createTask = new Button("Create task");
+        UsersListWriteToFile usersListWriteToFile = new UsersListWriteToFile();
+        createTask.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                Stage newTaskStage = new Stage();
+                createTask(newTaskStage);
+                newTaskStage.show();
+            }
+        });
 
         Hyperlink link = new Hyperlink();
         final String url = "http://zlotewrota.org";
@@ -294,7 +366,8 @@ public class Manager extends Application {
         tableTasks.getColumns().addAll(idCol, titleCol, typeCol, statusCol, assigneeCol, creatorCol, createdCol, deadlineCol);
 
         grid.add(label, 3, 1, 2, 1);
-        grid.add(link, 3, 4, 2, 1);
+        grid.add(createTask, 3, 4, 2, 1);
+        grid.add(link, 3, 7, 2, 1);
         grid.add(tableTasks, 3, 2, 2, 1);
 
         return grid;
