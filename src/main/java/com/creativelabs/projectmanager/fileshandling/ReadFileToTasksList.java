@@ -27,7 +27,7 @@ public class ReadFileToTasksList {
             String findStr = "#";
             int index = data.indexOf(findStr);
 
-            String id = data.substring(0, index);
+            Integer id = Integer.valueOf(data.substring(0, index));
             data = data.substring(index +1, data.length());
 
             String title = data.substring(0, data.indexOf(findStr));

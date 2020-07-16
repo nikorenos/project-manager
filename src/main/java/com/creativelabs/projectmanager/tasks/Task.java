@@ -6,7 +6,7 @@ import java.time.temporal.ChronoUnit;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 public final class Task {
-    private final String id;
+    private final Integer id;
     private final String title;
     private final String description;
     private final String type;
@@ -16,7 +16,7 @@ public final class Task {
     private final LocalDate created;
     private final LocalDate deadline;
 
-    public Task(final String id, final String title, final String description,
+    public Task(final Integer id, final String title, final String description,
                 final String type, final String status,
                 final String assignedUser, final String creator,
                 final LocalDate created, final LocalDate deadline) {
@@ -31,7 +31,7 @@ public final class Task {
         this.deadline = deadline;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 

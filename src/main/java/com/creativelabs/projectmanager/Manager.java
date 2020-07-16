@@ -1,6 +1,7 @@
 package com.creativelabs.projectmanager;
 
 import com.creativelabs.projectmanager.fileshandling.ReadFileToTasksList;
+import com.creativelabs.projectmanager.fileshandling.TasksListWriteToFile;
 import com.creativelabs.projectmanager.fileshandling.UsersListWriteToFile;
 import com.creativelabs.projectmanager.fileshandling.ReadFileToUsersList;
 import com.creativelabs.projectmanager.table.EditingCell;
@@ -31,6 +32,7 @@ import javafx.util.Callback;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.time.LocalDate;
 
 public class Manager extends Application {
 
@@ -42,6 +44,7 @@ public class Manager extends Application {
     private String nick = "nick";
     private String project = "Test";
     private String password = "1234";
+    private int taskNumber = 0;
     private UserList userList1 = new UserList("Team");
 
     public String getNick() {
@@ -153,21 +156,42 @@ public class Manager extends Application {
 
             @Override
             public void handle(ActionEvent e) {
+                String convertTaskNumber;
+                LocalDate created = LocalDate.now();
+                String createdDate = String.valueOf(created);
+
+                LocalDate deadline = LocalDate.now().plusDays(10);
+                String deadlineDate = String.valueOf(deadline);
+
                 if (taskNameTextField.getText().length() < 3) {
                     actiontarget.setFill(Color.FIREBRICK);
                     actiontarget.setText("Enter project name!");
                 } else {
+
+                    if (tasksList.getTasks().size() > 0) {
+                        taskNumber = tasksList.getTasks().get(tasksList.getTasks().size()-1).getId();
+                    }
+                    taskNumber += 1;
+
+                    convertTaskNumber = String.valueOf(taskNumber);
+                    if (taskNumber <10) {
+                        convertTaskNumber = "00" + convertTaskNumber;
+                    } else if (taskNumber < 100) {
+                        convertTaskNumber = "0" + convertTaskNumber;
+                    }
+
                     dataTasks.add(new TaskInTable(
+                            convertTaskNumber,
                             taskNameTextField.getText(),
                             "test",
                             "test",
                             "test",
                             "test",
-                            "test",
-                            "test",
-                            "test"));
-                    //userList.addUser(new User(addFirstName.getText(), addLastName.getText(), addEmail.getText()));
-                    //usersListWriteToFile.writeToFile(userList);
+                            createdDate,
+                            deadlineDate));
+                    tasksList.addTask(new Task(taskNumber, taskNameTextField.getText(), "test", "test", "test", "test", "test", created, deadline));
+                    TasksListWriteToFile tasksListWriteToFile = new TasksListWriteToFile();
+                    tasksListWriteToFile.writeToFile(tasksList);
 
                     stage.hide();
                 }

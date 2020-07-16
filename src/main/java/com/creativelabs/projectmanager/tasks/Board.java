@@ -75,10 +75,13 @@ public final class Board {
         LocalDate date = LocalDate.now();
         System.out.println(date);
 
-        path = "src/main/resources/files/tasklist0.txt";
-        myObj = new File(path);
+
+        System.out.println("tasks list test");
         ReadFileToTasksList readFileToTasksList = new ReadFileToTasksList();
-        readFileToTasksList.fileToList(myObj);
+        String pathTasks = "src/main/resources/files/tasklist0.txt";
+        File myObjTasks = new File(pathTasks);
+        TaskList tasksList = readFileToTasksList.fileToList(myObjTasks);
+        System.out.println(tasksList.getTasks().get(tasksList.getTasks().size()-1).getId());
 
     }
 
