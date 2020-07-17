@@ -33,7 +33,6 @@ public class CreateNpc {
                 "\t\n" +
                 "\t//---aivars-----\n" +
                 "\taivar[AIV_NewsOverride] = TRUE;\n" +
-                "\taivar[AIV_ToughGuyNewsOverride] = TRUE;\n" +
                 "\t\n" +
                 "\t// ------ Attribute ------\n" +
                 "\tB_SetAttributesToChapter (self, 6);\n" +
@@ -61,28 +60,30 @@ public class CreateNpc {
                 "\t// ------ TA anmelden ------\n" +
                 "\tdaily_routine \t= Rtn_Start_1071;\n" +
                 "};\n" +
+                "\n" +
                 "FUNC VOID Rtn_Start_1071 ()\n" +
                 "{\n" +
                 "  \tTA_Guard_Passage     (09,00,21,00,\"BL_ENTRANCE_04\");\n" +
                 "    TA_Guard_Passage     (21,00,09,00,\"BL_ENTRANCE_04\");\t\t\n" +
                 "};";
 
-        /*try {
-            FileWriter myWriter = new FileWriter("src/main/resources/files/userlist1.txt");
+        try {
+            FileWriter myWriter = new FileWriter("src/main/resources/files/npc.d");
 
-            List<String> temporaryList = list.getUsersList().stream()
+            /*List<String> temporaryList = list.getUsersList().stream()
                     .map(s -> s.getUsername() + " " + s.getPassword() + " " + s.getEmail())
                     .collect(Collectors.toList());
             for (String userName : temporaryList) {
                 myWriter.write(userName + "\n");
-            }
+            }*/
+            myWriter.write(npcScript);
 
             myWriter.close();
             System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
-        }*/
+        }
 
         System.out.println(npcScript);
 

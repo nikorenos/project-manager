@@ -211,6 +211,96 @@ public class Manager extends Application {
         stage.show();
     }
 
+    public void editTask(Stage stage) {
+
+        GridPane grid = new GridPane();
+
+
+        Label taskName = new Label("Task name:");
+        taskName.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        TextField taskNameTextField = new TextField();
+        taskNameTextField.setText("test");
+        //taskNameTextField.setEditable(false);
+
+        TextField taskTypeTextField = new TextField();
+        taskTypeTextField.setText("test");
+        taskTypeTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        taskTypeTextField.setDisable(true);
+
+
+        Button btnCreateTask = new Button("Create");
+        HBox hbBtnApply = new HBox(10);
+        hbBtnApply.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtnApply.getChildren().add(btnCreateTask);
+
+
+        //info when text is too short
+        final Text actiontarget = new Text();
+        grid.setColumnSpan(actiontarget, 2);
+        grid.setHalignment(actiontarget, RIGHT);
+        actiontarget.setId("actiontarget");
+
+        btnCreateTask.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+                String convertTaskNumber;
+                LocalDate created = LocalDate.now();
+                String createdDate = String.valueOf(created);
+
+                LocalDate deadline = LocalDate.now().plusDays(10);
+                String deadlineDate = String.valueOf(deadline);
+
+                if (taskNameTextField.getText().length() < 3) {
+                    actiontarget.setFill(Color.FIREBRICK);
+                    actiontarget.setText("Enter project name!");
+                } else {
+
+                    if (tasksList.getTasks().size() > 0) {
+                        taskNumber = tasksList.getTasks().get(tasksList.getTasks().size()-1).getId();
+                    }
+                    taskNumber += 1;
+
+                    convertTaskNumber = String.valueOf(taskNumber);
+                    if (taskNumber <10) {
+                        convertTaskNumber = "00" + convertTaskNumber;
+                    } else if (taskNumber < 100) {
+                        convertTaskNumber = "0" + convertTaskNumber;
+                    }
+
+                    dataTasks.add(new TaskInTable(
+                            convertTaskNumber,
+                            taskNameTextField.getText(),
+                            "test",
+                            "test",
+                            "test",
+                            "test",
+                            createdDate,
+                            deadlineDate));
+                    tasksList.addTask(new Task(taskNumber, taskNameTextField.getText(), "test", "test", "test", "test", "test", created, deadline));
+                    TasksListWriteToFile tasksListWriteToFile = new TasksListWriteToFile();
+                    tasksListWriteToFile.writeToFile(tasksList);
+
+                    stage.hide();
+                }
+
+
+            }
+        });
+
+        grid.add(taskName, 2, 5);
+        grid.add(taskNameTextField, 3, 6);
+        grid.add(taskTypeTextField, 3, 7);
+        grid.add(hbBtnApply, 3, 8);
+        grid.add(actiontarget, 2, 12);
+
+        Scene scene = new Scene(grid, 600, 400); // Manage scene size
+        stage.setTitle("Task");
+        stage.setScene(scene);
+        stage.show();
+    }
+
     private Pane tabTasks() {
 
         TableView tableTasks = new TableView();
@@ -225,13 +315,21 @@ public class Manager extends Application {
         label.setFont(new Font("Arial", 20));
 
         final Button createTask = new Button("Create task");
-        UsersListWriteToFile usersListWriteToFile = new UsersListWriteToFile();
         createTask.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 Stage newTaskStage = new Stage();
                 createTask(newTaskStage);
                 newTaskStage.show();
+            }
+        });
+        final Button editTask = new Button("Edit task");
+        editTask.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                Stage editTaskStage = new Stage();
+                editTask(editTaskStage);
+                editTaskStage.show();
             }
         });
 
@@ -391,6 +489,7 @@ public class Manager extends Application {
 
         grid.add(label, 3, 1, 2, 1);
         grid.add(createTask, 3, 4, 2, 1);
+        grid.add(editTask, 3, 5, 2, 1);
         grid.add(link, 3, 7, 2, 1);
         grid.add(tableTasks, 3, 2, 2, 1);
 

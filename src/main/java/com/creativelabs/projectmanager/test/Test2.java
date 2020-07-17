@@ -10,13 +10,20 @@ import javafx.scene.Scene;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.time.LocalDate;
+
+import static java.awt.Color.WHITE;
+import static java.awt.Color.white;
 
 
 /**
@@ -122,6 +129,8 @@ public class Test2 extends Application {
 
 
         TextArea textArea = new TextArea();
+        textArea.setText("This is example text.");
+        textArea.setDisable(true);
         textArea.setPrefRowCount(4);
         textArea.setEditable(true);
         textArea.textProperty().addListener((observable, oldValue, newValue) -> {
