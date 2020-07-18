@@ -7,6 +7,7 @@ import com.creativelabs.projectmanager.fileshandling.ReadFileToUsersList;
 import com.creativelabs.projectmanager.table.EditingCell;
 import com.creativelabs.projectmanager.table.UserInTable;
 import com.creativelabs.projectmanager.table.TaskInTable;
+import com.creativelabs.projectmanager.table.UserInTableHyperlink;
 import com.creativelabs.projectmanager.tasks.*;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -90,8 +91,10 @@ public class Manager extends Application {
     }
     public ObservableList<TaskInTable> convertTasksListToObservable(TaskList list) {
         ObservableList<TaskInTable> data = FXCollections.observableArrayList();
+
         for(int n = 0; n < list.getTasks().size(); n++) {
             String id = "00" + list.getTasks().get(n).getId();
+            Hyperlink hyperlink = new Hyperlink();
             String title = list.getTasks().get(n).getTitle();
             String type = list.getTasks().get(n).getType();
             String status = list.getTasks().get(n).getStatus();
@@ -99,7 +102,7 @@ public class Manager extends Application {
             String creator = list.getTasks().get(n).getCreator();
             String created = String.valueOf(list.getTasks().get(n).getCreated());
             String deadline = String.valueOf(list.getTasks().get(n).getDeadline());
-            data.add(new TaskInTable(id, title, type,status,assignee,creator,created,deadline));
+            data.add(new TaskInTable(id,hyperlink, title, type,status,assignee,creator,created,deadline));
         }
         return data;
     }
@@ -179,9 +182,11 @@ public class Manager extends Application {
                     } else if (taskNumber < 100) {
                         convertTaskNumber = "0" + convertTaskNumber;
                     }
+                    Hyperlink hyperlink = new Hyperlink(convertTaskNumber);
 
                     dataTasks.add(new TaskInTable(
                             convertTaskNumber,
+                            hyperlink,
                             taskNameTextField.getText(),
                             "test",
                             "test",
@@ -268,16 +273,21 @@ public class Manager extends Application {
                     } else if (taskNumber < 100) {
                         convertTaskNumber = "0" + convertTaskNumber;
                     }
+                    Hyperlink hyperlink = new Hyperlink(convertTaskNumber);
 
-                    dataTasks.add(new TaskInTable(
+                    TaskInTable test = new TaskInTable("1",hyperlink, "title", "type","status","assignee","creator","deadline", "deadline");
+                    dataTasks.set(0, test);
+
+                    /*dataTasks.add(new TaskInTable(
                             convertTaskNumber,
+                            hyperlink,
                             taskNameTextField.getText(),
                             "test",
                             "test",
                             "test",
                             "test",
                             createdDate,
-                            deadlineDate));
+                            deadlineDate));*/
                     tasksList.addTask(new Task(taskNumber, taskNameTextField.getText(), "test", "test", "test", "test", "test", created, deadline));
                     TasksListWriteToFile tasksListWriteToFile = new TasksListWriteToFile();
                     tasksListWriteToFile.writeToFile(tasksList);
@@ -358,18 +368,9 @@ public class Manager extends Application {
         TableColumn idCol = new TableColumn("Id");
         idCol.setMinWidth(100);
         idCol.setCellValueFactory(
-                new PropertyValueFactory<TaskInTable, String>("id"));
-        idCol.setCellFactory(cellFactory);
-        idCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<TaskInTable, String>>() {
-                    @Override
-                    public void handle(TableColumn.CellEditEvent<TaskInTable, String> t) {
-                        ((TaskInTable) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())
-                        ).setId(t.getNewValue());
-                    }
-                }
-        );
+                new PropertyValueFactory<TaskInTable, String>("hyperlink"));
+
+
 
 
         TableColumn titleCol = new TableColumn("Title");

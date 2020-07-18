@@ -94,12 +94,6 @@ public class TableViewSample extends Application {
         firstNameCol.setCellValueFactory(
                 new PropertyValueFactory<UserInTableHyperlink, String>("hyperlink"));
 
-                        new EventHandler<ActionEvent>() {
-                            @Override
-                            public void handle(ActionEvent e) {
-                                System.out.println("hyperlink");
-                            }
-                        };
 
         link.setOnAction(new EventHandler<ActionEvent>() {
             @Override
