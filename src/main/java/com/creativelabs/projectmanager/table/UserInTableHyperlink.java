@@ -1,7 +1,12 @@
 package com.creativelabs.projectmanager.table;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 public class UserInTableHyperlink {
 
@@ -16,7 +21,19 @@ public class UserInTableHyperlink {
         this.email = new SimpleStringProperty(email);
     }
 
-    public Hyperlink getHyperlink() {
+    public Hyperlink getHyperlink()
+    {
+        hyperlink.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                GridPane grid = new GridPane();
+                Stage stage = new Stage();
+                Scene scene = new Scene(grid, 600, 400); // Manage scene size
+                stage.setTitle("Create task");
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
         return hyperlink;
     }
 
@@ -34,6 +51,15 @@ public class UserInTableHyperlink {
 
     public void setEmail(String fName) {
         email.set(fName);
+    }
+
+    public void openStage() {
+        hyperlink.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                System.out.println("test");
+            }
+        });
     }
 }
 

@@ -1,1 +1,1 @@
-Wld_InsertNpc 		(Zag, "ZAG");
+Wld_InsertNpc 		(Omar, "OMAR");

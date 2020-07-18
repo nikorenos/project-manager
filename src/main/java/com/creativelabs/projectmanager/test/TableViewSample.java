@@ -82,10 +82,18 @@ public class TableViewSample extends Application {
                     }
                 };
 
+        Callback<TableColumn, TableCell> cellLink =
+                new Callback<TableColumn, TableCell>() {
+                    public TableCell call(TableColumn p) {
+                        return new EditingCell();
+                    }
+                };
+
         TableColumn firstNameCol = new TableColumn("Username");
         firstNameCol.setMinWidth(100);
         firstNameCol.setCellValueFactory(
                 new PropertyValueFactory<UserInTableHyperlink, String>("hyperlink"));
+
                         new EventHandler<ActionEvent>() {
                             @Override
                             public void handle(ActionEvent e) {

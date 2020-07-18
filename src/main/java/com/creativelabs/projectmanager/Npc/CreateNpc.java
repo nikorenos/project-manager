@@ -15,15 +15,15 @@ public class CreateNpc {
     public static void main(String[] args) {
 
 
-        String npcName = "Zag";
+        String npcName = "Omar";
         String npcGuild = "BDT";
-        int npcId = 733;
-        int SetAttributesToChapter = 5;
-        String fight_tactic = "MASTER"; // MASTER / STRONG / COWARD
-        String weapon = "steel_broadsword"; //ItMw_2h_Sld_Axe
-        String armor = "BDT_ARMOR3";
+        int npcId = 740;
+        int SetAttributesToChapter = 4;
+        String fight_tactic = "STRONG"; // MASTER / STRONG / COWARD
+        String weapon = "iron_warhammer"; //ItMw_2h_Sld_Axe iron_mastersword
+        String armor = "ITAR_BDT_M"; //ITAR_BDT_H ITAR_BDT_M ItAr_Leather_L itar_prisoner
         String Mdl_ApplyOverlayMds = "Militia"; // Tired / Militia / Mage / Arrogance / Relaxed
-        int FightSkills = 55;
+        int FightSkills = 45;
 
 
         String npcScript = "\n" +
