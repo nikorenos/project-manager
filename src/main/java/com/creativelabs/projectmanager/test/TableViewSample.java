@@ -3,7 +3,7 @@ package com.creativelabs.projectmanager.test;
 import com.creativelabs.projectmanager.fileshandling.UsersListWriteToFile;
 import com.creativelabs.projectmanager.fileshandling.ReadFileToUsersList;
 import com.creativelabs.projectmanager.table.EditingCell;
-import com.creativelabs.projectmanager.table.UserInTable;
+import com.creativelabs.projectmanager.table.UserInTableHyperlink;
 import com.creativelabs.projectmanager.tasks.User;
 import com.creativelabs.projectmanager.tasks.UserList;
 import javafx.application.Application;
@@ -14,13 +14,8 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellEditEvent;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -30,6 +25,8 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 
 public class TableViewSample extends Application {
 
@@ -38,19 +35,26 @@ public class TableViewSample extends Application {
     File myObj = new File(path);
     UserList userList = readFile.fileToList(myObj);
 
-    public ObservableList<UserInTable> convertListToObservable(UserList list) {
-        ObservableList<UserInTable> data = FXCollections.observableArrayList();
-        for(int n = 0; n < list.getUsersList().size(); n++) {
-            String nick = list.getUsersList().get(n).getUsername();
-            String password = list.getUsersList().get(n).getPassword();
-            String email = list.getUsersList().get(n).getEmail();
-            data.add(new UserInTable(nick, password, email));
-        }
+    Hyperlink nick = new Hyperlink("test");
+    String password = "pass";
+    String email = "email";
+    UserInTableHyperlink user = new UserInTableHyperlink(nick, password, email);
+    Hyperlink link = new Hyperlink("test");
+
+
+
+    public ObservableList<UserInTableHyperlink> convertListToObservable(UserList list) {
+        ObservableList<UserInTableHyperlink> data = FXCollections.observableArrayList();
+
+        data.add(new UserInTableHyperlink(link, password, email));
+        data.add(new UserInTableHyperlink(link, password, email));
+        data.add(new UserInTableHyperlink(link, password, email));
+
         return data;
     }
 
-    private TableView<UserInTable> table = new TableView<UserInTable>();
-    private final ObservableList<UserInTable> data = convertListToObservable(userList);
+    private TableView<UserInTableHyperlink> table = new TableView<UserInTableHyperlink>();
+    private final ObservableList<UserInTableHyperlink> data = convertListToObservable(userList);
 
     final HBox hb = new HBox();
 
@@ -81,46 +85,40 @@ public class TableViewSample extends Application {
         TableColumn firstNameCol = new TableColumn("Username");
         firstNameCol.setMinWidth(100);
         firstNameCol.setCellValueFactory(
-                new PropertyValueFactory<UserInTable, String>("firstName"));
-        firstNameCol.setCellFactory(cellFactory);
-        firstNameCol.setOnEditCommit(
-                new EventHandler<CellEditEvent<UserInTable, String>>() {
-                    @Override
-                    public void handle(CellEditEvent<UserInTable, String> t) {
-                        ((UserInTable) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())
-                        ).setFirstName(t.getNewValue());
-                    }
-                }
-        );
+                new PropertyValueFactory<UserInTableHyperlink, String>("hyperlink"));
+                        new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent e) {
+                                System.out.println("hyperlink");
+                            }
+                        };
+
+        link.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                System.out.println("test");
+            }
+        });
+
 
 
         TableColumn lastNameCol = new TableColumn("Password");
         lastNameCol.setMinWidth(100);
         lastNameCol.setCellValueFactory(
-                new PropertyValueFactory<UserInTable, String>("lastName"));
-        lastNameCol.setCellFactory(cellFactory);
-        lastNameCol.setOnEditCommit(
-                new EventHandler<CellEditEvent<UserInTable, String>>() {
-                    @Override
-                    public void handle(CellEditEvent<UserInTable, String> t) {
-                        ((UserInTable) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())
-                        ).setLastName(t.getNewValue());
-                    }
-                }
-        );
+                new PropertyValueFactory<UserInTableHyperlink, String>("lastName"));
+        //lastNameCol.setCellFactory(cellFactory);
+
 
         TableColumn emailCol = new TableColumn("Email");
         emailCol.setMinWidth(200);
         emailCol.setCellValueFactory(
-                new PropertyValueFactory<UserInTable, String>("email"));
+                new PropertyValueFactory<UserInTableHyperlink, String>("email"));
         emailCol.setCellFactory(cellFactory);
         emailCol.setOnEditCommit(
-                new EventHandler<CellEditEvent<UserInTable, String>>() {
+                new EventHandler<CellEditEvent<UserInTableHyperlink, String>>() {
                     @Override
-                    public void handle(CellEditEvent<UserInTable, String> t) {
-                        ((UserInTable) t.getTableView().getItems().get(
+                    public void handle(CellEditEvent<UserInTableHyperlink, String> t) {
+                        ((UserInTableHyperlink) t.getTableView().getItems().get(
                                 t.getTablePosition().getRow())
                         ).setEmail(t.getNewValue());
                     }
@@ -140,31 +138,14 @@ public class TableViewSample extends Application {
         addEmail.setMaxWidth(emailCol.getPrefWidth());
         addEmail.setPromptText("Email");
 
-        final Button addButton = new Button("Add");
-        UsersListWriteToFile usersListWriteToFile = new UsersListWriteToFile();
-        addButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                data.add(new UserInTable(
-                        addFirstName.getText(),
-                        addLastName.getText(),
-                        addEmail.getText()));
-                userList.addUser(new User(addFirstName.getText(), addLastName.getText(), addEmail.getText()));
-                usersListWriteToFile.writeToFile(userList);
 
-                addFirstName.clear();
-                addLastName.clear();
-                addEmail.clear();
-            }
-        });
 
-        hb.getChildren().addAll(addFirstName, addLastName, addEmail, addButton);
-        hb.setSpacing(3);
+
 
         final VBox vbox = new VBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));
-        vbox.getChildren().addAll(label, table, hb);
+        vbox.getChildren().addAll(label, table, hb, link);
 
         ((Group) scene.getRoot()).getChildren().addAll(vbox);
 

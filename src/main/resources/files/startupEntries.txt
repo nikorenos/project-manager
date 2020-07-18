@@ -1,0 +1,1 @@
+Wld_InsertNpc 		(Zag, "ZAG");

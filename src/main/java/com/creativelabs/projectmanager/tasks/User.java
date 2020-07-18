@@ -1,5 +1,7 @@
 package com.creativelabs.projectmanager.tasks;
 
+import javafx.scene.control.Hyperlink;
+
 public class User {
     private final String username;
     private final String password;

@@ -15,13 +15,19 @@ public class CreateNpc {
     public static void main(String[] args) {
 
 
-        String npcName = "Gorstap";
+        String npcName = "Zag";
         String npcGuild = "BDT";
-        int npcId = 732;
-        int attributesToChapter;
+        int npcId = 733;
+        int SetAttributesToChapter = 5;
+        String fight_tactic = "MASTER"; // MASTER / STRONG / COWARD
+        String weapon = "steel_broadsword"; //ItMw_2h_Sld_Axe
+        String armor = "BDT_ARMOR3";
+        String Mdl_ApplyOverlayMds = "Militia"; // Tired / Militia / Mage / Arrogance / Relaxed
+        int FightSkills = 55;
 
 
-        String npcScript = "instance " + npcName + " (Npc_Default)\n" +
+        String npcScript = "\n" +
+                "instance " + npcName + " (Npc_Default)\n" +
                 "{\n" +
                 "\t// ------ NSC ------\n" +
                 "\tname \t\t= \""+ npcName + "\";\n" +
@@ -32,13 +38,13 @@ public class CreateNpc {
                 "\tnpctype\t\t= NPCTYPE_MAIN;\n" +
                 "\t\n" +
                 "\t//---aivars-----\n" +
-                "\taivar[AIV_NewsOverride] = TRUE;\n" +
+                "\t//aivar[AIV_NewsOverride] = TRUE;\n" +
                 "\t\n" +
                 "\t// ------ Attribute ------\n" +
-                "\tB_SetAttributesToChapter (self, 6);\n" +
+                "\tB_SetAttributesToChapter (self, " + SetAttributesToChapter + ");\n" +
                 "\t\n" +
                 "\t// ------ Kampf-Taktik ------\n" +
-                "\tfight_tactic = FAI_HUMAN_MASTER;\t\n" +
+                "\tfight_tactic = FAI_HUMAN_" + fight_tactic + ";\t\n" +
                 "\t\n" +
                 "\t// ------ Equippte Waffen ------\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n" +
                 "\tEquipItem (self, ItMw_2h_Sld_Axe);\n" +
@@ -47,45 +53,48 @@ public class CreateNpc {
                 "\tB_CreateAmbientInv (self); \n" +
                 "\t\n" +
                 "\t// ------ visuals ------\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n" +
-                "\tB_SetNpcVisual \t\t(self, MALE, \"Hum_Head_Bald\", Face_L_ToughBald01, BodyTex_L, ITAR_Bloodwyn_Addon);\t\n" +
-                "\tMdl_SetModelFatness\t(self, 0.5);\n" +
-                "\tMdl_ApplyOverlayMds\t(self, \"Humans_Militia.mds\"); \n" +
+                "\tB_SetNpcVisual \t\t(self, MALE, \"Hum_Head_Bald\", Face_L_ToughBald01, BodyTex_L, " + armor + ");\t\n" +
+                "\tMdl_SetModelFatness\t(self, 0.0);\n" +
+                "\tMdl_ApplyOverlayMds\t(self, \"Humans_" + Mdl_ApplyOverlayMds + ".mds\"); \n" +
                 "\n" +
                 "\t// ------ NSC-relevante Talente vergeben ------\n" +
                 "\tB_GiveNpcTalents (self);\n" +
                 "\t\n" +
                 "\t// ------ Kampf-Talente ------\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n" +
-                "\tB_SetFightSkills (self, 55); \n" +
+                "\tB_SetFightSkills (self, " + FightSkills + "); \n" +
                 "\n" +
                 "\t// ------ TA anmelden ------\n" +
-                "\tdaily_routine \t= Rtn_Start_1071;\n" +
+                "\tdaily_routine \t= Rtn_Start_" + npcId + ";\n" +
                 "};\n" +
                 "\n" +
-                "FUNC VOID Rtn_Start_1071 ()\n" +
+                "FUNC VOID Rtn_Start_" + npcId + " ()\n" +
                 "{\n" +
-                "  \tTA_Guard_Passage     (09,00,21,00,\"BL_ENTRANCE_04\");\n" +
-                "    TA_Guard_Passage     (21,00,09,00,\"BL_ENTRANCE_04\");\t\t\n" +
+                "  \tTA_Stand_Guarding     (08,00,12,00,\"" + npcName.toUpperCase() + "\");\n" +
+                "    TA_Stand_Guarding     (12,00,08,00,\"" + npcName.toUpperCase() + "\");\t\t\n" +
                 "};";
 
-        try {
-            FileWriter myWriter = new FileWriter("src/main/resources/files/npc.d");
+        String startupEntry = "Wld_InsertNpc \t\t(" + npcName + ", \"" + npcName.toUpperCase() + "\");";
 
-            /*List<String> temporaryList = list.getUsersList().stream()
-                    .map(s -> s.getUsername() + " " + s.getPassword() + " " + s.getEmail())
-                    .collect(Collectors.toList());
-            for (String userName : temporaryList) {
-                myWriter.write(userName + "\n");
-            }*/
+        try {
+            String npcPath = "D:/Program Files/JoWood/Gothic2ZlotaEdycja/_Work/data/Scripts/Content/" +
+                    "Story/NPC/SAM_" + npcGuild + "_" + npcId  + "_" + npcName +".d";
+            FileWriter myWriter = new FileWriter(npcPath);
             myWriter.write(npcScript);
 
             myWriter.close();
+
+            String startupEntryPath = "src/main/resources/files/startupEntries.txt";
+            FileWriter myWriterStartup = new FileWriter(startupEntryPath);
+            myWriterStartup.write(startupEntry);
+            myWriterStartup.close();
+
             System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
 
-        System.out.println(npcScript);
+        //System.out.println(npcScript);
 
 
 
