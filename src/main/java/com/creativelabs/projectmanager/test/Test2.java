@@ -130,7 +130,7 @@ public class Test2 extends Application {
 
         TextArea textArea = new TextArea();
         textArea.setText("This is example text.");
-        textArea.setDisable(true);
+        textArea.setDisable(false);
         textArea.setPrefRowCount(4);
         textArea.setEditable(true);
         textArea.textProperty().addListener((observable, oldValue, newValue) -> {

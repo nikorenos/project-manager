@@ -82,6 +82,9 @@ public final class Board {
         File myObjTasks = new File(pathTasks);
         TaskList tasksList = readFileToTasksList.fileToList(myObjTasks);
         System.out.println(tasksList.getTasks().get(tasksList.getTasks().size()-1).getId());
+        System.out.println(tasksList.getTasks().get(tasksList.getTasks().indexOf("1")));
+
+        System.out.println(tasksList.getTasks());
 
     }
 

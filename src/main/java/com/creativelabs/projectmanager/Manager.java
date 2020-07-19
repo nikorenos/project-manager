@@ -140,13 +140,92 @@ public class Manager extends Application {
     public void createTask(Stage stage) {
 
         GridPane grid = new GridPane();
-               
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(25, 25, 25, 25));
 
-        Label taskName = new Label("Task name:");
-        taskName.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
 
-        TextField taskNameTextField = new TextField();
+        //Label taskId = new Label("Task number: " + id);
+        //taskId.setFont(Font.font("Tahoma", FontWeight.NORMAL, 12));
 
+        Label taskTitle = new Label("Name:");
+        taskTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        TextField taskTitleTextField = new TextField();
+        taskTitleTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        Label taskType = new Label("Type:");
+        taskType.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        TextField taskTypeTextField = new TextField();
+        taskTypeTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        Label statusType = new Label("Status:");
+        statusType.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        TextField taskStatusTextField = new TextField();
+        taskStatusTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        Label assagneeLabel = new Label("Assignee:");
+        assagneeLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        final ComboBox priorityComboBox = new ComboBox();
+        priorityComboBox.getItems().addAll(
+                "Highest",
+                "High",
+                "Normal",
+                "Low",
+                "Lowest"
+        );
+
+        priorityComboBox.setValue("Normal");
+
+        TextField assagneeTextField = new TextField();
+        assagneeTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        Label creatorLabel = new Label("Creator:");
+        creatorLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        TextField creatorTextField = new TextField();
+        creatorTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        Label createdLabel = new Label("Created:");
+        createdLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        LocalDate created = LocalDate.now();
+        TextField createdTextField = new TextField();
+        createdTextField.setText(String.valueOf(created));
+        createdTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        createdTextField.setDisable(true);
+
+        Label deadlineLabel = new Label("Days for task:");
+        deadlineLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        TextField deadlineTextField = new TextField();
+        deadlineTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        Label descriptionLabel = new Label("Description:");
+        descriptionLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        TextField descriptionTextField = new TextField();
+        descriptionTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        descriptionTextField.setMinSize(250,50);
+
+
+
+
+
+        Button btnExitTask = new Button("Exit");
+        HBox hbBtnExitApply = new HBox(10);
+        hbBtnExitApply.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtnExitApply.getChildren().add(btnExitTask);
+
+        btnExitTask.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                stage.hide();
+            }
+        });
 
         Button btnCreateTask = new Button("Create");
         HBox hbBtnApply = new HBox(10);
@@ -165,15 +244,13 @@ public class Manager extends Application {
             @Override
             public void handle(ActionEvent e) {
                 String convertTaskNumber;
-                LocalDate created = LocalDate.now();
-                String createdDate = String.valueOf(created);
 
-                LocalDate deadline = LocalDate.now().plusDays(10);
+                LocalDate deadline = LocalDate.now().plusDays(Long.parseLong(deadlineTextField.getText()));
                 String deadlineDate = String.valueOf(deadline);
 
-                if (taskNameTextField.getText().length() < 3) {
+                if (taskTitleTextField.getText().length() < 3) {
                     actiontarget.setFill(Color.FIREBRICK);
-                    actiontarget.setText("Enter project name!");
+                    actiontarget.setText("Fill all fields!");
                 } else {
 
                     if (tasksList.getTasks().size() > 0) {
@@ -192,14 +269,14 @@ public class Manager extends Application {
                     dataTasks.add(new TaskInTable(
                             convertTaskNumber,
                             hyperlink,
-                            taskNameTextField.getText(),
-                            "test",
-                            "test",
-                            "test",
-                            "test",
-                            createdDate,
+                            taskTitleTextField.getText(),
+                            taskTypeTextField.getText(),
+                            taskStatusTextField.getText(),
+                            assagneeTextField.getText(),
+                            creatorTextField.getText(),
+                            createdTextField.getText(),
                             deadlineDate));
-                    tasksList.addTask(new Task(taskNumber, taskNameTextField.getText(), "test", "test", "test", "test", "test", created, deadline));
+                    tasksList.addTask(new Task(taskNumber, taskTitleTextField.getText(), descriptionTextField.getText(),  taskTypeTextField.getText(), taskStatusTextField.getText(), assagneeTextField.getText(),creatorTextField.getText(), created, deadline));
                     TasksListWriteToFile tasksListWriteToFile = new TasksListWriteToFile();
                     tasksListWriteToFile.writeToFile(tasksList);
 
@@ -210,12 +287,32 @@ public class Manager extends Application {
             }
         });
 
-        grid.add(taskName, 2, 5);
-        grid.add(taskNameTextField, 3, 6);
-        grid.add(hbBtnApply, 3, 7);
-        grid.add(actiontarget, 2, 12);
 
-        Scene scene = new Scene(grid, 600, 400); // Manage scene size
+        grid.add(taskTitle, 1, 0);
+        grid.add(taskTitleTextField, 1, 1);
+        grid.add(taskType, 1, 2);
+        grid.add(taskTypeTextField, 1, 3);
+        grid.add(statusType, 5, 0);
+        grid.add(taskStatusTextField, 5, 1);
+        grid.add(assagneeLabel, 5, 2);
+        grid.add(assagneeTextField, 5, 3);
+        grid.add(creatorLabel, 5, 4);
+        grid.add(creatorTextField, 5, 5);
+        grid.add(createdLabel, 11, 0);
+        grid.add(createdTextField, 11, 1);
+        grid.add(deadlineLabel, 11, 2);
+        grid.add(deadlineTextField, 11, 3);
+        grid.add(descriptionLabel, 1, 7);
+        grid.add(priorityComboBox, 11, 10);
+        grid.add(descriptionTextField, 1, 8);
+
+
+
+        grid.add(btnCreateTask, 11, 9);
+        //grid.add(btnExitTask, 11, 9);
+
+
+        Scene scene = new Scene(grid, 800, 600); // Manage scene size
         stage.setTitle("Create task");
         stage.setScene(scene);
         stage.show();
@@ -260,7 +357,7 @@ public class Manager extends Application {
         assagneeLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
 
         TextField assagneeTextField = new TextField();
-        assagneeTextField.setText(status);
+        assagneeTextField.setText(assignee);
         assagneeTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
         assagneeTextField.setDisable(true);
 
@@ -268,7 +365,7 @@ public class Manager extends Application {
         creatorLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
 
         TextField creatorTextField = new TextField();
-        creatorTextField.setText(status);
+        creatorTextField.setText(creator);
         creatorTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
         creatorTextField.setDisable(true);
 
@@ -276,7 +373,7 @@ public class Manager extends Application {
         createdLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
 
         TextField createdTextField = new TextField();
-        createdTextField.setText(status);
+        createdTextField.setText(created);
         createdTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
         createdTextField.setDisable(true);
 
@@ -284,7 +381,7 @@ public class Manager extends Application {
         deadlineLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
 
         TextField deadlineTextField = new TextField();
-        deadlineTextField.setText(status);
+        deadlineTextField.setText(deadline);
         deadlineTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
         deadlineTextField.setDisable(true);
 
@@ -292,10 +389,10 @@ public class Manager extends Application {
         descriptionLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
 
         TextField descriptionTextField = new TextField();
-        descriptionTextField.setText(status);
+        descriptionTextField.setText(tasksList.getTasks().get(Integer.parseInt(id)-1).getDescription());
         descriptionTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
         descriptionTextField.setDisable(true);
-        descriptionTextField.setMinSize(300,200);
+        descriptionTextField.setMinSize(250,50);
 
 
 
