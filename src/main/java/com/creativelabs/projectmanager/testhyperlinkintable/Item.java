@@ -1,9 +1,6 @@
-package com.creativelabs.projectmanager.table;
+package com.creativelabs.projectmanager.testhyperlinkintable;
 
 import com.creativelabs.projectmanager.Manager;
-import com.creativelabs.projectmanager.fileshandling.TasksListWriteToFile;
-import com.creativelabs.projectmanager.tasks.Task;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -24,47 +21,33 @@ import java.time.LocalDate;
 
 import static javafx.geometry.HPos.RIGHT;
 
-public class TaskInTable {
+public class Item {
+    private String websiteName;
+    private Hyperlink hyperlink;
 
-    private final SimpleStringProperty id;
-    private final Hyperlink hyperlink;
-    private final SimpleStringProperty title;
-    private final SimpleStringProperty type;
-    private final SimpleStringProperty status;
-    private final SimpleStringProperty assignee;
-    private final SimpleStringProperty creator;
-    private final SimpleStringProperty created;
-    private final SimpleStringProperty deadline;
-
-    public TaskInTable(String id, Hyperlink hyperlink, String title, String type, String status, String assignee, String creator, String created, String deadline) {
-        this.id = new SimpleStringProperty(id);
-        this.hyperlink = new Hyperlink(id);
-        this.title = new SimpleStringProperty(title);
-        this.type = new SimpleStringProperty(type);
-        this.status = new SimpleStringProperty(status);
-        this.assignee = new SimpleStringProperty(assignee);
-        this.creator = new SimpleStringProperty(creator);
-        this.created = new SimpleStringProperty(created);
-        this.deadline = new SimpleStringProperty(deadline);
+    public Item(String websiteName, String websiteUrl) {
+        this.websiteName = websiteName;
+        this.hyperlink = new Hyperlink(websiteUrl);
     }
 
-    public String getId() {
-        return id.get();
+    public String getWebsiteName() {
+        return websiteName;
     }
 
-    public Hyperlink getHyperlink()
-    {
-        hyperlink.setOnAction(new EventHandler<ActionEvent>() {
+    public void setWebsiteName(String websiteName) {
+        this.websiteName = websiteName;
+    }
+
+    public Hyperlink getHyperlink() {
+
+        /*hyperlink.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                Manager manager = new Manager();
-                //manager.editTask(getId(), getHyperlink(), getTitle(), getType(), getStatus(), getAssignee(), getCreator(), getCreated(), getDeadline());
-
                 Stage stage = new Stage();
-                manager.editTask(stage);
-                stage.show();
+                editTask(stage);
             }
-        });
+        });*/
+
         return hyperlink;
     }
 
@@ -79,7 +62,7 @@ public class TaskInTable {
         taskTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
 
         TextField taskTitleTextField = new TextField();
-        taskTitleTextField.setText(getTitle());
+        taskTitleTextField.setText(getWebsiteName());
         taskTitleTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
         taskTitleTextField.setDisable(true);
 
@@ -87,7 +70,7 @@ public class TaskInTable {
         taskType.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
 
         TextField taskTypeTextField = new TextField();
-        taskTypeTextField.setText(getType());
+        taskTypeTextField.setText("getType");
         taskTypeTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
         taskTypeTextField.setDisable(true);
 
@@ -131,8 +114,8 @@ public class TaskInTable {
                     actiontarget.setFill(Color.FIREBRICK);
                     actiontarget.setText("Fill all fields!");
                 } else {
-                    setTitle(taskTitleTextField.getText());
-                    setType(taskTypeTextField.getText());
+                    setWebsiteName(taskTitleTextField.getText());
+                    System.out.println(taskTitleTextField.getText());
 
                     /*TaskInTable editedTask = new TaskInTable(id,hyperlink, taskTitleTextField.getText(), taskTypeTextField.getText(),"status","assignee","creator","deadline", "deadline");
                     dataTasks.set(Integer.parseInt(id)-1, editedTask);
@@ -171,99 +154,12 @@ public class TaskInTable {
         grid.add(actiontarget, 5, 25);
 
         Scene scene = new Scene(grid, 800, 600); // Manage scene size
-        stage.setTitle("Task " + getId());
+        stage.setTitle("Task ");
         stage.setScene(scene);
         stage.show();
     }
 
-    public void setId(String id) {
-        this.id.set(id);
-    }
-
-    public String getTitle() {
-        return title.get();
-    }
-
-    public void setTitle(String title) {
-        this.title.set(title);
-    }
-
-    public String getType() {
-        return type.get();
-    }
-
-    public void setType(String type) {
-        this.type.set(type);
-    }
-
-    public String getStatus() {
-        return status.get();
-    }
-
-    public void setStatus(String status) {
-        this.status.set(status);
-    }
-
-    public String getAssignee() {
-        return assignee.get();
-    }
-
-    public SimpleStringProperty assigneeProperty() {
-        return assignee;
-    }
-
-    public void setAssignee(String assignee) {
-        this.assignee.set(assignee);
-    }
-
-    public String getCreator() {
-        return creator.get();
-    }
-
-    public SimpleStringProperty creatorProperty() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator.set(creator);
-    }
-
-    public String getCreated() {
-        return created.get();
-    }
-
-    public SimpleStringProperty createdProperty() {
-        return created;
-    }
-
-    public void setCreated(String created) {
-        this.created.set(created);
-    }
-
-    public String getDeadline() {
-        return deadline.get();
-    }
-
-    public SimpleStringProperty deadlineProperty() {
-        return deadline;
-    }
-
-    public void setDeadline(String deadline) {
-        this.deadline.set(deadline);
-    }
-
-    @Override
-    public String toString() {
-        return "TaskInTable{" +
-                "id=" + id +
-                ", hyperlink=" + hyperlink +
-                ", title=" + title +
-                ", type=" + type +
-                ", status=" + status +
-                ", assignee=" + assignee +
-                ", creator=" + creator +
-                ", created=" + created +
-                ", deadline=" + deadline +
-                '}';
+    public void setHyperlink(String websiteUrl) {
+        this.hyperlink = new Hyperlink(websiteUrl);
     }
 }

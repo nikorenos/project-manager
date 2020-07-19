@@ -93,7 +93,12 @@ public class Manager extends Application {
         ObservableList<TaskInTable> data = FXCollections.observableArrayList();
 
         for(int n = 0; n < list.getTasks().size(); n++) {
-            String id = "00" + list.getTasks().get(n).getId();
+            String id = String.valueOf(list.getTasks().get(n).getId());
+            if (list.getTasks().get(n).getId() < 10) {
+                id = "00" + id;
+            } else if ((list.getTasks().get(n).getId() >= 10) && (list.getTasks().get(n).getId() < 100)) {
+                id = "0" + id;
+            }
             Hyperlink hyperlink = new Hyperlink();
             String title = list.getTasks().get(n).getTitle();
             String type = list.getTasks().get(n).getType();
@@ -177,9 +182,9 @@ public class Manager extends Application {
                     taskNumber += 1;
 
                     convertTaskNumber = String.valueOf(taskNumber);
-                    if (taskNumber <10) {
+                    if (taskNumber < 10) {
                         convertTaskNumber = "00" + convertTaskNumber;
-                    } else if (taskNumber < 100) {
+                    } else if ((taskNumber >= 10) && (taskNumber < 100)) {
                         convertTaskNumber = "0" + convertTaskNumber;
                     }
                     Hyperlink hyperlink = new Hyperlink(convertTaskNumber);
@@ -216,28 +221,46 @@ public class Manager extends Application {
         stage.show();
     }
 
-    public void editTask(Stage stage) {
+    /*public void editTask(String id, Hyperlink hyperlink, String title, String type, String status, String assignee, String creator, String created, String deadline) {
 
         GridPane grid = new GridPane();
+        Stage stage = new Stage();
 
+        //Label taskId = new Label("Task number: " + id);
+        //taskId.setFont(Font.font("Tahoma", FontWeight.NORMAL, 12));
 
-        Label taskName = new Label("Task name:");
-        taskName.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        Label taskTitle = new Label("Task name:");
+        taskTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
 
-        TextField taskNameTextField = new TextField();
-        taskNameTextField.setText("test");
-        //taskNameTextField.setEditable(false);
+        TextField taskTitleTextField = new TextField();
+        taskTitleTextField.setText(title);
+        taskTitleTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        taskTitleTextField.setDisable(true);
+
+        Label taskType = new Label("Task type:");
+        taskType.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
 
         TextField taskTypeTextField = new TextField();
-        taskTypeTextField.setText("test");
+        taskTypeTextField.setText("Quest");
         taskTypeTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
         taskTypeTextField.setDisable(true);
 
 
-        Button btnCreateTask = new Button("Create");
+        Button btnEditTask = new Button("Edit");
+
+        btnEditTask.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                taskTitleTextField.setDisable(false);
+                taskTypeTextField.setDisable(false);
+                grid.getChildren().remove(btnEditTask);
+            }
+        });
+
+        Button btnSaveTask = new Button("Save");
         HBox hbBtnApply = new HBox(10);
         hbBtnApply.setAlignment(Pos.BOTTOM_RIGHT);
-        hbBtnApply.getChildren().add(btnCreateTask);
+        hbBtnApply.getChildren().add(btnSaveTask);
 
 
         //info when text is too short
@@ -246,8 +269,7 @@ public class Manager extends Application {
         grid.setHalignment(actiontarget, RIGHT);
         actiontarget.setId("actiontarget");
 
-        btnCreateTask.setOnAction(new EventHandler<ActionEvent>() {
-
+        btnSaveTask.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 String convertTaskNumber;
@@ -257,40 +279,33 @@ public class Manager extends Application {
                 LocalDate deadline = LocalDate.now().plusDays(10);
                 String deadlineDate = String.valueOf(deadline);
 
-                if (taskNameTextField.getText().length() < 3) {
+                if ((taskTitleTextField.getText().length() < 3)
+                || (taskTypeTextField.getText().length() < 3))
+                {
                     actiontarget.setFill(Color.FIREBRICK);
-                    actiontarget.setText("Enter project name!");
+                    actiontarget.setText("Fill all fields!");
                 } else {
 
-                    if (tasksList.getTasks().size() > 0) {
-                        taskNumber = tasksList.getTasks().get(tasksList.getTasks().size()-1).getId();
-                    }
-                    taskNumber += 1;
-
-                    convertTaskNumber = String.valueOf(taskNumber);
-                    if (taskNumber <10) {
-                        convertTaskNumber = "00" + convertTaskNumber;
-                    } else if (taskNumber < 100) {
-                        convertTaskNumber = "0" + convertTaskNumber;
-                    }
-                    Hyperlink hyperlink = new Hyperlink(convertTaskNumber);
-
-                    TaskInTable test = new TaskInTable("1",hyperlink, "title", "type","status","assignee","creator","deadline", "deadline");
-                    dataTasks.set(0, test);
-
-                    /*dataTasks.add(new TaskInTable(
-                            convertTaskNumber,
+                    TaskInTable editedTask = new TaskInTable(id,hyperlink, taskTitleTextField.getText(), taskTypeTextField.getText(),"status","assignee","creator","deadline", "deadline");
+                    dataTasks.set(Integer.parseInt(id)-1, editedTask);
+                    System.out.println(dataTasks.get(Integer.parseInt(id)-1).getTitle());
+                    *//*System.out.println("Edited task");
+                    dataTasks.add(new TaskInTable(
+                            id,
                             hyperlink,
-                            taskNameTextField.getText(),
+                            taskTitleTextField.getText(),
                             "test",
                             "test",
                             "test",
                             "test",
                             createdDate,
-                            deadlineDate));*/
-                    tasksList.addTask(new Task(taskNumber, taskNameTextField.getText(), "test", "test", "test", "test", "test", created, deadline));
+                            deadlineDate));*//*
+
+
+
+                    *//*tasksList.addTask(new Task(taskNumber, taskTitleTextField.getText(), "test", "test", "test", "test", "test", created, deadline));
                     TasksListWriteToFile tasksListWriteToFile = new TasksListWriteToFile();
-                    tasksListWriteToFile.writeToFile(tasksList);
+                    tasksListWriteToFile.writeToFile(tasksList);*//*
 
                     stage.hide();
                 }
@@ -299,14 +314,123 @@ public class Manager extends Application {
             }
         });
 
-        grid.add(taskName, 2, 5);
-        grid.add(taskNameTextField, 3, 6);
-        grid.add(taskTypeTextField, 3, 7);
-        grid.add(hbBtnApply, 3, 8);
-        grid.add(actiontarget, 2, 12);
+        //grid.add(taskId, 2, 3);
+        grid.add(taskTitle, 3, 5);
+        grid.add(taskTitleTextField, 3, 6);
+        grid.add(taskType, 3, 8);
+        grid.add(taskTypeTextField, 3, 9);
+        grid.add(btnEditTask, 3, 22);
+        grid.add(btnSaveTask, 5, 22);
+        grid.add(actiontarget, 5, 25);
 
-        Scene scene = new Scene(grid, 600, 400); // Manage scene size
-        stage.setTitle("Task");
+        Scene scene = new Scene(grid, 800, 600); // Manage scene size
+        stage.setTitle("Task " + id);
+        stage.setScene(scene);
+        stage.show();
+    }*/
+
+    public void editTask(Stage stage) {
+
+        GridPane grid = new GridPane();
+
+        //Label taskId = new Label("Task number: " + id);
+        //taskId.setFont(Font.font("Tahoma", FontWeight.NORMAL, 12));
+
+        Label taskTitle = new Label("Task name:");
+        taskTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        TextField taskTitleTextField = new TextField();
+        taskTitleTextField.setText("title");
+        taskTitleTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        taskTitleTextField.setDisable(true);
+
+        Label taskType = new Label("Task type:");
+        taskType.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        TextField taskTypeTextField = new TextField();
+        taskTypeTextField.setText("Quest");
+        taskTypeTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        taskTypeTextField.setDisable(true);
+
+
+        Button btnEditTask = new Button("Edit");
+
+        btnEditTask.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                taskTitleTextField.setDisable(false);
+                taskTypeTextField.setDisable(false);
+                grid.getChildren().remove(btnEditTask);
+            }
+        });
+
+        Button btnSaveTask = new Button("Save");
+        HBox hbBtnApply = new HBox(10);
+        hbBtnApply.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtnApply.getChildren().add(btnSaveTask);
+
+
+        //info when text is too short
+        final Text actiontarget = new Text();
+        grid.setColumnSpan(actiontarget, 2);
+        grid.setHalignment(actiontarget, RIGHT);
+        actiontarget.setId("actiontarget");
+
+        btnSaveTask.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                String convertTaskNumber;
+                LocalDate created = LocalDate.now();
+                String createdDate = String.valueOf(created);
+
+                LocalDate deadline = LocalDate.now().plusDays(10);
+                String deadlineDate = String.valueOf(deadline);
+
+                if ((taskTitleTextField.getText().length() < 3)
+                        || (taskTypeTextField.getText().length() < 3))
+                {
+                    actiontarget.setFill(Color.FIREBRICK);
+                    actiontarget.setText("Fill all fields!");
+                } else {
+                    Hyperlink hyperlink = new Hyperlink();
+                    TaskInTable editedTask = new TaskInTable("id",hyperlink, taskTitleTextField.getText(), taskTypeTextField.getText(),"status","assignee","creator","deadline", "deadline");
+                    dataTasks.set(0, editedTask);
+                    /*System.out.println("Edited task");
+                    dataTasks.add(new TaskInTable(
+                            id,
+                            hyperlink,
+                            taskTitleTextField.getText(),
+                            "test",
+                            "test",
+                            "test",
+                            "test",
+                            createdDate,
+                            deadlineDate));*/
+
+
+
+                    /*tasksList.addTask(new Task(taskNumber, taskTitleTextField.getText(), "test", "test", "test", "test", "test", created, deadline));
+                    TasksListWriteToFile tasksListWriteToFile = new TasksListWriteToFile();
+                    tasksListWriteToFile.writeToFile(tasksList);*/
+
+                    stage.hide();
+                }
+
+
+            }
+        });
+
+        //grid.add(taskId, 2, 3);
+        grid.add(taskTitle, 3, 5);
+        grid.add(taskTitleTextField, 3, 6);
+        grid.add(taskType, 3, 8);
+        grid.add(taskTypeTextField, 3, 9);
+        grid.add(btnEditTask, 3, 22);
+        grid.add(btnSaveTask, 5, 22);
+        grid.add(actiontarget, 5, 25);
+
+        Scene scene = new Scene(grid, 800, 600); // Manage scene size
+        stage.setTitle("Task edit");
         stage.setScene(scene);
         stage.show();
     }
