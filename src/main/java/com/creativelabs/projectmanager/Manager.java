@@ -14,6 +14,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+
+import static javafx.geometry.HPos.LEFT;
 import static javafx.geometry.HPos.RIGHT;
 
 import javafx.geometry.Insets;
@@ -27,6 +29,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -884,34 +887,51 @@ public class Manager extends Application {
     public void createNewProject(Stage createNewProject) {
 
         GridPane gridCreateProject = new GridPane();
-        gridCreateProject.setAlignment(Pos.CENTER);
+        gridCreateProject.setAlignment(Pos.TOP_CENTER);
         gridCreateProject.setHgap(10);
         gridCreateProject.setVgap(10);
-        gridCreateProject.setPadding(new Insets(25, 25, 25, 25));
+        gridCreateProject.setPadding(new Insets(100, 25, 25, 25));
+        Scene sceneCreateNewProject = new Scene(gridCreateProject, 500, 475);
 
-
-        Text welcomeUser = new Text("Create new project");
-
-        welcomeUser.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        gridCreateProject.add(welcomeUser, 0, 0, 2, 1);
+        Text createProject = new Text("Create new project");
+        createProject.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        gridCreateProject.add(createProject, 0, 0, 2, 1);
 
         Label projectName = new Label("Project name:");
         gridCreateProject.add(projectName, 0, 1);
 
         TextField projectNameTextField = new TextField();
         gridCreateProject.add(projectNameTextField, 1, 1);
-        Scene sceneCreateNewProject = new Scene(gridCreateProject, 400, 475);
+
+        Label projectPath = new Label("Select folder:");
+        gridCreateProject.add(projectPath, 0, 2);
+
+        TextField projectPathTextField = new TextField();
+        projectPathTextField.setText("C:/Users");
+        gridCreateProject.add(projectPathTextField, 1, 2);
+
+
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setInitialDirectory(new File("C:/Users"));
+
+        Button buttonSelectDirectory = new Button("Select Directory");
+        buttonSelectDirectory.setOnAction(e -> {
+            File selectedDirectory = directoryChooser.showDialog(createNewProject);
+            projectPathTextField.setText(selectedDirectory.getAbsolutePath());
+            //System.out.println(selectedDirectory.getAbsolutePath());
+        });
+        gridCreateProject.add(buttonSelectDirectory, 3, 2);
 
         Button btnCreateProject = new Button("Create");
         HBox hbBtnApply = new HBox(10);
         hbBtnApply.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtnApply.getChildren().add(btnCreateProject);
-        gridCreateProject.add(hbBtnApply, 1, 4);
+        gridCreateProject.add(hbBtnApply, 1, 3);
 
         final Text actiontarget = new Text();
-        gridCreateProject.add(actiontarget, 0, 6);
+        gridCreateProject.add(actiontarget, 0, 3);
         gridCreateProject.setColumnSpan(actiontarget, 2);
-        gridCreateProject.setHalignment(actiontarget, RIGHT);
+        gridCreateProject.setHalignment(actiontarget, LEFT);
         actiontarget.setId("actiontarget");
 
         btnCreateProject.setOnAction(new EventHandler<ActionEvent>() {
@@ -921,7 +941,7 @@ public class Manager extends Application {
                 if (projectNameTextField.getText().length() < 3) {
                     actiontarget.setFill(Color.FIREBRICK);
                     actiontarget.setText("Enter project name!");
-                } else {                    
+                } else {
                     project = projectNameTextField.getText();
                     System.out.println(project);
                     createNewProject.hide();
@@ -931,6 +951,28 @@ public class Manager extends Application {
 
             }
         });
+
+        Text selectProject = new Text("Select project");
+        selectProject.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        gridCreateProject.add(selectProject, 0, 8, 2, 1);
+
+        Label selectProjectName = new Label("Project name:");
+        gridCreateProject.add(selectProjectName, 0, 9);
+
+        ObservableList<String> users = convertUsersListToString(userList);
+        final ComboBox projectComboBox = new ComboBox(users);
+        projectComboBox.setValue(userList.getUsersList().get(0).getUsername());
+        gridCreateProject.add(projectComboBox, 1, 9, 2, 1);
+
+        Button btnSelectProject = new Button("Select");
+        HBox btnSelectProjectApply = new HBox(10);
+        btnSelectProjectApply.setAlignment(Pos.BOTTOM_RIGHT);
+        btnSelectProjectApply.getChildren().add(btnSelectProject);
+        gridCreateProject.add(btnSelectProjectApply, 1, 10);
+
+
+
+
 
         createNewProject.setTitle("Welcome " + getNick() + " " + getPassword());
         createNewProject.setScene(sceneCreateNewProject);
@@ -1101,7 +1143,8 @@ public class Manager extends Application {
         //primaryStage.show();
 
         Stage newBoard = new Stage();
-        createBoard(newBoard);
+        //createBoard(newBoard);
+        createNewProject(newBoard);
 
 
 
