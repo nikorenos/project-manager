@@ -79,6 +79,15 @@ public class Manager extends Application {
 
     final HBox hb = new HBox();
 
+    public ObservableList<String> convertUsersListToString(UserList list) {
+        ObservableList<String> data = FXCollections.observableArrayList();
+        for(int n = 0; n < list.getUsersList().size(); n++) {
+            String nick = list.getUsersList().get(n).getUsername();
+            data.add(nick);
+        }
+        return data;
+    }
+
     public ObservableList<UserInTable> convertUsersListToObservable(UserList list) {
         ObservableList<UserInTable> data = FXCollections.observableArrayList();
         for(int n = 0; n < list.getUsersList().size(); n++) {
@@ -169,19 +178,12 @@ public class Manager extends Application {
         Label assagneeLabel = new Label("Assignee:");
         assagneeLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
 
-        final ComboBox priorityComboBox = new ComboBox();
-        priorityComboBox.getItems().addAll(
-                "Highest",
-                "High",
-                "Normal",
-                "Low",
-                "Lowest"
-        );
 
-        priorityComboBox.setValue("Normal");
 
-        TextField assagneeTextField = new TextField();
-        assagneeTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        ObservableList<String> users = convertUsersListToString(userList);
+        final ComboBox usersComboBox = new ComboBox(users);
+        usersComboBox.setValue(userList.getUsersList().get(0).getUsername());
+
 
         Label creatorLabel = new Label("Creator:");
         creatorLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
@@ -272,11 +274,11 @@ public class Manager extends Application {
                             taskTitleTextField.getText(),
                             taskTypeTextField.getText(),
                             taskStatusTextField.getText(),
-                            assagneeTextField.getText(),
+                            usersComboBox.getValue().toString(),
                             creatorTextField.getText(),
                             createdTextField.getText(),
                             deadlineDate));
-                    tasksList.addTask(new Task(taskNumber, taskTitleTextField.getText(), descriptionTextField.getText(),  taskTypeTextField.getText(), taskStatusTextField.getText(), assagneeTextField.getText(),creatorTextField.getText(), created, deadline));
+                    tasksList.addTask(new Task(taskNumber, taskTitleTextField.getText(), descriptionTextField.getText(),  taskTypeTextField.getText(), taskStatusTextField.getText(), usersComboBox.getValue().toString(),creatorTextField.getText(), created, deadline));
                     TasksListWriteToFile tasksListWriteToFile = new TasksListWriteToFile();
                     tasksListWriteToFile.writeToFile(tasksList);
 
@@ -295,7 +297,7 @@ public class Manager extends Application {
         grid.add(statusType, 5, 0);
         grid.add(taskStatusTextField, 5, 1);
         grid.add(assagneeLabel, 5, 2);
-        grid.add(assagneeTextField, 5, 3);
+        grid.add(usersComboBox, 5, 3);
         grid.add(creatorLabel, 5, 4);
         grid.add(creatorTextField, 5, 5);
         grid.add(createdLabel, 11, 0);
@@ -303,7 +305,6 @@ public class Manager extends Application {
         grid.add(deadlineLabel, 11, 2);
         grid.add(deadlineTextField, 11, 3);
         grid.add(descriptionLabel, 1, 7);
-        grid.add(priorityComboBox, 11, 10);
         grid.add(descriptionTextField, 1, 8);
 
 
