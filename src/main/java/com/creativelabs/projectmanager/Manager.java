@@ -221,15 +221,18 @@ public class Manager extends Application {
         stage.show();
     }
 
-    /*public void editTask(String id, Hyperlink hyperlink, String title, String type, String status, String assignee, String creator, String created, String deadline) {
+    public void showTask(String id, Hyperlink hyperlink, String title, String type, String status, String assignee, String creator, String created, String deadline) {
 
         GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(25, 25, 25, 25));
         Stage stage = new Stage();
 
         //Label taskId = new Label("Task number: " + id);
         //taskId.setFont(Font.font("Tahoma", FontWeight.NORMAL, 12));
 
-        Label taskTitle = new Label("Task name:");
+        Label taskTitle = new Label("Name:");
         taskTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
 
         TextField taskTitleTextField = new TextField();
@@ -237,101 +240,114 @@ public class Manager extends Application {
         taskTitleTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
         taskTitleTextField.setDisable(true);
 
-        Label taskType = new Label("Task type:");
+        Label taskType = new Label("Type:");
         taskType.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
 
         TextField taskTypeTextField = new TextField();
-        taskTypeTextField.setText("Quest");
+        taskTypeTextField.setText(type);
         taskTypeTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
         taskTypeTextField.setDisable(true);
 
+        Label statusType = new Label("Status:");
+        statusType.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
 
-        Button btnEditTask = new Button("Edit");
+        TextField taskStatusTextField = new TextField();
+        taskStatusTextField.setText(status);
+        taskStatusTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        taskStatusTextField.setDisable(true);
 
-        btnEditTask.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                taskTitleTextField.setDisable(false);
-                taskTypeTextField.setDisable(false);
-                grid.getChildren().remove(btnEditTask);
-            }
-        });
+        Label assagneeLabel = new Label("Assignee:");
+        assagneeLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
 
-        Button btnSaveTask = new Button("Save");
+        TextField assagneeTextField = new TextField();
+        assagneeTextField.setText(status);
+        assagneeTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        assagneeTextField.setDisable(true);
+
+        Label creatorLabel = new Label("Creator:");
+        creatorLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        TextField creatorTextField = new TextField();
+        creatorTextField.setText(status);
+        creatorTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        creatorTextField.setDisable(true);
+
+        Label createdLabel = new Label("Created:");
+        createdLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        TextField createdTextField = new TextField();
+        createdTextField.setText(status);
+        createdTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        createdTextField.setDisable(true);
+
+        Label deadlineLabel = new Label("Deadline:");
+        deadlineLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        TextField deadlineTextField = new TextField();
+        deadlineTextField.setText(status);
+        deadlineTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        deadlineTextField.setDisable(true);
+
+        Label descriptionLabel = new Label("Description:");
+        descriptionLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+
+        TextField descriptionTextField = new TextField();
+        descriptionTextField.setText(status);
+        descriptionTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        descriptionTextField.setDisable(true);
+        descriptionTextField.setMinSize(300,200);
+
+
+
+
+
+        Button btnExitTask = new Button("Exit");
         HBox hbBtnApply = new HBox(10);
         hbBtnApply.setAlignment(Pos.BOTTOM_RIGHT);
-        hbBtnApply.getChildren().add(btnSaveTask);
+        hbBtnApply.getChildren().add(btnExitTask);
 
-
-        //info when text is too short
-        final Text actiontarget = new Text();
-        grid.setColumnSpan(actiontarget, 2);
-        grid.setHalignment(actiontarget, RIGHT);
-        actiontarget.setId("actiontarget");
-
-        btnSaveTask.setOnAction(new EventHandler<ActionEvent>() {
+        btnExitTask.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                String convertTaskNumber;
-                LocalDate created = LocalDate.now();
-                String createdDate = String.valueOf(created);
-
-                LocalDate deadline = LocalDate.now().plusDays(10);
-                String deadlineDate = String.valueOf(deadline);
-
-                if ((taskTitleTextField.getText().length() < 3)
-                || (taskTypeTextField.getText().length() < 3))
-                {
-                    actiontarget.setFill(Color.FIREBRICK);
-                    actiontarget.setText("Fill all fields!");
-                } else {
-
-                    TaskInTable editedTask = new TaskInTable(id,hyperlink, taskTitleTextField.getText(), taskTypeTextField.getText(),"status","assignee","creator","deadline", "deadline");
-                    dataTasks.set(Integer.parseInt(id)-1, editedTask);
-                    System.out.println(dataTasks.get(Integer.parseInt(id)-1).getTitle());
-                    *//*System.out.println("Edited task");
-                    dataTasks.add(new TaskInTable(
-                            id,
-                            hyperlink,
-                            taskTitleTextField.getText(),
-                            "test",
-                            "test",
-                            "test",
-                            "test",
-                            createdDate,
-                            deadlineDate));*//*
-
-
-
-                    *//*tasksList.addTask(new Task(taskNumber, taskTitleTextField.getText(), "test", "test", "test", "test", "test", created, deadline));
-                    TasksListWriteToFile tasksListWriteToFile = new TasksListWriteToFile();
-                    tasksListWriteToFile.writeToFile(tasksList);*//*
-
                     stage.hide();
                 }
-
-
-            }
         });
 
-        //grid.add(taskId, 2, 3);
-        grid.add(taskTitle, 3, 5);
-        grid.add(taskTitleTextField, 3, 6);
-        grid.add(taskType, 3, 8);
-        grid.add(taskTypeTextField, 3, 9);
-        grid.add(btnEditTask, 3, 22);
-        grid.add(btnSaveTask, 5, 22);
-        grid.add(actiontarget, 5, 25);
+
+        grid.add(taskTitle, 1, 0);
+        grid.add(taskTitleTextField, 1, 1);
+        grid.add(taskType, 1, 2);
+        grid.add(taskTypeTextField, 1, 3);
+        grid.add(statusType, 5, 0);
+        grid.add(taskStatusTextField, 5, 1);
+        grid.add(assagneeLabel, 5, 2);
+        grid.add(assagneeTextField, 5, 3);
+        grid.add(creatorLabel, 5, 4);
+        grid.add(creatorTextField, 5, 5);
+        grid.add(createdLabel, 11, 0);
+        grid.add(createdTextField, 11, 1);
+        grid.add(deadlineLabel, 11, 2);
+        grid.add(deadlineTextField, 11, 3);
+        grid.add(descriptionLabel, 1, 7);
+        grid.add(descriptionTextField, 1, 8);
+
+
+
+        grid.add(btnExitTask, 11, 9);
+
 
         Scene scene = new Scene(grid, 800, 600); // Manage scene size
         stage.setTitle("Task " + id);
         stage.setScene(scene);
         stage.show();
-    }*/
+    }
 
     public void editTask(Stage stage) {
 
         GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(25, 25, 25, 25));
 
         //Label taskId = new Label("Task number: " + id);
         //taskId.setFont(Font.font("Tahoma", FontWeight.NORMAL, 12));
