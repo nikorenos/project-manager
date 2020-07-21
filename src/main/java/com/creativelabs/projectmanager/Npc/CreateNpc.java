@@ -15,13 +15,13 @@ public class CreateNpc {
     public static void main(String[] args) {
 
 
-        String npcName = "Omar";
-        String npcGuild = "BDT";
-        int npcId = 740;
+        String npcName = "Eustachy";
+        String npcGuild = "STRF";
+        int npcId = 753;
         int SetAttributesToChapter = 4;
         String fight_tactic = "STRONG"; // MASTER / STRONG / COWARD
-        String weapon = "iron_warhammer"; //ItMw_2h_Sld_Axe iron_mastersword
-        String armor = "ITAR_BDT_M"; //ITAR_BDT_H ITAR_BDT_M ItAr_Leather_L itar_prisoner
+        String weapon = "ItMw_2h_Sld_Axe"; //ItMw_2h_Sld_Axe iron_mastersword
+        String armor = "ITAR_VLK_M"; //ITAR_BDT_H ITAR_BDT_M ItAr_Leather_L itar_prisoner
         String Mdl_ApplyOverlayMds = "Militia"; // Tired / Militia / Mage / Arrogance / Relaxed
         int FightSkills = 45;
 
@@ -47,7 +47,7 @@ public class CreateNpc {
                 "\tfight_tactic = FAI_HUMAN_" + fight_tactic + ";\t\n" +
                 "\t\n" +
                 "\t// ------ Equippte Waffen ------\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n" +
-                "\tEquipItem (self, ItMw_2h_Sld_Axe);\n" +
+                "\tEquipItem (self, " + weapon + ");\n" +
                 "\t\n" +
                 "\t// ------ Inventory ------\n" +
                 "\tB_CreateAmbientInv (self); \n" +
@@ -82,6 +82,7 @@ public class CreateNpc {
             myWriter.write(npcScript);
 
             myWriter.close();
+
 
             String startupEntryPath = "src/main/resources/files/startupEntries.txt";
             FileWriter myWriterStartup = new FileWriter(startupEntryPath);
