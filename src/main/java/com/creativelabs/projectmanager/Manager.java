@@ -45,6 +45,7 @@ public class Manager extends Application {
 
     }
 
+    private Stage signStage = new Stage();
     private String nick = "nick";
     private String project = "Test";
     private String password = "1234";
@@ -131,15 +132,15 @@ public class Manager extends Application {
 
         // Use tab pane with one tab for sizing UI and one tab for alignment UI
         TabPane tabs = new TabPane();
-        Tab tabSize = new Tab();
-        tabSize.setText("Tasks");
-        tabSize.setContent(tabTasks());
+        Tab tabTasks = new Tab();
+        tabTasks.setText("Tasks");
+        tabTasks.setContent(tabTasks());
 
-        Tab tabAlign = new Tab();
-        tabAlign.setText("Users");
-        tabAlign.setContent(tabUsers());
+        Tab tabUsers = new Tab();
+        tabUsers.setText("Users");
+        tabUsers.setContent(tabUsers());
 
-        tabs.getTabs().addAll(tabSize, tabAlign);
+        tabs.getTabs().addAll(tabTasks, tabUsers);
         tabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         Scene scene = new Scene(tabs, 1000, 600); // Manage scene size
@@ -149,7 +150,212 @@ public class Manager extends Application {
         createNewBoard.show();
     }
 
-    public void createTask(Stage stage) {
+    public void signUser() {
+
+        // Use tab pane with one tab for sizing UI and one tab for alignment UI
+        TabPane tabs = new TabPane();
+        Tab tabSignIn = new Tab();
+        tabSignIn.setText("Sign in");
+        tabSignIn.setContent(tabSignIn());
+
+        Tab tabRegister = new Tab();
+        tabRegister.setText("Register");
+        tabRegister.setContent(tabRegister());
+
+        tabs.getTabs().addAll(tabRegister, tabSignIn);
+        tabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+
+        Scene scene = new Scene(tabs, 350, 300); // Manage scene size
+
+        signStage.setTitle("Project manager");
+        signStage.setScene(scene);
+        signStage.show();
+    }
+    private Pane tabSignIn() {
+
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(25, 25, 25, 25));
+
+        Text scenetitle = new Text("Hello");
+        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        grid.add(scenetitle, 0, 0, 2, 1);
+
+        Label userName = new Label("User Name:");
+        grid.add(userName, 0, 1);
+
+        TextField userTextField = new TextField();
+        grid.add(userTextField, 1, 1);
+
+        Label pw = new Label("Password:");
+        grid.add(pw, 0, 2);
+
+        PasswordField pwBox = new PasswordField();
+        grid.add(pwBox, 1, 2);
+
+        Label email = new Label("Email:");
+        grid.add(email, 0, 3);
+
+        TextField emailBox = new TextField();
+        grid.add(emailBox, 1, 3);
+
+        Button btn = new Button("Sign in");
+        HBox hbBtn = new HBox(10);
+        hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtn.getChildren().add(btn);
+        grid.add(hbBtn, 1, 4);
+
+        final Text actiontarget = new Text();
+        grid.add(actiontarget, 0, 6);
+        grid.setColumnSpan(actiontarget, 2);
+        grid.setHalignment(actiontarget, RIGHT);
+        actiontarget.setId("actiontarget");
+
+
+
+        ////////////////////////////scene 2///////////////////
+        Stage stage2 = new Stage();
+
+        GridPane gridCreateProject = new GridPane();
+        gridCreateProject.setAlignment(Pos.CENTER);
+        gridCreateProject.setHgap(10);
+        gridCreateProject.setVgap(10);
+        gridCreateProject.setPadding(new Insets(25, 25, 25, 25));
+
+
+        Text welcomeUser = new Text("Welcome " + getNick());
+
+        welcomeUser.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        gridCreateProject.add(welcomeUser, 0, 0, 2, 1);
+
+        Label projectName = new Label("Project name:");
+        gridCreateProject.add(projectName, 0, 1);
+
+        TextField projectNameTextField = new TextField();
+        gridCreateProject.add(projectNameTextField, 1, 1);
+
+
+        btn.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+                if ((userTextField.getText().length() < 3) || (pwBox.getText().length() < 3) || (emailBox.getText().length() < 3)) {
+                    actiontarget.setFill(Color.FIREBRICK);
+                    actiontarget.setText("Enter username, password and mail!");
+                } else {
+                    signStage.hide();
+
+                    UsersListWriteToFile usersListWriteToFile = new UsersListWriteToFile();
+                    userList.addUser(new User(userTextField.getText(),pwBox.getText(),emailBox.getText()));
+                    usersListWriteToFile.writeToFile(userList);
+
+                    Stage createNewProject = new Stage();
+                    createNewProject(createNewProject);
+                }
+
+                /*primaryStage.hide();
+                Stage newBoard = new Stage();
+                createBoard(newBoard);*/
+
+            }
+        });
+
+        return grid;
+    }
+
+    private Pane tabRegister() {
+
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(25, 25, 25, 25));
+
+        Label userName = new Label("User Name:");
+        grid.add(userName, 0, 1);
+
+        TextField userTextField = new TextField();
+        grid.add(userTextField, 1, 1);
+
+        Label pw = new Label("Password:");
+        grid.add(pw, 0, 2);
+
+        PasswordField pwBox = new PasswordField();
+        grid.add(pwBox, 1, 2);
+
+        Label email = new Label("Email:");
+        grid.add(email, 0, 3);
+
+        TextField emailBox = new TextField();
+        grid.add(emailBox, 1, 3);
+
+        Button btn = new Button("Register");
+        HBox hbBtn = new HBox(10);
+        hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtn.getChildren().add(btn);
+        grid.add(hbBtn, 1, 4);
+
+        final Text actiontarget = new Text();
+        grid.add(actiontarget, 0, 6);
+        grid.setColumnSpan(actiontarget, 2);
+        grid.setHalignment(actiontarget, RIGHT);
+        actiontarget.setId("actiontarget");
+
+
+
+        ////////////////////////////scene 2///////////////////
+        Stage stage2 = new Stage();
+
+        GridPane gridCreateProject = new GridPane();
+        gridCreateProject.setAlignment(Pos.CENTER);
+        gridCreateProject.setHgap(10);
+        gridCreateProject.setVgap(10);
+        gridCreateProject.setPadding(new Insets(25, 25, 25, 25));
+
+
+        Text welcomeUser = new Text("Welcome " + getNick());
+
+        welcomeUser.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        gridCreateProject.add(welcomeUser, 0, 0, 2, 1);
+
+        Label projectName = new Label("Project name:");
+        gridCreateProject.add(projectName, 0, 1);
+
+        TextField projectNameTextField = new TextField();
+        gridCreateProject.add(projectNameTextField, 1, 1);
+
+
+        btn.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+                if ((userTextField.getText().length() < 3) || (pwBox.getText().length() < 3) || (emailBox.getText().length() < 3)) {
+                    actiontarget.setFill(Color.FIREBRICK);
+                    actiontarget.setText("Enter username, password and mail!");
+                } else {
+                    signStage.hide();
+
+                    UsersListWriteToFile usersListWriteToFile = new UsersListWriteToFile();
+                    userList.addUser(new User(userTextField.getText(),pwBox.getText(),emailBox.getText()));
+                    usersListWriteToFile.writeToFile(userList);
+
+                    Stage createNewProject = new Stage();
+                    createNewProject(createNewProject);
+                }
+
+                /*primaryStage.hide();
+                Stage newBoard = new Stage();
+                createBoard(newBoard);*/
+
+            }
+        });
+
+        return grid;
+    }
+
+        public void createTask(Stage stage) {
 
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -884,7 +1090,7 @@ public class Manager extends Application {
     }
 
 
-    public void createNewProject(Stage createNewProject) {
+    public void createNewProject(Stage stage) {
 
         GridPane gridCreateProject = new GridPane();
         gridCreateProject.setAlignment(Pos.TOP_CENTER);
@@ -916,7 +1122,7 @@ public class Manager extends Application {
 
         Button buttonSelectDirectory = new Button("Select Directory");
         buttonSelectDirectory.setOnAction(e -> {
-            File selectedDirectory = directoryChooser.showDialog(createNewProject);
+            File selectedDirectory = directoryChooser.showDialog(stage);
             projectPathTextField.setText(selectedDirectory.getAbsolutePath());
             //System.out.println(selectedDirectory.getAbsolutePath());
         });
@@ -944,7 +1150,7 @@ public class Manager extends Application {
                 } else {
                     project = projectNameTextField.getText();
                     System.out.println(project);
-                    createNewProject.hide();
+                    stage.hide();
                     Stage newBoard = new Stage();
                     createBoard(newBoard);
                 }
@@ -974,9 +1180,9 @@ public class Manager extends Application {
 
 
 
-        createNewProject.setTitle("Welcome " + getNick() + " " + getPassword());
-        createNewProject.setScene(sceneCreateNewProject);
-        createNewProject.show();
+        stage.setTitle("Welcome " + getNick() + " " + getPassword());
+        stage.setScene(sceneCreateNewProject);
+        stage.show();
 
 
     }
@@ -1044,107 +1250,13 @@ public class Manager extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-
-
-        primaryStage.setTitle("Project manager");
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(25, 25, 25, 25));
-
-        Text scenetitle = new Text("Hello");
-        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        grid.add(scenetitle, 0, 0, 2, 1);
-
-        Label userName = new Label("User Name:");
-        grid.add(userName, 0, 1);
-
-        TextField userTextField = new TextField();
-        grid.add(userTextField, 1, 1);
-
-        Label pw = new Label("Password:");
-        grid.add(pw, 0, 2);
-
-        PasswordField pwBox = new PasswordField();
-        grid.add(pwBox, 1, 2);
-
-        Label email = new Label("Email:");
-        grid.add(email, 0, 3);
-
-        TextField emailBox = new TextField();
-        grid.add(emailBox, 1, 3);
-
-        Button btn = new Button("Sign in");
-        HBox hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-        hbBtn.getChildren().add(btn);
-        grid.add(hbBtn, 1, 4);
-
-        final Text actiontarget = new Text();
-        grid.add(actiontarget, 0, 6);
-        grid.setColumnSpan(actiontarget, 2);
-        grid.setHalignment(actiontarget, RIGHT);
-        actiontarget.setId("actiontarget");
-
-
-
-        ////////////////////////////scene 2///////////////////
-        Stage stage2 = new Stage();
-
-        GridPane gridCreateProject = new GridPane();
-        gridCreateProject.setAlignment(Pos.CENTER);
-        gridCreateProject.setHgap(10);
-        gridCreateProject.setVgap(10);
-        gridCreateProject.setPadding(new Insets(25, 25, 25, 25));
-
-
-        Text welcomeUser = new Text("Welcome " + getNick());
-
-        welcomeUser.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        gridCreateProject.add(welcomeUser, 0, 0, 2, 1);
-
-        Label projectName = new Label("Project name:");
-        gridCreateProject.add(projectName, 0, 1);
-
-        TextField projectNameTextField = new TextField();
-        gridCreateProject.add(projectNameTextField, 1, 1);
-
-
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent e) {
-                if ((userTextField.getText().length() < 3) || (pwBox.getText().length() < 3) || (emailBox.getText().length() < 3)) {
-                    actiontarget.setFill(Color.FIREBRICK);
-                    actiontarget.setText("Enter username, password and mail!");
-                } else {
-                    primaryStage.hide();
-
-                    UsersListWriteToFile usersListWriteToFile = new UsersListWriteToFile();
-                    userList.addUser(new User(userTextField.getText(),pwBox.getText(),emailBox.getText()));
-                    usersListWriteToFile.writeToFile(userList);
-
-                    Stage createNewProject = new Stage();
-                    createNewProject(createNewProject);
-                }
-
-                /*primaryStage.hide();
-                Stage newBoard = new Stage();
-                createBoard(newBoard);*/
-
-            }
-        });
-
-
-
-        Scene scene = new Scene(grid, 300, 275);
-        primaryStage.setScene(scene);
-        //primaryStage.show();
-
         Stage newBoard = new Stage();
         //createBoard(newBoard);
-        createNewProject(newBoard);
+        //createNewProject(newBoard);
+        signUser();
+
+
+
 
 
 
