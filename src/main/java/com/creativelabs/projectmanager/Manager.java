@@ -605,7 +605,15 @@ public class Manager extends Application {
         descriptionTextField.setMinSize(250,50);
 
 
-
+        final Button editTask = new Button("Edit task");
+        editTask.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                Stage editTaskStage = new Stage();
+                editTask(editTaskStage);
+                editTaskStage.show();
+            }
+        });
 
 
         Button btnExitTask = new Button("Exit");
@@ -641,6 +649,7 @@ public class Manager extends Application {
 
 
         grid.add(btnExitTask, 11, 9);
+        grid.add(editTask, 11, 10);
 
 
         Scene scene = new Scene(grid, 800, 600); // Manage scene size
@@ -1251,9 +1260,9 @@ public class Manager extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         Stage newBoard = new Stage();
-        //createBoard(newBoard);
+        createBoard(newBoard);
         //createNewProject(newBoard);
-        signUser();
+        //signUser();
 
 
 
