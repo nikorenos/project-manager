@@ -79,7 +79,7 @@ public class Manager extends Application {
 
 
     private ObservableList<UserInTable> usersData = convertUsersListToObservable(userList);
-    private final ObservableList<TaskInTable> dataTasks = convertTasksListToObservable(tasksList);
+    private ObservableList<TaskInTable> dataTasks = convertTasksListToObservable(tasksList);
 
     final HBox hb = new HBox();
 
@@ -104,7 +104,7 @@ public class Manager extends Application {
     }
     public ObservableList<TaskInTable> convertTasksListToObservable(TaskList list) {
         ObservableList<TaskInTable> data = FXCollections.observableArrayList();
-
+        System.out.println("convertTasksListToObservable");
         for(int n = 0; n < list.getTasks().size(); n++) {
             String id = String.valueOf(list.getTasks().get(n).getId());
             if (list.getTasks().get(n).getId() < 10) {
@@ -609,6 +609,7 @@ public class Manager extends Application {
         editTask.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                stage.hide();
                 Stage editTaskStage = new Stage();
                 editTask(editTaskStage);
                 editTaskStage.show();
@@ -741,9 +742,10 @@ public class Manager extends Application {
 
 
 
-                    /*tasksList.addTask(new Task(taskNumber, taskTitleTextField.getText(), "test", "test", "test", "test", "test", created, deadline));
+                    tasksList.addTask(new Task(100, taskTitleTextField.getText(), "test", "test", "test", "test", "test", created, deadline));
                     TasksListWriteToFile tasksListWriteToFile = new TasksListWriteToFile();
-                    tasksListWriteToFile.writeToFile(tasksList);*/
+                    tasksListWriteToFile.writeToFile(tasksList);
+                    dataTasks = convertTasksListToObservable(tasksList);
 
                     stage.hide();
                 }
