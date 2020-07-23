@@ -57,8 +57,9 @@ public class TaskInTable {
         hyperlink.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                Manager manager = new Manager();
-                manager.showTask(getId(), getHyperlink(), getTitle(), getType(), getStatus(), getAssignee(), getCreator(), getCreated(), getDeadline());
+
+                //Manager manager = new Manager();
+                //manager.showTask(getId(), getHyperlink(), getTitle(), getType(), getStatus(), getAssignee(), getCreator(), getCreated(), getDeadline());
 
                 //Stage stage = new Stage();
                 //manager.editTask(stage);

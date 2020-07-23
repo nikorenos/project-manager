@@ -1,14 +1,10 @@
 package com.creativelabs.projectmanager;
 
-import com.creativelabs.projectmanager.fileshandling.ReadFileToTasksList;
-import com.creativelabs.projectmanager.fileshandling.TasksListWriteToFile;
-import com.creativelabs.projectmanager.fileshandling.UsersListWriteToFile;
-import com.creativelabs.projectmanager.fileshandling.ReadFileToUsersList;
 import com.creativelabs.projectmanager.table.EditingCell;
 import com.creativelabs.projectmanager.table.UserInTable;
-import com.creativelabs.projectmanager.table.TaskInTable;
-import com.creativelabs.projectmanager.table.UserInTableHyperlink;
 import com.creativelabs.projectmanager.tasks.*;
+import com.creativelabs.projectmanager.fileshandling.*;
+import com.creativelabs.projectmanager.table.TaskInTable;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -80,6 +76,7 @@ public class Manager extends Application {
 
     private ObservableList<UserInTable> usersData = convertUsersListToObservable(userList);
     private ObservableList<TaskInTable> dataTasks = convertTasksListToObservable(tasksList);
+    TableView tableTasks = new TableView();
 
     final HBox hb = new HBox();
 
@@ -195,11 +192,6 @@ public class Manager extends Application {
         PasswordField pwBox = new PasswordField();
         grid.add(pwBox, 1, 2);
 
-        Label email = new Label("Email:");
-        grid.add(email, 0, 3);
-
-        TextField emailBox = new TextField();
-        grid.add(emailBox, 1, 3);
 
         Button btn = new Button("Sign in");
         HBox hbBtn = new HBox(10);
@@ -214,42 +206,16 @@ public class Manager extends Application {
         actiontarget.setId("actiontarget");
 
 
-
-        ////////////////////////////scene 2///////////////////
-        Stage stage2 = new Stage();
-
-        GridPane gridCreateProject = new GridPane();
-        gridCreateProject.setAlignment(Pos.CENTER);
-        gridCreateProject.setHgap(10);
-        gridCreateProject.setVgap(10);
-        gridCreateProject.setPadding(new Insets(25, 25, 25, 25));
-
-
-        Text welcomeUser = new Text("Welcome " + getNick());
-
-        welcomeUser.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        gridCreateProject.add(welcomeUser, 0, 0, 2, 1);
-
-        Label projectName = new Label("Project name:");
-        gridCreateProject.add(projectName, 0, 1);
-
-        TextField projectNameTextField = new TextField();
-        gridCreateProject.add(projectNameTextField, 1, 1);
-
-
         btn.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent e) {
-                if ((userTextField.getText().length() < 3) || (pwBox.getText().length() < 3) || (emailBox.getText().length() < 3)) {
+                if ((userTextField.getText().length() < 3) || (pwBox.getText().length() < 3)) {
                     actiontarget.setFill(Color.FIREBRICK);
-                    actiontarget.setText("Enter username, password and mail!");
+                    actiontarget.setText("Enter username and password!");
                 } else {
                     signStage.hide();
 
-                    UsersListWriteToFile usersListWriteToFile = new UsersListWriteToFile();
-                    userList.addUser(new User(userTextField.getText(),pwBox.getText(),emailBox.getText()));
-                    usersListWriteToFile.writeToFile(userList);
 
                     Stage createNewProject = new Stage();
                     createNewProject(createNewProject);
@@ -355,7 +321,7 @@ public class Manager extends Application {
         return grid;
     }
 
-        public void createTask(Stage stage) {
+    public void createTask(Stage stage) {
 
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -625,8 +591,8 @@ public class Manager extends Application {
         btnExitTask.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                    stage.hide();
-                }
+                stage.hide();
+            }
         });
 
 
@@ -746,6 +712,7 @@ public class Manager extends Application {
                     TasksListWriteToFile tasksListWriteToFile = new TasksListWriteToFile();
                     tasksListWriteToFile.writeToFile(tasksList);
                     dataTasks = convertTasksListToObservable(tasksList);
+                    tableTasks.refresh();
 
                     stage.hide();
                 }
@@ -771,7 +738,6 @@ public class Manager extends Application {
 
     private Pane tabTasks() {
 
-        TableView tableTasks = new TableView();
 
 
         GridPane grid = new GridPane();
@@ -1262,9 +1228,9 @@ public class Manager extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         Stage newBoard = new Stage();
-        createBoard(newBoard);
+        //createBoard(newBoard);
         //createNewProject(newBoard);
-        //signUser();
+        signUser();
 
 
 
