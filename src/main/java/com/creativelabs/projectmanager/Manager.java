@@ -42,6 +42,7 @@ public class Manager extends Application {
     }
 
     private Stage signStage = new Stage();
+    private Stage boardStage = new Stage();
     private String nick = "nick";
     private String project = "Test";
     private String password = "1234";
@@ -56,6 +57,9 @@ public class Manager extends Application {
     }
     public String getPassword() {
         return password;
+    }
+    public Stage getBoardStage() {
+        return boardStage;
     }
 
     // Define buttons here for access by multiple methods
@@ -123,7 +127,7 @@ public class Manager extends Application {
     }
 
 
-    public void createBoard(Stage createNewBoard) {
+    public void createBoard() {
 
         btnExit.setStyle("-fx-font-size: 15pt;");
 
@@ -142,9 +146,9 @@ public class Manager extends Application {
 
         Scene scene = new Scene(tabs, 1000, 600); // Manage scene size
 
-        createNewBoard.setTitle("Project " + getProject());
-        createNewBoard.setScene(scene);
-        createNewBoard.show();
+        boardStage.setTitle("Project " + getProject());
+        boardStage.setScene(scene);
+        boardStage.show();
     }
 
     public void signUser() {
@@ -223,7 +227,7 @@ public class Manager extends Application {
 
                 /*primaryStage.hide();
                 Stage newBoard = new Stage();
-                createBoard(newBoard);*/
+                createBoard();*/
 
             }
         });
@@ -313,7 +317,7 @@ public class Manager extends Application {
 
                 /*primaryStage.hide();
                 Stage newBoard = new Stage();
-                createBoard(newBoard);*/
+                createBoard();*/
 
             }
         });
@@ -1129,7 +1133,7 @@ public class Manager extends Application {
                     System.out.println(project);
                     stage.hide();
                     Stage newBoard = new Stage();
-                    createBoard(newBoard);
+                    createBoard();
                 }
 
             }
@@ -1228,9 +1232,9 @@ public class Manager extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         Stage newBoard = new Stage();
-        //createBoard(newBoard);
+        createBoard();
         //createNewProject(newBoard);
-        signUser();
+        //signUser();
 
 
 
