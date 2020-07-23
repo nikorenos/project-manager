@@ -15,8 +15,8 @@ public class CreateNpc {
     public static void main(String[] args) {
 
 
-        String npcName = "Eustachy";
-        String npcGuild = "STRF";
+        String npcName = "Estea";
+        String npcGuild = "BDT";
         int npcId = 753;
         int SetAttributesToChapter = 4;
         String fight_tactic = "STRONG"; // MASTER / STRONG / COWARD
