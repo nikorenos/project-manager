@@ -34,23 +34,24 @@ public class CreateNpcAmbient {
 
         for (int n = 1; n <= amount; n++) {
 
-            String waypoint = "BANDITCAMP052";
+            String waypoint = "BANDITCAMP064";
             String npcGuild = "BDT";
             String npcName = npcGuild + "_" + npcId + "_Bandit_L";
             String name = "NAME_BANDIT";
-            int SetAttributesToChapter = 3;
+            int SetAttributesToChapter = 4;
             int voice = 5 + n;
-            String fight_tactic = "COWARD"; // MASTER / STRONG / COWARD
-            String weapon = "ItMw_1h_Bau_Mace"; //ItMw_2h_Sld_Axe iron_mastersword
-            String armor = "ItAr_Leather_L"; //ITAR_BDT_H ITAR_BDT_M ItAr_Leather_L itar_prisoner
-            String Mdl_ApplyOverlayMds = "Relaxed"; // Tired / Militia / Mage / Arrogance / Relaxed
-            int FightSkills = 25;
+            String fight_tactic = "MASTER"; // MASTER / STRONG / COWARD
+            String weapon = "ItMw_1h_Sld_Axe"; //ItMw_2h_Sld_Axe iron_mastersword
+            String armor = "ITAR_BDT_M"; //ITAR_BDT_H ITAR_BDT_M ItAr_Leather_L itar_prisoner
+            String Mdl_ApplyOverlayMds = "Arrogance"; // Tired / Militia / Mage / Arrogance / Relaxed
+            int FightSkills = 45;
+            String routine = "TA_Sit_Bench"; //TA_Smalltalk TA_Practice_Sword
 
             String npcScript = "\n" +
                     "instance " + npcName + " (Npc_Default)\n" +
                     "{\n" +
                     "\t// ------ NSC ------\n" +
-                    "\tname \t\t= \""+ name + "\";\n" +
+                    "\tname \t\t= "+ name + ";\n" +
                     "\tguild \t\t= GIL_" + npcGuild + ";\n" +
                     "\tid \t\t\t= " + npcId + ";\n" +
                     "\tvoice \t\t= " + voice + ";\n" +
@@ -73,8 +74,8 @@ public class CreateNpcAmbient {
                     "\tB_CreateAmbientInv (self); \n" +
                     "\t\n" +
                     "\t// ------ visuals ------\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n" +
-                    "\tB_SetNpcVisual \t\t(self, MALE, \"Hum_Head_Bald\", Face_L_Tough01, BodyTex_L, " + armor + ");\t\n" +
-                    "\tMdl_SetModelFatness\t(self, 0.0);\n" +
+                    "\tB_SetNpcVisual \t\t(self, MALE, \"Hum_Head_Bald\", Face_L_ToughBart_Quentin, BodyTex_L, " + armor + ");\t\n" +
+                    "\tMdl_SetModelFatness\t(self, 0.5);\n" +
                     "\tMdl_ApplyOverlayMds\t(self, \"Humans_" + Mdl_ApplyOverlayMds + ".mds\"); \n" +
                     "\n" +
                     "\t// ------ NSC-relevante Talente vergeben ------\n" +
@@ -89,8 +90,8 @@ public class CreateNpcAmbient {
                     "\n" +
                     "FUNC VOID Rtn_Start_" + npcId + " ()\n" +
                     "{\n" +
-                    "  \tTA_Smalltalk     (08,00,12,00,\"" + waypoint.toUpperCase() + "\");\n" +
-                    "    TA_Smalltalk     (12,00,08,00,\"" + waypoint.toUpperCase() + "\");\t\t\n" +
+                    "  \t" + routine + "     (08,00,12,00,\"" + waypoint.toUpperCase() + "\");\n" +
+                    "    " + routine + "     (12,00,08,00,\"" + waypoint.toUpperCase() + "\");\t\t\n" +
                     "};";
 
             String startupEntry = "Wld_InsertNpc \t\t(" + npcName + ", \"" + waypoint.toUpperCase() + "\");";
@@ -136,7 +137,7 @@ public class CreateNpcAmbient {
     public static void main(String[] args) {
 
         CreateNpcAmbient createNpcAmbient = new CreateNpcAmbient();
-        createNpcAmbient.createNPC(2,754);
+        createNpcAmbient.createNPC(1,770);
 
     }
 }
