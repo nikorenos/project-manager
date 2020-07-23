@@ -58,12 +58,12 @@ public class TaskInTable {
             @Override
             public void handle(ActionEvent e) {
 
-                //Manager manager = new Manager();
+                Manager manager = new Manager();
                 //manager.showTask(getId(), getHyperlink(), getTitle(), getType(), getStatus(), getAssignee(), getCreator(), getCreated(), getDeadline());
 
-                //Stage stage = new Stage();
-                //manager.editTask(stage);
-                //stage.show();
+                Stage stage = new Stage();
+                manager.editTask(stage);
+                stage.show();
             }
         });
         return hyperlink;
