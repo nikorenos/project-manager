@@ -46,8 +46,10 @@ public class Manager extends Application {
     private String nick = "nick";
     private String project = "Test";
     private String password = "1234";
+    private String email = "test@example.com";
     private int taskNumber = 0;
     private UserList userList1 = new UserList("Team");
+    private User admin = new User(nick, password, email);
 
     public String getNick() {
         return nick;
@@ -306,10 +308,7 @@ public class Manager extends Application {
                     actiontarget.setText("Enter username, password and mail!");
                 } else {
                     signStage.hide();
-
-                    UsersListWriteToFile usersListWriteToFile = new UsersListWriteToFile();
-                    userList.addUser(new User(userTextField.getText(),pwBox.getText(),emailBox.getText()));
-                    usersListWriteToFile.writeToFile(userList);
+                    admin = new User(userTextField.getText(), pwBox.getText(), emailBox.getText());
 
                     Stage createNewProject = new Stage();
                     createNewProject(createNewProject);
@@ -716,9 +715,9 @@ public class Manager extends Application {
                     TasksListWriteToFile tasksListWriteToFile = new TasksListWriteToFile();
                     tasksListWriteToFile.writeToFile(tasksList);
                     dataTasks = convertTasksListToObservable(tasksList);
+                    stage.hide();
                     tableTasks.refresh();
 
-                    stage.hide();
                 }
 
 
@@ -1125,12 +1124,15 @@ public class Manager extends Application {
 
             @Override
             public void handle(ActionEvent e) {
-                if (projectNameTextField.getText().length() < 3) {
+                if ((projectNameTextField.getText().length() < 3) || (projectPathTextField.getText().length() < 3)) {
                     actiontarget.setFill(Color.FIREBRICK);
-                    actiontarget.setText("Enter project name!");
+                    actiontarget.setText("Enter project name and destination!");
                 } else {
                     project = projectNameTextField.getText();
-                    System.out.println(project);
+                    path = projectPathTextField.getText();
+                    FilesHandle filesHandle = new FilesHandle();
+                    filesHandle.createProjectFolder(project, path, admin);
+
                     stage.hide();
                     Stage newBoard = new Stage();
                     createBoard();
@@ -1232,8 +1234,8 @@ public class Manager extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         Stage newBoard = new Stage();
-        createBoard();
-        //createNewProject(newBoard);
+        //createBoard();
+        createNewProject(newBoard);
         //signUser();
 
 
