@@ -18,14 +18,51 @@ public class FilesHandle {
 
     public void createProjectFolder(String projectName, String projectPath, User admin) {
         UserList userList = new UserList(projectName);
+        String projectDataPath = projectPath +  "/" + projectName + "_projectdata.txt";
+        String tasksDataPath = projectPath +  "/" + projectName + "_taskslist.txt";
+        String usersDataPath = projectPath +  "/" + projectName + "_userslist.txt";
+        System.out.println(projectDataPath);
+        System.out.println(usersDataPath);
+        System.out.println(tasksDataPath);
 
         try {
-            FileWriter myWriter = new FileWriter(projectPath + "/" + projectName + "/" + projectName + "_userlist.txt");
-            myWriter.write(admin.getUsername() + " " + admin.getPassword() + admin.getEmail());
-            myWriter.close();
-            System.out.println("Admin data successfully wrote to the file.");
+            //create file with users data
+            FileWriter writeProjectData = new FileWriter(projectDataPath);
+            //create file with users data
+            writeProjectData.write(projectName + "\n");
+            writeProjectData.write(projectDataPath + "\n");
+            writeProjectData.write(tasksDataPath + "\n");
+            writeProjectData.write(usersDataPath + "\n");
+            writeProjectData.close();
+            System.out.println("Project data successfully wrote to the file.");
+
         } catch (IOException e) {
-            System.out.println("An error occurred.");
+            System.out.println("An error with users list occurred.");
+            e.printStackTrace();
+        }
+
+        try {
+            //create file with users data
+            FileWriter writeUsers = new FileWriter(usersDataPath);
+            //create file with users data
+            writeUsers.write(admin.getUsername() + " " + admin.getPassword() + " " + admin.getEmail());
+            writeUsers.close();
+            System.out.println("Users data successfully wrote to the file.");
+
+        } catch (IOException e) {
+            System.out.println("An error with users list occurred.");
+            e.printStackTrace();
+        }
+        try {
+
+            //create empty file with tasks data
+            FileWriter writeTasks = new FileWriter(tasksDataPath);
+            writeTasks.write("");
+            writeTasks.close();
+            System.out.println("Tasks data successfully wrote to the file.");
+
+        } catch (IOException e) {
+            System.out.println("An error with tasks list occurred.");
             e.printStackTrace();
         }
 

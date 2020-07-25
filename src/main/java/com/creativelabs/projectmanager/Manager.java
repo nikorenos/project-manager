@@ -1093,12 +1093,12 @@ public class Manager extends Application {
         gridCreateProject.add(projectPath, 0, 2);
 
         TextField projectPathTextField = new TextField();
-        projectPathTextField.setText("C:/Users");
+        projectPathTextField.setText("C:/ZW2");
         gridCreateProject.add(projectPathTextField, 1, 2);
 
 
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setInitialDirectory(new File("C:/Users"));
+        directoryChooser.setInitialDirectory(new File("C:/ZW2"));
 
         Button buttonSelectDirectory = new Button("Select Directory");
         buttonSelectDirectory.setOnAction(e -> {

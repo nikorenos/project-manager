@@ -20,7 +20,7 @@ public class CreateNpc {
         int npcId = 753;
         int SetAttributesToChapter = 4;
         String fight_tactic = "STRONG"; // MASTER / STRONG / COWARD
-        String weapon = "ItMw_2h_Sld_Axe"; //ItMw_2h_Sld_Axe iron_mastersword
+        String weapon = "iron_longsword"; //ItMw_2h_Sld_Axe iron_mastersword
         String armor = "ITAR_VLK_M"; //ITAR_BDT_H ITAR_BDT_M ItAr_Leather_L itar_prisoner
         String Mdl_ApplyOverlayMds = "Militia"; // Tired / Militia / Mage / Arrogance / Relaxed
         int FightSkills = 45;

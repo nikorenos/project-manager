@@ -34,18 +34,18 @@ public class CreateNpcAmbient {
 
         for (int n = 1; n <= amount; n++) {
 
-            String waypoint = "BANDITCAMP064";
+            String waypoint = "BANDITCAMP050";
             String npcGuild = "BDT";
-            String npcName = npcGuild + "_" + npcId + "_Bandit_L";
+            String npcName = npcGuild + "_" + npcId + "_Bandit_M";
             String name = "NAME_BANDIT";
-            int SetAttributesToChapter = 4;
-            int voice = 5 + n;
+            int SetAttributesToChapter = 3;
+            int voice = 1 + n;
             String fight_tactic = "MASTER"; // MASTER / STRONG / COWARD
-            String weapon = "ItMw_1h_Sld_Axe"; //ItMw_2h_Sld_Axe iron_mastersword
+            String weapon = "ItMw_2h_Sld_Axe"; //ItMw_2h_Sld_Axe iron_mastersword
             String armor = "ITAR_BDT_M"; //ITAR_BDT_H ITAR_BDT_M ItAr_Leather_L itar_prisoner
-            String Mdl_ApplyOverlayMds = "Arrogance"; // Tired / Militia / Mage / Arrogance / Relaxed
+            String Mdl_ApplyOverlayMds = "Relaxed"; // Tired / Militia / Mage / Arrogance / Relaxed
             int FightSkills = 45;
-            String routine = "TA_Sit_Bench"; //TA_Smalltalk TA_Practice_Sword
+            String routine = "TA_Stand_Eating"; //TA_Smalltalk TA_Practice_Sword TA_Sit_Bench
 
             String npcScript = "\n" +
                     "instance " + npcName + " (Npc_Default)\n" +
@@ -137,7 +137,7 @@ public class CreateNpcAmbient {
     public static void main(String[] args) {
 
         CreateNpcAmbient createNpcAmbient = new CreateNpcAmbient();
-        createNpcAmbient.createNPC(1,770);
+        createNpcAmbient.createNPC(1,771);
 
     }
 }
