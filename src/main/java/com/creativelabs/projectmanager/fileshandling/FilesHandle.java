@@ -37,9 +37,7 @@ public class FilesHandle {
             FileWriter writeProjectData = new FileWriter(projectDataPath);
             //create file with users data
             writeProjectData.write(projectName + "\n");
-            writeProjectData.write(projectDataPath + "\n");
-            writeProjectData.write(tasksDataPath + "\n");
-            writeProjectData.write(usersDataPath + "\n");
+            writeProjectData.write(projectPath + "\n");
             writeProjectData.close();
             System.out.println("Project data successfully wrote to the file.");
 
@@ -192,11 +190,10 @@ public class FilesHandle {
         }
     }
 
-    public void tasksWriteToFile(TaskList list){
+    public void tasksWriteToFile(TaskList list, String projectName, String projectPath){
         System.out.println("tasksWriteToFile");
-        Manager manager = new Manager();
         try {
-            FileWriter myWriter = new FileWriter(manager.getProjectPath() +  "/" + manager.getProjectName() + "_taskslist.txt");
+            FileWriter myWriter = new FileWriter(projectPath +  "/" + projectName +  "_taskslist.txt");
 
             List<String> temporaryList = list.getTasks().stream()
                     .map(s -> s.getId() + "#" + s.getTitle() +  "#" + s.getDescription() + "#"
@@ -209,7 +206,7 @@ public class FilesHandle {
             }
 
             myWriter.close();
-            System.out.println("Successfully wrote to the file.");
+            System.out.println("Successfully wrote to the file." + projectPath +  "/" + projectName +  "_taskslist.txt");
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();

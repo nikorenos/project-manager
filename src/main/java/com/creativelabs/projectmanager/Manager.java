@@ -6,7 +6,6 @@ import com.creativelabs.projectmanager.tasks.*;
 import com.creativelabs.projectmanager.fileshandling.*;
 import com.creativelabs.projectmanager.table.TaskInTable;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -26,12 +25,15 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 
 public class Manager extends Application {
@@ -50,7 +52,7 @@ public class Manager extends Application {
     private UserList userList1 = new UserList("Team");
     private User admin = new User(nick, password, email);
     private String projectName = "zw2";
-    private String projectPath = "C:/ZW2";
+    private String projectPath = "C:/";
 
 
     public String getProjectName() {
@@ -167,8 +169,8 @@ public class Manager extends Application {
                     signStage.hide();
 
 
-                    Stage createNewProject = new Stage();
-                    createNewProject(createNewProject);
+                    Stage stage = new Stage();
+                    createProject(stage);
                 }
 
                 /*primaryStage.hide();
@@ -219,30 +221,6 @@ public class Manager extends Application {
         grid.setHalignment(actiontarget, RIGHT);
         actiontarget.setId("actiontarget");
 
-
-
-        ////////////////////////////scene 2///////////////////
-        Stage stage2 = new Stage();
-
-        GridPane gridCreateProject = new GridPane();
-        gridCreateProject.setAlignment(Pos.CENTER);
-        gridCreateProject.setHgap(10);
-        gridCreateProject.setVgap(10);
-        gridCreateProject.setPadding(new Insets(25, 25, 25, 25));
-
-
-        Text welcomeUser = new Text("Welcome " + getNick());
-
-        welcomeUser.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        gridCreateProject.add(welcomeUser, 0, 0, 2, 1);
-
-        Label projectNameLabel = new Label("Project name:");
-        gridCreateProject.add(projectNameLabel, 0, 1);
-
-        TextField projectNameLabelTextField = new TextField();
-        gridCreateProject.add(projectNameLabelTextField, 1, 1);
-
-
         btn.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
@@ -254,13 +232,9 @@ public class Manager extends Application {
                     signStage.hide();
                     admin = new User(userTextField.getText(), pwBox.getText(), emailBox.getText());
 
-                    Stage createNewProject = new Stage();
-                    createNewProject(createNewProject);
+                    Stage stage = new Stage();
+                    createProject(stage);
                 }
-
-                /*primaryStage.hide();
-                Stage newBoard = new Stage();
-                createBoard();*/
 
             }
         });
@@ -381,7 +355,7 @@ public class Manager extends Application {
                     TableView tableTasks = new TableView();
                     pathTasks = projectPath +  "/" + projectName + "_taskslist.txt";
                     File myObjTasks = new File(pathTasks);
-                    TaskList tasksList = filesHandle.fileToTasksList(myObjTasks);
+                    tasksList = filesHandle.fileToTasksList(myObjTasks);
                     dataTasks = filesHandle.convertTasksListToObservable(tasksList);
 
                     if (tasksList.getTasks().size() > 0) {
@@ -397,7 +371,7 @@ public class Manager extends Application {
                     }
                     Hyperlink hyperlink = new Hyperlink(convertTaskNumber);
 
-                    /*dataTasks.add(new TaskInTable(
+                    dataTasks.add(new TaskInTable(
                             convertTaskNumber,
                             hyperlink,
                             taskTitleTextField.getText(),
@@ -406,10 +380,10 @@ public class Manager extends Application {
                             usersComboBox.getValue().toString(),
                             creatorTextField.getText(),
                             createdTextField.getText(),
-                            deadlineDate));*/
+                            deadlineDate));
 
                     tasksList.addTask(new Task(taskNumber, taskTitleTextField.getText(), descriptionTextField.getText(),  taskTypeTextField.getText(), taskStatusTextField.getText(), usersComboBox.getValue().toString(),creatorTextField.getText(), created, deadline));
-                    filesHandle.tasksWriteToFile(tasksList);
+                    filesHandle.tasksWriteToFile(tasksList, projectName, projectPath);
                     createBoard();
 
                     stage.hide();
@@ -1057,7 +1031,7 @@ public class Manager extends Application {
     }
 
 
-    public void createNewProject(Stage stage) {
+    public void createProject(Stage stage) {
 
 
         GridPane gridCreateProject = new GridPane();
@@ -1139,16 +1113,57 @@ public class Manager extends Application {
         Label selectprojectNameLabel = new Label("Project name:");
         gridCreateProject.add(selectprojectNameLabel, 0, 9);
 
-        //ObservableList<String> users = filesHandle.convertUsersListToString(userList);
-        //final ComboBox projectComboBox = new ComboBox(users);
-        //projectComboBox.setValue(userList.getUsersList().get(0).getUsername());
-        //gridCreateProject.add(projectComboBox, 1, 9, 2, 1);
+        TextField projectSelectLabelTextField = new TextField();
+        gridCreateProject.add(projectSelectLabelTextField, 1, 9);
 
-        Button btnSelectProject = new Button("Select");
+        final FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(
+                new File(projectPath)
+        );
+
+        final Button openProjectButton = new Button("Select Project File...");
+        gridCreateProject.add(openProjectButton, 3, 9);
+
+        openProjectButton.setOnAction(
+                new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(final ActionEvent e) {
+                        File file = fileChooser.showOpenDialog(stage);
+                        projectSelectLabelTextField.setText(file.getAbsolutePath());
+                        System.out.println(file.getAbsolutePath());
+
+                        try {
+                            projectName = Files.readAllLines(Paths.get(file.getAbsolutePath())).get(0);
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                        try {
+                            projectPath = Files.readAllLines(Paths.get(file.getAbsolutePath())).get(1);
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+
+                        System.out.println(projectName);
+                        System.out.println(projectPath);
+
+                    }
+                });
+
+        Button btnSelectProject = new Button("Open");
         HBox btnSelectProjectApply = new HBox(10);
         btnSelectProjectApply.setAlignment(Pos.BOTTOM_RIGHT);
         btnSelectProjectApply.getChildren().add(btnSelectProject);
         gridCreateProject.add(btnSelectProjectApply, 1, 10);
+
+        btnSelectProject.setOnAction(
+                new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(final ActionEvent e) {
+                        stage.hide();
+                        Stage newBoard = new Stage();
+                        createBoard();
+                    }
+                });
 
 
 
@@ -1225,9 +1240,9 @@ public class Manager extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         Stage newBoard = new Stage();
-        createBoard();
+        //createBoard();
         //createNewProject(newBoard);
-        //signUser();
+        signUser();
 
 
 
