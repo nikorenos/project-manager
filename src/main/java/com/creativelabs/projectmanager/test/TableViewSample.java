@@ -1,10 +1,8 @@
 package com.creativelabs.projectmanager.test;
 
-import com.creativelabs.projectmanager.fileshandling.UsersListWriteToFile;
-import com.creativelabs.projectmanager.fileshandling.ReadFileToUsersList;
+import com.creativelabs.projectmanager.fileshandling.FilesHandle;
 import com.creativelabs.projectmanager.table.EditingCell;
 import com.creativelabs.projectmanager.table.UserInTableHyperlink;
-import com.creativelabs.projectmanager.tasks.User;
 import com.creativelabs.projectmanager.tasks.UserList;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -30,10 +28,10 @@ import java.net.URI;
 
 public class TableViewSample extends Application {
 
-    ReadFileToUsersList readFile = new ReadFileToUsersList();
+    FilesHandle filesHandle = new FilesHandle();
     String path = "src/main/resources/files/userlist1.txt";
     File myObj = new File(path);
-    UserList userList = readFile.fileToList(myObj);
+    UserList userList = filesHandle.fileToUsersList(myObj);
 
     Hyperlink nick = new Hyperlink("test");
     String password = "pass";

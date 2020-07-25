@@ -44,18 +44,24 @@ public class Manager extends Application {
     private Stage signStage = new Stage();
     private Stage boardStage = new Stage();
     private String nick = "nick";
-    private String project = "Test";
     private String password = "1234";
     private String email = "test@example.com";
     private int taskNumber = 0;
     private UserList userList1 = new UserList("Team");
     private User admin = new User(nick, password, email);
+    private String projectName = "zw2";
+    private String projectPath = "C:/ZW2";
 
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public String getProjectPath() {
+        return projectPath;
+    }
     public String getNick() {
         return nick;
-    }
-    public String getProject() {
-        return project;
     }
     public String getPassword() {
         return password;
@@ -69,89 +75,27 @@ public class Manager extends Application {
     private final Button btnContinue = new Button("Continue");
     private final Button btnExit = new Button("Exit");
 
-    ReadFileToUsersList readFileToUsersList = new ReadFileToUsersList();
-    String path = "src/main/resources/files/userlist1.txt";
-    File myObj = new File(path);
-    UserList userList = readFileToUsersList.fileToList(myObj);
+    FilesHandle filesHandle = new FilesHandle();
+    String path;
+    File myObj;
+    UserList userList;
 
-    ReadFileToTasksList readFileToTasksList = new ReadFileToTasksList();
-    String pathTasks = "src/main/resources/files/tasklist0.txt";
-    File myObjTasks = new File(pathTasks);
-    TaskList tasksList = readFileToTasksList.fileToList(myObjTasks);
+    String pathTasks;
+    File myObjTasks;
+    TaskList tasksList;
+
+    //String path = "src/main/resources/files/userlist1.txt";
+    //String pathTasks = "src/main/resources/files/tasklist0.txt";
 
 
-    private ObservableList<UserInTable> usersData = convertUsersListToObservable(userList);
-    private ObservableList<TaskInTable> dataTasks = convertTasksListToObservable(tasksList);
-    TableView tableTasks = new TableView();
+
+
+    private ObservableList<UserInTable> usersData;
+    private ObservableList<TaskInTable> dataTasks;
+    TableView tableTasks;
 
     final HBox hb = new HBox();
 
-    public ObservableList<String> convertUsersListToString(UserList list) {
-        ObservableList<String> data = FXCollections.observableArrayList();
-        for(int n = 0; n < list.getUsersList().size(); n++) {
-            String nick = list.getUsersList().get(n).getUsername();
-            data.add(nick);
-        }
-        return data;
-    }
-
-    public ObservableList<UserInTable> convertUsersListToObservable(UserList list) {
-        ObservableList<UserInTable> data = FXCollections.observableArrayList();
-        for(int n = 0; n < list.getUsersList().size(); n++) {
-            String nick = list.getUsersList().get(n).getUsername();
-            String password = list.getUsersList().get(n).getPassword();
-            String email = list.getUsersList().get(n).getEmail();
-            data.add(new UserInTable(nick, password, email));
-        }
-        return data;
-    }
-    public ObservableList<TaskInTable> convertTasksListToObservable(TaskList list) {
-        ObservableList<TaskInTable> data = FXCollections.observableArrayList();
-        System.out.println("convertTasksListToObservable");
-        for(int n = 0; n < list.getTasks().size(); n++) {
-            String id = String.valueOf(list.getTasks().get(n).getId());
-            if (list.getTasks().get(n).getId() < 10) {
-                id = "00" + id;
-            } else if ((list.getTasks().get(n).getId() >= 10) && (list.getTasks().get(n).getId() < 100)) {
-                id = "0" + id;
-            }
-            Hyperlink hyperlink = new Hyperlink();
-            String title = list.getTasks().get(n).getTitle();
-            String type = list.getTasks().get(n).getType();
-            String status = list.getTasks().get(n).getStatus();
-            String assignee = list.getTasks().get(n).getAssignedUser();
-            String creator = list.getTasks().get(n).getCreator();
-            String created = String.valueOf(list.getTasks().get(n).getCreated());
-            String deadline = String.valueOf(list.getTasks().get(n).getDeadline());
-            data.add(new TaskInTable(id,hyperlink, title, type,status,assignee,creator,created,deadline));
-        }
-        return data;
-    }
-
-
-    public void createBoard() {
-
-        btnExit.setStyle("-fx-font-size: 15pt;");
-
-        // Use tab pane with one tab for sizing UI and one tab for alignment UI
-        TabPane tabs = new TabPane();
-        Tab tabTasks = new Tab();
-        tabTasks.setText("Tasks");
-        tabTasks.setContent(tabTasks());
-
-        Tab tabUsers = new Tab();
-        tabUsers.setText("Users");
-        tabUsers.setContent(tabUsers());
-
-        tabs.getTabs().addAll(tabTasks, tabUsers);
-        tabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-
-        Scene scene = new Scene(tabs, 1000, 600); // Manage scene size
-
-        boardStage.setTitle("Project " + getProject());
-        boardStage.setScene(scene);
-        boardStage.show();
-    }
 
     public void signUser() {
 
@@ -292,11 +236,11 @@ public class Manager extends Application {
         welcomeUser.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         gridCreateProject.add(welcomeUser, 0, 0, 2, 1);
 
-        Label projectName = new Label("Project name:");
-        gridCreateProject.add(projectName, 0, 1);
+        Label projectNameLabel = new Label("Project name:");
+        gridCreateProject.add(projectNameLabel, 0, 1);
 
-        TextField projectNameTextField = new TextField();
-        gridCreateProject.add(projectNameTextField, 1, 1);
+        TextField projectNameLabelTextField = new TextField();
+        gridCreateProject.add(projectNameLabelTextField, 1, 1);
 
 
         btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -357,8 +301,10 @@ public class Manager extends Application {
         assagneeLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
 
 
-
-        ObservableList<String> users = convertUsersListToString(userList);
+        path = projectPath +  "/" + projectName + "_userslist.txt";
+        File myObj = new File(path);
+        userList = filesHandle.fileToUsersList(myObj);
+        ObservableList<String> users = filesHandle.convertUsersListToString(userList);
         final ComboBox usersComboBox = new ComboBox(users);
         usersComboBox.setValue(userList.getUsersList().get(0).getUsername());
 
@@ -432,6 +378,11 @@ public class Manager extends Application {
                     actiontarget.setFill(Color.FIREBRICK);
                     actiontarget.setText("Fill all fields!");
                 } else {
+                    TableView tableTasks = new TableView();
+                    pathTasks = projectPath +  "/" + projectName + "_taskslist.txt";
+                    File myObjTasks = new File(pathTasks);
+                    TaskList tasksList = filesHandle.fileToTasksList(myObjTasks);
+                    dataTasks = filesHandle.convertTasksListToObservable(tasksList);
 
                     if (tasksList.getTasks().size() > 0) {
                         taskNumber = tasksList.getTasks().get(tasksList.getTasks().size()-1).getId();
@@ -446,7 +397,7 @@ public class Manager extends Application {
                     }
                     Hyperlink hyperlink = new Hyperlink(convertTaskNumber);
 
-                    dataTasks.add(new TaskInTable(
+                    /*dataTasks.add(new TaskInTable(
                             convertTaskNumber,
                             hyperlink,
                             taskTitleTextField.getText(),
@@ -455,12 +406,14 @@ public class Manager extends Application {
                             usersComboBox.getValue().toString(),
                             creatorTextField.getText(),
                             createdTextField.getText(),
-                            deadlineDate));
+                            deadlineDate));*/
+
                     tasksList.addTask(new Task(taskNumber, taskTitleTextField.getText(), descriptionTextField.getText(),  taskTypeTextField.getText(), taskStatusTextField.getText(), usersComboBox.getValue().toString(),creatorTextField.getText(), created, deadline));
-                    TasksListWriteToFile tasksListWriteToFile = new TasksListWriteToFile();
-                    tasksListWriteToFile.writeToFile(tasksList);
+                    filesHandle.tasksWriteToFile(tasksList);
+                    createBoard();
 
                     stage.hide();
+
                 }
 
 
@@ -578,10 +531,12 @@ public class Manager extends Application {
         editTask.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                System.out.println("edit task in showTask");
                 stage.hide();
                 Stage editTaskStage = new Stage();
-                editTask(editTaskStage);
-                editTaskStage.show();
+                //editTask(editTaskStage);
+                //editTaskStage.show();
+                createTask(editTaskStage);
             }
         });
 
@@ -712,9 +667,8 @@ public class Manager extends Application {
 
 
                     tasksList.addTask(new Task(100, taskTitleTextField.getText(), "test", "test", "test", "test", "test", created, deadline));
-                    TasksListWriteToFile tasksListWriteToFile = new TasksListWriteToFile();
-                    tasksListWriteToFile.writeToFile(tasksList);
-                    dataTasks = convertTasksListToObservable(tasksList);
+
+                    dataTasks = filesHandle.convertTasksListToObservable(tasksList);
                     stage.hide();
                     tableTasks.refresh();
 
@@ -739,14 +693,43 @@ public class Manager extends Application {
         stage.show();
     }
 
+    public void createBoard() {
+
+        btnExit.setStyle("-fx-font-size: 15pt;");
+
+        // Use tab pane with one tab for sizing UI and one tab for alignment UI
+        TabPane tabs = new TabPane();
+        Tab tabTasks = new Tab();
+        tabTasks.setText("Tasks");
+        tabTasks.setContent(tabTasks());
+
+        Tab tabUsers = new Tab();
+        tabUsers.setText("Users");
+        tabUsers.setContent(tabUsers());
+
+        tabs.getTabs().addAll(tabTasks, tabUsers);
+        tabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+
+        Scene scene = new Scene(tabs, 1000, 600); // Manage scene size
+
+        boardStage.setTitle("Project " + projectName);
+        boardStage.setScene(scene);
+        boardStage.show();
+    }
+
     private Pane tabTasks() {
 
 
-
+        TableView tableTasks = new TableView();
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.TOP_LEFT);  // Override default
         grid.setHgap(10);
         grid.setVgap(10);
+
+        pathTasks = projectPath +  "/" + projectName + "_taskslist.txt";
+        File myObjTasks = new File(pathTasks);
+        TaskList tasksList = filesHandle.fileToTasksList(myObjTasks);
+        dataTasks = filesHandle.convertTasksListToObservable(tasksList);
 
         final Label label = new Label("Tasks");
         label.setFont(new Font("Arial", 20));
@@ -764,6 +747,7 @@ public class Manager extends Application {
         editTask.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                System.out.println("edit task in Board");
                 Stage editTaskStage = new Stage();
                 editTask(editTaskStage);
                 editTaskStage.show();
@@ -932,9 +916,12 @@ public class Manager extends Application {
         grid.setHgap(10);
         grid.setVgap(10);
 
+        path = projectPath +  "/" + projectName + "_userslist.txt";
+        File myObj = new File(path);
+        UserList userList = filesHandle.fileToUsersList(myObj);
 
         TableView tableUsers = new TableView();
-        usersData = convertUsersListToObservable(userList);
+        usersData = filesHandle.convertUsersListToObservable(userList);
 
         final Label label = new Label("List of users");
         label.setFont(new Font("Arial", 20));
@@ -1010,7 +997,7 @@ public class Manager extends Application {
         addEmail.setPromptText("Email");
 
         final Button addButton = new Button("Add");
-        UsersListWriteToFile usersListWriteToFile = new UsersListWriteToFile();
+
         addButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -1019,7 +1006,7 @@ public class Manager extends Application {
                         addLastName.getText(),
                         addEmail.getText()));
                 userList.addUser(new User(addFirstName.getText(), addLastName.getText(), addEmail.getText()));
-                usersListWriteToFile.writeToFile(userList);
+                filesHandle.usersWriteToFile(userList);
 
                 addFirstName.clear();
                 addLastName.clear();
@@ -1072,6 +1059,7 @@ public class Manager extends Application {
 
     public void createNewProject(Stage stage) {
 
+
         GridPane gridCreateProject = new GridPane();
         gridCreateProject.setAlignment(Pos.TOP_CENTER);
         gridCreateProject.setHgap(10);
@@ -1083,18 +1071,18 @@ public class Manager extends Application {
         createProject.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         gridCreateProject.add(createProject, 0, 0, 2, 1);
 
-        Label projectName = new Label("Project name:");
-        gridCreateProject.add(projectName, 0, 1);
+        Label projectNameLabel = new Label("Project name:");
+        gridCreateProject.add(projectNameLabel, 0, 1);
 
-        TextField projectNameTextField = new TextField();
-        gridCreateProject.add(projectNameTextField, 1, 1);
+        TextField projectNameLabelTextField = new TextField();
+        gridCreateProject.add(projectNameLabelTextField, 1, 1);
 
-        Label projectPath = new Label("Select folder:");
-        gridCreateProject.add(projectPath, 0, 2);
+        Label projectPathLabel = new Label("Select folder:");
+        gridCreateProject.add(projectPathLabel, 0, 2);
 
-        TextField projectPathTextField = new TextField();
-        projectPathTextField.setText("C:/ZW2");
-        gridCreateProject.add(projectPathTextField, 1, 2);
+        TextField projectPathLabelTextField = new TextField();
+        projectPathLabelTextField.setText("C:/ZW2");
+        gridCreateProject.add(projectPathLabelTextField, 1, 2);
 
 
         DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -1103,7 +1091,7 @@ public class Manager extends Application {
         Button buttonSelectDirectory = new Button("Select Directory");
         buttonSelectDirectory.setOnAction(e -> {
             File selectedDirectory = directoryChooser.showDialog(stage);
-            projectPathTextField.setText(selectedDirectory.getAbsolutePath());
+            projectPathLabelTextField.setText(selectedDirectory.getAbsolutePath());
             //System.out.println(selectedDirectory.getAbsolutePath());
         });
         gridCreateProject.add(buttonSelectDirectory, 3, 2);
@@ -1124,14 +1112,17 @@ public class Manager extends Application {
 
             @Override
             public void handle(ActionEvent e) {
-                if ((projectNameTextField.getText().length() < 3) || (projectPathTextField.getText().length() < 3)) {
+                if ((projectNameLabelTextField.getText().length() < 3) || (projectPathLabelTextField.getText().length() < 3)) {
                     actiontarget.setFill(Color.FIREBRICK);
                     actiontarget.setText("Enter project name and destination!");
                 } else {
-                    project = projectNameTextField.getText();
-                    path = projectPathTextField.getText();
-                    FilesHandle filesHandle = new FilesHandle();
-                    filesHandle.createProjectFolder(project, path, admin);
+                    projectName = projectNameLabelTextField.getText();
+                    projectPath = projectPathLabelTextField.getText();
+
+                    System.out.println(projectName);
+                    System.out.println(projectPath);
+
+                    filesHandle.createProjectFolder(projectName, projectPath, admin);
 
                     stage.hide();
                     Stage newBoard = new Stage();
@@ -1145,13 +1136,13 @@ public class Manager extends Application {
         selectProject.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         gridCreateProject.add(selectProject, 0, 8, 2, 1);
 
-        Label selectProjectName = new Label("Project name:");
-        gridCreateProject.add(selectProjectName, 0, 9);
+        Label selectprojectNameLabel = new Label("Project name:");
+        gridCreateProject.add(selectprojectNameLabel, 0, 9);
 
-        ObservableList<String> users = convertUsersListToString(userList);
-        final ComboBox projectComboBox = new ComboBox(users);
-        projectComboBox.setValue(userList.getUsersList().get(0).getUsername());
-        gridCreateProject.add(projectComboBox, 1, 9, 2, 1);
+        //ObservableList<String> users = filesHandle.convertUsersListToString(userList);
+        //final ComboBox projectComboBox = new ComboBox(users);
+        //projectComboBox.setValue(userList.getUsersList().get(0).getUsername());
+        //gridCreateProject.add(projectComboBox, 1, 9, 2, 1);
 
         Button btnSelectProject = new Button("Select");
         HBox btnSelectProjectApply = new HBox(10);
@@ -1234,8 +1225,8 @@ public class Manager extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         Stage newBoard = new Stage();
-        //createBoard();
-        createNewProject(newBoard);
+        createBoard();
+        //createNewProject(newBoard);
         //signUser();
 
 

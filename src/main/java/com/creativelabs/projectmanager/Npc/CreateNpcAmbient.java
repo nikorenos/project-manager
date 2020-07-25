@@ -34,15 +34,15 @@ public class CreateNpcAmbient {
 
         for (int n = 1; n <= amount; n++) {
 
-            String waypoint = "BANDITCAMP050";
-            String npcGuild = "BDT";
-            String npcName = npcGuild + "_" + npcId + "_Bandit_M";
-            String name = "NAME_BANDIT";
+            String waypoint = "HUNTER001";
+            String npcGuild = "SLD";
+            String npcName = npcGuild + "_" + npcId + "_Hunter_M";
+            String name = "NAME_HUNTER";
             int SetAttributesToChapter = 3;
             int voice = 1 + n;
             String fight_tactic = "MASTER"; // MASTER / STRONG / COWARD
-            String weapon = "ItMw_2h_Sld_Axe"; //ItMw_2h_Sld_Axe iron_mastersword
-            String armor = "ITAR_BDT_M"; //ITAR_BDT_H ITAR_BDT_M ItAr_Leather_L itar_prisoner
+            String weapon = "iron_dagger"; //ItMw_2h_Sld_Axe iron_mastersword
+            String armor = "Hunter"; //ITAR_BDT_H ITAR_BDT_M ItAr_Leather_L itar_prisoner
             String Mdl_ApplyOverlayMds = "Relaxed"; // Tired / Militia / Mage / Arrogance / Relaxed
             int FightSkills = 45;
             String routine = "TA_Stand_Eating"; //TA_Smalltalk TA_Practice_Sword TA_Sit_Bench
@@ -74,7 +74,7 @@ public class CreateNpcAmbient {
                     "\tB_CreateAmbientInv (self); \n" +
                     "\t\n" +
                     "\t// ------ visuals ------\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n" +
-                    "\tB_SetNpcVisual \t\t(self, MALE, \"Hum_Head_Bald\", Face_L_ToughBart_Quentin, BodyTex_L, " + armor + ");\t\n" +
+                    "\tB_SetNpcVisual \t\t(self, MALE, \"Hum_Head_Pony\", Face_N_NormalBart_Senyan, BodyTex_N, " + armor + ");\t\n" +
                     "\tMdl_SetModelFatness\t(self, 0.5);\n" +
                     "\tMdl_ApplyOverlayMds\t(self, \"Humans_" + Mdl_ApplyOverlayMds + ".mds\"); \n" +
                     "\n" +
@@ -137,7 +137,7 @@ public class CreateNpcAmbient {
     public static void main(String[] args) {
 
         CreateNpcAmbient createNpcAmbient = new CreateNpcAmbient();
-        createNpcAmbient.createNPC(1,771);
+        createNpcAmbient.createNPC(1,773);
 
     }
 }

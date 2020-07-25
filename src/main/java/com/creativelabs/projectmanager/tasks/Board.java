@@ -1,8 +1,5 @@
 package com.creativelabs.projectmanager.tasks;
 
-import com.creativelabs.projectmanager.fileshandling.ReadFileToTasksList;
-import com.creativelabs.projectmanager.fileshandling.UsersListWriteToFile;
-import com.creativelabs.projectmanager.fileshandling.ReadFileToUsersList;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -62,29 +59,6 @@ public final class Board {
                 .map(s -> s.getUsername())
                 .forEach(System.out::println);
 
-        UsersListWriteToFile usersListWriteToFile = new UsersListWriteToFile();
-        usersListWriteToFile.writeToFile(userList1);
-
-        ReadFileToUsersList readFileToUsersList = new ReadFileToUsersList();
-        String path = "src/main/resources/files/userlist1.txt";
-        File myObj = new File(path);
-        System.out.println("file to list test:");
-        System.out.println(readFileToUsersList.fileToList(myObj).getUsersList().get(0).getUsername());
-        System.out.println(readFileToUsersList.fileToList(myObj).getUsersList().size());
-
-        LocalDate date = LocalDate.now();
-        System.out.println(date);
-
-
-        System.out.println("tasks list test");
-        ReadFileToTasksList readFileToTasksList = new ReadFileToTasksList();
-        String pathTasks = "src/main/resources/files/tasklist0.txt";
-        File myObjTasks = new File(pathTasks);
-        TaskList tasksList = readFileToTasksList.fileToList(myObjTasks);
-        System.out.println(tasksList.getTasks().get(tasksList.getTasks().size()-1).getId());
-        System.out.println(tasksList.getTasks().get(tasksList.getTasks().indexOf("1")));
-
-        System.out.println(tasksList.getTasks());
 
     }
 
