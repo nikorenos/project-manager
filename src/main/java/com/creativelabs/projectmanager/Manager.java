@@ -6,6 +6,7 @@ import com.creativelabs.projectmanager.tasks.*;
 import com.creativelabs.projectmanager.fileshandling.*;
 import com.creativelabs.projectmanager.table.TaskInTable;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,6 +18,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
@@ -52,7 +54,7 @@ public class Manager extends Application {
     private UserList userList1 = new UserList("Team");
     private User admin = new User(nick, password, email);
     private String projectName = "zw2";
-    private String projectPath = "C:/";
+    private String projectPath = "C:/ZW2";
 
 
     public String getProjectName() {
@@ -681,7 +683,11 @@ public class Manager extends Application {
         tabUsers.setText("Users");
         tabUsers.setContent(tabUsers());
 
-        tabs.getTabs().addAll(tabTasks, tabUsers);
+        Tab tabStats = new Tab();
+        tabStats.setText("Stats");
+        tabStats.setContent(tabStats());
+
+        tabs.getTabs().addAll(tabStats, tabTasks, tabUsers);
         tabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         Scene scene = new Scene(tabs, 1000, 600); // Manage scene size
@@ -689,6 +695,31 @@ public class Manager extends Application {
         boardStage.setTitle("Project " + projectName);
         boardStage.setScene(scene);
         boardStage.show();
+    }
+
+    private Pane tabStats() {
+
+
+
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.TOP_LEFT);  // Override default
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        ObservableList<PieChart.Data> pieChartData =
+                FXCollections.observableArrayList(
+                        new PieChart.Data("Grapefruit", 13),
+                        new PieChart.Data("Oranges", 25),
+                        new PieChart.Data("Plums", 10),
+                        new PieChart.Data("Pears", 22),
+                        new PieChart.Data("Apples", 30));
+        final PieChart chart = new PieChart(pieChartData);
+        chart.setTitle("Imported Fruits");
+
+
+        grid.add(chart, 3, 2, 2, 1);
+
+        return grid;
     }
 
     private Pane tabTasks() {
@@ -1240,9 +1271,9 @@ public class Manager extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         Stage newBoard = new Stage();
-        //createBoard();
+        createBoard();
         //createNewProject(newBoard);
-        signUser();
+        //signUser();
 
 
 
