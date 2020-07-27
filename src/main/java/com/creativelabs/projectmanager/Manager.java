@@ -47,13 +47,12 @@ public class Manager extends Application {
 
     }
 
-    private Stage signStage = new Stage();
-    private Stage boardStage = new Stage();
-    private String nick = "nick";
-    private String password = "1234";
-    private String email = "test@example.com";
+    private final Stage signStage = new Stage();
+    private final Stage boardStage = new Stage();
+    private final String nick = "nick";
+    private final String password = "1234";
+    private final String email = "test@example.com";
     private int taskNumber = 0;
-    private UserList userList1 = new UserList("Team");
     private User admin = new User(nick, password, email);
     private String projectName = "zw2";
     private String projectPath = "C:/ZW2";
@@ -83,17 +82,10 @@ public class Manager extends Application {
 
     FilesHandle filesHandle = new FilesHandle();
     String path;
-    File myObj;
     UserList userList;
 
     String pathTasks;
-    File myObjTasks;
     TaskList tasksList;
-
-    //String path = "src/main/resources/files/userlist1.txt";
-    //String pathTasks = "src/main/resources/files/tasklist0.txt";
-
-
 
 
     private ObservableList<UserInTable> usersData;
@@ -722,7 +714,6 @@ public class Manager extends Application {
     private Pane tabStats() {
 
 
-
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.TOP_LEFT);  // Override default
         grid.setHgap(10);
@@ -1096,37 +1087,6 @@ public class Manager extends Application {
         grid.add(label, 3, 1, 2, 1);
         grid.add(tableUsers, 3, 2, 2, 1);
         grid.add(hb, 4, 4, 2, 1);
-
-
-
-        //((Group) scene.getRoot()).getChildren().addAll(vbox);
-
-
-        /*
-        // Use column constraints to set properties for columns in the grid
-        ColumnConstraints column1 = new ColumnConstraints();
-        column1.setHalignment(HPos.RIGHT);  // Override default
-        grid.getColumnConstraints().add(column1);
-
-        ColumnConstraints column2 = new ColumnConstraints();
-        column2.setHalignment(HPos.LEFT);  // Override default
-        grid.getColumnConstraints().add(column2);
-
-        HBox hbButtons = new HBox();
-        hbButtons.setSpacing(10.0);
-        hbButtons.setAlignment(Pos.CENTER);  // Aligns HBox and controls in HBox
-
-
-        Button btnSubmit = new Button("Submit");
-        Button btnClear = new Button("Clear");
-        Button btnExit2 = new Button("Exit");
-        btnSubmit.setStyle("-fx-font-size: 15pt;");
-
-
-
-        hbButtons.getChildren().addAll(btnSubmit, btnClear, btnExit2);
-        grid.add(hbButtons, 0, 2, 2, 1);*/
-
 
         return grid;
     }
