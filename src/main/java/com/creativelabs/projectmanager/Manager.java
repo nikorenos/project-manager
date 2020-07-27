@@ -83,6 +83,7 @@ public class Manager extends Application {
     FilesHandle filesHandle = new FilesHandle();
     String path;
     UserList userList;
+    TableView tableUsers = new TableView();
 
     String pathTasks;
     TaskList tasksList;
@@ -90,7 +91,10 @@ public class Manager extends Application {
 
     private ObservableList<UserInTable> usersData;
     private ObservableList<TaskInTable> dataTasks;
-    TableView tableTasks;
+    TableView tableTasks = new TableView();
+    Tab tabStats = new Tab();
+    Tab tabTasks = new Tab();
+    Tab tabUsers = new Tab();
 
     final HBox hb = new HBox();
 
@@ -245,10 +249,6 @@ public class Manager extends Application {
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
-
-        //Label taskId = new Label("Task number: " + id);
-        //taskId.setFont(Font.font("Tahoma", FontWeight.NORMAL, 12));
-
         Label taskTitle = new Label("Name:");
         taskTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
 
@@ -264,7 +264,6 @@ public class Manager extends Application {
 
         Label assagneeLabel = new Label("Assignee:");
         assagneeLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
-
 
         path = projectPath +  "/" + projectName + "_userslist.txt";
         File myObj = new File(path);
@@ -368,11 +367,6 @@ public class Manager extends Application {
                     actiontarget.setFill(Color.FIREBRICK);
                     actiontarget.setText("Fill all fields!");
                 } else {
-                    TableView tableTasks = new TableView();
-                    pathTasks = projectPath +  "/" + projectName + "_taskslist.txt";
-                    File myObjTasks = new File(pathTasks);
-                    tasksList = filesHandle.fileToTasksList(myObjTasks);
-                    dataTasks = filesHandle.convertTasksListToObservable(tasksList);
 
                     if (tasksList.getTasks().size() > 0) {
                         taskNumber = tasksList.getTasks().get(tasksList.getTasks().size()-1).getId();
@@ -400,7 +394,7 @@ public class Manager extends Application {
 
                     tasksList.addTask(new Task(taskNumber, taskTitleTextField.getText(), descriptionTextField.getText(),  tasksTypesComboBox.getValue().toString(),tasksStatusComboBox.getValue().toString(), usersComboBox.getValue().toString(), creatorTextField.getText(), created, deadline));
                     filesHandle.tasksWriteToFile(tasksList, projectName, projectPath);
-                    createBoard();
+                    tabStats.setContent(tabStats());
 
                     stage.hide();
 
@@ -689,15 +683,13 @@ public class Manager extends Application {
 
         // Use tab pane with one tab for sizing UI and one tab for alignment UI
         TabPane tabs = new TabPane();
-        Tab tabTasks = new Tab();
+
         tabTasks.setText("Tasks");
         tabTasks.setContent(tabTasks());
 
-        Tab tabUsers = new Tab();
         tabUsers.setText("Users");
         tabUsers.setContent(tabUsers());
 
-        Tab tabStats = new Tab();
         tabStats.setText("Stats");
         tabStats.setContent(tabStats());
 
@@ -786,7 +778,6 @@ public class Manager extends Application {
     private Pane tabTasks() {
 
 
-        TableView tableTasks = new TableView();
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.TOP_LEFT);  // Override default
         grid.setHgap(10);
@@ -794,7 +785,7 @@ public class Manager extends Application {
 
         pathTasks = projectPath +  "/" + projectName + "_taskslist.txt";
         File myObjTasks = new File(pathTasks);
-        TaskList tasksList = filesHandle.fileToTasksList(myObjTasks);
+        tasksList = filesHandle.fileToTasksList(myObjTasks);
         dataTasks = filesHandle.convertTasksListToObservable(tasksList);
 
         final Label label = new Label("Tasks");
@@ -806,7 +797,22 @@ public class Manager extends Application {
             public void handle(ActionEvent e) {
                 Stage newTaskStage = new Stage();
                 createTask(newTaskStage);
-                newTaskStage.show();
+
+                /*
+                Hyperlink hyperlink = new Hyperlink();
+                TaskInTable taskInTable = new TaskInTable("101", hyperlink, "task 5", "Music", "Done", "dev1", "dev2", "2000", "2001");
+                dataTasks.set(0, taskInTable);
+
+                dataTasks.add(new TaskInTable(
+                        "100",
+                        hyperlink,
+                        "taskTitleTextField.getText()",
+                        "tasksTypesComboBox.getValue().toString()",
+                        "tasksStatusComboBox.getValue().toString()",
+                        "usersComboBox.getValue().toString()",
+                        "creatorTextField.getText()",
+                        "createdTextField.getText()",
+                        "deadlineDate"));*/
             }
         });
         final Button editTask = new Button("Edit task");
@@ -834,7 +840,7 @@ public class Manager extends Application {
             }
         });
 
-        tableTasks.setEditable(true);
+        tableTasks.setEditable(false);
         Callback<TableColumn, TableCell> cellFactory =
                 new Callback<TableColumn, TableCell>() {
                     public TableCell call(TableColumn p) {
@@ -985,8 +991,6 @@ public class Manager extends Application {
         path = projectPath +  "/" + projectName + "_userslist.txt";
         File myObj = new File(path);
         UserList userList = filesHandle.fileToUsersList(myObj);
-
-        TableView tableUsers = new TableView();
         usersData = filesHandle.convertUsersListToObservable(userList);
 
         final Label label = new Label("List of users");
@@ -1067,6 +1071,9 @@ public class Manager extends Application {
         addButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                /*//change data
+                UserInTable user = new UserInTable ("developer0", "pass", "email");
+                usersData.set(0, user);*/
                 usersData.add(new UserInTable(
                         addFirstName.getText(),
                         addLastName.getText(),
