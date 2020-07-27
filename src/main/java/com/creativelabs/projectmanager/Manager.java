@@ -709,7 +709,7 @@ public class Manager extends Application {
         tabStats.setText("Stats");
         tabStats.setContent(tabStats());
 
-        tabs.getTabs().addAll(tabStats, tabTasks, tabUsers);
+        tabs.getTabs().addAll(tabTasks, tabUsers, tabStats);
         tabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         Scene scene = new Scene(tabs, 1000, 600); // Manage scene size
@@ -733,33 +733,47 @@ public class Manager extends Application {
         TaskList tasksList = filesHandle.fileToTasksList(myObjTasks);
         ArrayList<String> tasksType = filesHandle.convertTaskTypeToString(tasksList);
 
-        int questTaskAmount = 0;
+        int taskQuestAmount = 0;
+        int task3dAmount = 0;
+        int task2dAmount = 0;
+        int taskLevelDesignAmount = 0;
+        int taskScriptsAmount = 0;
+        int taskMusicAmount = 0;
 
         for (String task : tasksType) {
             //System.out.println(task);
             if (task.equals("Quest")) {
-                questTaskAmount = questTaskAmount + 1;
+                taskQuestAmount = taskQuestAmount + 1;
+            }if (task.equals("3D")) {
+                task3dAmount = task3dAmount + 1;
+            }if (task.equals("2D")) {
+                task2dAmount = task2dAmount + 1;
+            }if (task.equals("Level Design")) {
+                taskLevelDesignAmount = taskLevelDesignAmount + 1;
+            }if (task.equals("Scripts")) {
+                taskScriptsAmount = taskScriptsAmount + 1;
+            }if (task.equals("Music")) {
+                taskMusicAmount = taskMusicAmount + 1;
             }
 
         }
-        System.out.println("questTaskAmount = " + questTaskAmount);
 
-        ObservableList<PieChart.Data> pieChartData =
+        ObservableList<PieChart.Data> taskTypePieChartData =
                 FXCollections.observableArrayList(
-                        new PieChart.Data("Quest", questTaskAmount),
-                        new PieChart.Data("3D", 1),
-                        new PieChart.Data("2D", 0),
-                        new PieChart.Data("Level Design", 2),
-                        new PieChart.Data("Scripts", 2),
-                        new PieChart.Data("Music", 1));
-        final PieChart chart = new PieChart(pieChartData);
-        chart.setTitle("Task types");
+                        new PieChart.Data("Quest", taskQuestAmount),
+                        new PieChart.Data("3D", task3dAmount),
+                        new PieChart.Data("2D", task2dAmount),
+                        new PieChart.Data("Level Design", taskLevelDesignAmount),
+                        new PieChart.Data("Scripts", taskScriptsAmount),
+                        new PieChart.Data("Music", taskMusicAmount));
+        final PieChart taskTypeChart = new PieChart(taskTypePieChartData);
+        taskTypeChart.setTitle("Task types");
 
         final Label caption = new Label("");
         caption.setTextFill(Color.BLACK);
         caption.setStyle("-fx-font: 24 arial;");
 
-        for (final PieChart.Data data : chart.getData()) {
+        for (final PieChart.Data data : taskTypeChart.getData()) {
             data.getNode().addEventHandler(MouseEvent.MOUSE_PRESSED,
                     new EventHandler<MouseEvent>() {
                         @Override public void handle(MouseEvent e) {
@@ -772,7 +786,7 @@ public class Manager extends Application {
         }
 
 
-        grid.add(chart, 3, 2, 2, 1);
+        grid.add(taskTypeChart, 3, 2, 2, 1);
         grid.add(caption, 2, 0, 2, 1);
 
         return grid;
