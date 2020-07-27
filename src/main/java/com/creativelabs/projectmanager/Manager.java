@@ -21,6 +21,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -37,6 +38,7 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Manager extends Application {
 
@@ -726,18 +728,52 @@ public class Manager extends Application {
         grid.setHgap(10);
         grid.setVgap(10);
 
+        pathTasks = projectPath +  "/" + projectName + "_taskslist.txt";
+        File myObjTasks = new File(pathTasks);
+        TaskList tasksList = filesHandle.fileToTasksList(myObjTasks);
+        ArrayList<String> tasksType = filesHandle.convertTaskTypeToString(tasksList);
+
+        int questTaskAmount = 0;
+
+        for (String task : tasksType) {
+            //System.out.println(task);
+            if (task.equals("Quest")) {
+                questTaskAmount = questTaskAmount + 1;
+            }
+
+        }
+        System.out.println("questTaskAmount = " + questTaskAmount);
+
         ObservableList<PieChart.Data> pieChartData =
                 FXCollections.observableArrayList(
-                        new PieChart.Data("Grapefruit", 13),
-                        new PieChart.Data("Oranges", 25),
-                        new PieChart.Data("Plums", 10),
-                        new PieChart.Data("Pears", 22),
-                        new PieChart.Data("Apples", 30));
+                        new PieChart.Data("Quest", questTaskAmount),
+                        new PieChart.Data("3D", 1),
+                        new PieChart.Data("2D", 0),
+                        new PieChart.Data("Level Design", 2),
+                        new PieChart.Data("Scripts", 2),
+                        new PieChart.Data("Music", 1));
         final PieChart chart = new PieChart(pieChartData);
-        chart.setTitle("Imported Fruits");
+        chart.setTitle("Task types");
+
+        final Label caption = new Label("");
+        caption.setTextFill(Color.BLACK);
+        caption.setStyle("-fx-font: 24 arial;");
+
+        for (final PieChart.Data data : chart.getData()) {
+            data.getNode().addEventHandler(MouseEvent.MOUSE_PRESSED,
+                    new EventHandler<MouseEvent>() {
+                        @Override public void handle(MouseEvent e) {
+                            //System.out.println("clicked");
+                            caption.setTranslateX(e.getSceneX()-40);
+                            caption.setTranslateY(e.getSceneY()-40);
+                            caption.setText(String.valueOf(data.getPieValue()));
+                        }
+                    });
+        }
 
 
         grid.add(chart, 3, 2, 2, 1);
+        grid.add(caption, 2, 0, 2, 1);
 
         return grid;
     }

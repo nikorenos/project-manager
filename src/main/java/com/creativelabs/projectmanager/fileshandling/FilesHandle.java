@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -220,6 +221,16 @@ public class FilesHandle {
         for(int n = 0; n < list.getUsersList().size(); n++) {
             String nick = list.getUsersList().get(n).getUsername();
             data.add(nick);
+        }
+        return data;
+    }
+
+    public ArrayList<String> convertTaskTypeToString(TaskList list) {
+        ArrayList<String> data = new ArrayList<>();
+        System.out.println("convertTaskTypeToString");
+        for(int n = 0; n < list.getTasks().size(); n++) {
+            String type = list.getTasks().get(n).getType();
+            data.add(type);
         }
         return data;
     }
