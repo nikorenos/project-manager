@@ -260,18 +260,13 @@ public class Manager extends Application {
 
         TextField taskTitleTextField = new TextField();
         taskTitleTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        taskTitleTextField.setText("task 1");
 
         Label taskType = new Label("Type:");
         taskType.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
 
-        TextField taskTypeTextField = new TextField();
-        taskTypeTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
-
         Label statusType = new Label("Status:");
         statusType.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
-
-        TextField taskStatusTextField = new TextField();
-        taskStatusTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
 
         Label assagneeLabel = new Label("Assignee:");
         assagneeLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
@@ -284,12 +279,35 @@ public class Manager extends Application {
         final ComboBox usersComboBox = new ComboBox(users);
         usersComboBox.setValue(userList.getUsersList().get(0).getUsername());
 
+        ObservableList<String> tasksTypes =
+                FXCollections.observableArrayList(
+                        "Quest",
+                        "3D",
+                        "2D",
+                        "Level Design",
+                        "Scripts",
+                        "Music"
+                );
+        final ComboBox tasksTypesComboBox = new ComboBox(tasksTypes);
+        tasksTypesComboBox.setValue("Quest");
+
+        ObservableList<String> tasksStatus =
+                FXCollections.observableArrayList(
+                        "Done",
+                        "In progress",
+                        "Assigned",
+                        "Unassigned"
+                );
+        final ComboBox tasksStatusComboBox = new ComboBox(tasksStatus);
+        tasksStatusComboBox.setValue("Unassigned");
+
 
         Label creatorLabel = new Label("Creator:");
         creatorLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
 
         TextField creatorTextField = new TextField();
         creatorTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        creatorTextField.setText("developer1");
 
         Label createdLabel = new Label("Created:");
         createdLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
@@ -305,6 +323,7 @@ public class Manager extends Application {
 
         TextField deadlineTextField = new TextField();
         deadlineTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        deadlineTextField.setText("5");
 
         Label descriptionLabel = new Label("Description:");
         descriptionLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
@@ -312,6 +331,7 @@ public class Manager extends Application {
         TextField descriptionTextField = new TextField();
         descriptionTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
         descriptionTextField.setMinSize(250,50);
+        descriptionTextField.setText("This is example task.");
 
 
 
@@ -377,14 +397,14 @@ public class Manager extends Application {
                             convertTaskNumber,
                             hyperlink,
                             taskTitleTextField.getText(),
-                            taskTypeTextField.getText(),
-                            taskStatusTextField.getText(),
+                            tasksTypesComboBox.getValue().toString(),
+                            tasksStatusComboBox.getValue().toString(),
                             usersComboBox.getValue().toString(),
                             creatorTextField.getText(),
                             createdTextField.getText(),
                             deadlineDate));
 
-                    tasksList.addTask(new Task(taskNumber, taskTitleTextField.getText(), descriptionTextField.getText(),  taskTypeTextField.getText(), taskStatusTextField.getText(), usersComboBox.getValue().toString(),creatorTextField.getText(), created, deadline));
+                    tasksList.addTask(new Task(taskNumber, taskTitleTextField.getText(), descriptionTextField.getText(),  tasksTypesComboBox.getValue().toString(),tasksStatusComboBox.getValue().toString(), usersComboBox.getValue().toString(), creatorTextField.getText(), created, deadline));
                     filesHandle.tasksWriteToFile(tasksList, projectName, projectPath);
                     createBoard();
 
@@ -400,9 +420,9 @@ public class Manager extends Application {
         grid.add(taskTitle, 1, 0);
         grid.add(taskTitleTextField, 1, 1);
         grid.add(taskType, 1, 2);
-        grid.add(taskTypeTextField, 1, 3);
+        grid.add(tasksTypesComboBox, 1, 3);
         grid.add(statusType, 5, 0);
-        grid.add(taskStatusTextField, 5, 1);
+        grid.add(tasksStatusComboBox, 5, 1);
         grid.add(assagneeLabel, 5, 2);
         grid.add(usersComboBox, 5, 3);
         grid.add(creatorLabel, 5, 4);
