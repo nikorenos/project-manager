@@ -19,6 +19,10 @@ public final class TaskList {
         return tasks.remove(task);
     }
 
+    public void setTask (int id, Task task) {
+        tasks.set(id, task);
+    }
+
     public List<Task> getTasks() {
         return new LinkedList<>(tasks);
     }
