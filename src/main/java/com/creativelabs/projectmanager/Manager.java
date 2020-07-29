@@ -22,6 +22,8 @@ import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -244,6 +246,14 @@ public class Manager extends Application {
         return grid;
     }
 
+    private void keyPressed (KeyEvent keyEvent) {
+        KeyCode key = keyEvent.getCode();
+        if (KeyCode.C == key){
+            Stage stage = new Stage();
+            createTask(stage);
+        }
+    }
+
     public void createTask(Stage stage) {
 
         GridPane grid = new GridPane();
@@ -355,6 +365,8 @@ public class Manager extends Application {
         grid.setHalignment(actiontarget, RIGHT);
         actiontarget.setId("actiontarget");
 
+
+
         btnCreateTask.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
@@ -456,6 +468,8 @@ public class Manager extends Application {
         tabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         Scene scene = new Scene(tabs, 1000, 600); // Manage scene size
+
+        scene.setOnKeyPressed(this::keyPressed);
 
         boardStage.setTitle("Project " + projectName);
         boardStage.setScene(scene);
