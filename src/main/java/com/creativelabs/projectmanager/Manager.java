@@ -99,6 +99,8 @@ public class Manager extends Application {
     Tab tabStats = new Tab();
     Tab tabTasks = new Tab();
     Tab tabUsers = new Tab();
+    Tab tabNPCAmbient = new Tab();
+    Tab tabDialogueToScript = new Tab();
 
     final HBox hb = new HBox();
 
@@ -464,7 +466,13 @@ public class Manager extends Application {
         tabStats.setText("Stats");
         tabStats.setContent(tabStats());
 
-        tabs.getTabs().addAll(tabTasks, tabUsers, tabStats);
+        tabDialogueToScript.setText("Diague");
+        tabDialogueToScript.setContent(tabDialogueToScript());
+
+        tabNPCAmbient.setText("NPC Ambient");
+        tabNPCAmbient.setContent(tabDialogueToScript());
+
+        tabs.getTabs().addAll(tabDialogueToScript,tabTasks, tabUsers, tabStats, tabNPCAmbient);
         tabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         Scene scene = new Scene(tabs, 1000, 600); // Manage scene size
@@ -474,6 +482,86 @@ public class Manager extends Application {
         boardStage.setTitle("Project " + projectName);
         boardStage.setScene(scene);
         boardStage.show();
+    }
+
+    private Pane tabDialogueToScript() {
+
+        Stage stage = new Stage();
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.TOP_LEFT);  // Override default
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+
+        TextArea textArea = new TextArea();
+        textArea.setText("Put dialogue here.");
+        textArea.setDisable(false);
+        textArea.setPrefRowCount(4);
+        textArea.setEditable(true);
+        textArea.textProperty().addListener((observable, oldValue, newValue) -> {
+            String text = textArea.getText();
+        });
+        textArea.setText(textArea.getText());
+        ScrollPane scrollPane = new ScrollPane(textArea);
+        scrollPane.setMinSize(600,400);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        HBox.setHgrow(scrollPane, Priority.ALWAYS);
+
+        TextField projectPathLabelTextField = new TextField();
+        projectPathLabelTextField.setText("C:/ZW2");
+
+
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setInitialDirectory(new File("C:/ZW2"));
+
+        Button buttonSelectDirectory = new Button("Select Directory");
+        buttonSelectDirectory.setOnAction(e -> {
+            File selectedDirectory = directoryChooser.showDialog(stage);
+            projectPathLabelTextField.setText(selectedDirectory.getAbsolutePath());
+            //System.out.println(selectedDirectory.getAbsolutePath());
+        });
+
+        Button btnCreateProject = new Button("Create");
+        HBox hbBtnApply = new HBox(10);
+        hbBtnApply.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtnApply.getChildren().add(btnCreateProject);
+
+        final Text actiontarget = new Text();
+        grid.add(actiontarget, 0, 3);
+        grid.setColumnSpan(actiontarget, 2);
+        grid.setHalignment(actiontarget, LEFT);
+        actiontarget.setId("actiontarget");
+
+        btnCreateProject.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+                if (projectPathLabelTextField.getText().length() < 3) {
+                    actiontarget.setFill(Color.FIREBRICK);
+                    actiontarget.setText("Select destination!");
+                } else {
+                    //projectPath = projectPathLabelTextField.getText();
+
+                    System.out.println(textArea.getText());
+
+                    //filesHandle.createProjectFolder(projectName, projectPath, admin);
+
+                }
+
+            }
+        });
+
+
+
+        grid.add(scrollPane, 6, 3, 2, 1);
+        grid.add(projectPathLabelTextField, 10, 7);
+        grid.add(buttonSelectDirectory, 13, 7);
+        grid.add(hbBtnApply, 10, 8);
+
+        return grid;
     }
 
     private Pane tabStats() {
@@ -1069,9 +1157,9 @@ public class Manager extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         Stage newBoard = new Stage();
-        //createBoard();
+        createBoard();
         //createNewProject(newBoard);
-        signUser();
+        //signUser();
 
 
 
