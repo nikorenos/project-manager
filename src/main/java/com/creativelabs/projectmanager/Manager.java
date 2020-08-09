@@ -36,12 +36,14 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 
 public class Manager extends Application {
@@ -293,6 +295,7 @@ public class Manager extends Application {
                         "2D",
                         "Level Design",
                         "Scripts",
+                        "Organisation",
                         "Music"
                 );
         final ComboBox tasksTypesComboBox = new ComboBox(tasksTypes);
@@ -543,12 +546,7 @@ public class Manager extends Application {
                     actiontarget.setFill(Color.FIREBRICK);
                     actiontarget.setText("Select destination!");
                 } else {
-                    //projectPath = projectPathLabelTextField.getText();
-
-                    System.out.println(textArea.getText());
-
-                    //filesHandle.createProjectFolder(projectName, projectPath, admin);
-
+                    filesHandle.addDialoguePathToDataProjectFile(projectName, projectPath, projectPathLabelTextField.getText());
                 }
 
             }
@@ -583,6 +581,7 @@ public class Manager extends Application {
         int taskLevelDesignAmount = 0;
         int taskScriptsAmount = 0;
         int taskMusicAmount = 0;
+        int taskOrganisationAmount = 0;
 
         for (String task : tasksType) {
             //System.out.println(task);
@@ -598,6 +597,8 @@ public class Manager extends Application {
                 taskScriptsAmount = taskScriptsAmount + 1;
             }if (task.equals("Music")) {
                 taskMusicAmount = taskMusicAmount + 1;
+            }if (task.equals("Organisation")) {
+                taskOrganisationAmount = taskOrganisationAmount + 1;
             }
 
         }
@@ -609,6 +610,7 @@ public class Manager extends Application {
                         new PieChart.Data("2D", task2dAmount),
                         new PieChart.Data("Level Design", taskLevelDesignAmount),
                         new PieChart.Data("Scripts", taskScriptsAmount),
+                        new PieChart.Data("Organisation", taskOrganisationAmount),
                         new PieChart.Data("Music", taskMusicAmount));
         final PieChart taskTypeChart = new PieChart(taskTypePieChartData);
         taskTypeChart.setTitle("Task types");

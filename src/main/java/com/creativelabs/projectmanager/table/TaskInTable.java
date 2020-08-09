@@ -127,6 +127,7 @@ public class TaskInTable {
                         "2D",
                         "Level Design",
                         "Scripts",
+                        "Organisation",
                         "Music"
                 );
         final ComboBox tasksTypesComboBox = new ComboBox(tasksTypes);

@@ -74,6 +74,26 @@ public class FilesHandle {
 
     }
 
+    public void addDialoguePathToDataProjectFile(String projectName, String projectPath, String dialoguePath) {
+
+        String projectDataPath = projectPath +  "/" + projectName + "_projectdata.txt";
+
+        try {
+            //create file with users data
+            FileWriter writeProjectData = new FileWriter(projectDataPath);
+            //create file with users data
+            writeProjectData.write(projectName + "\n");
+            writeProjectData.write(projectPath + "\n");
+            writeProjectData.write(dialoguePath + "\n");
+            writeProjectData.close();
+            System.out.println("Project data successfully wrote to the file.");
+
+        } catch (IOException e) {
+            System.out.println("An error with users list occurred.");
+            e.printStackTrace();
+        }
+    }
+
     public TaskList fileToTasksList (File obj) {
         System.out.println("fileToTasksList");
 
