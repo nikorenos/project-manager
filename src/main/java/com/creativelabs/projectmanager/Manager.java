@@ -62,6 +62,7 @@ public class Manager extends Application {
     private User admin = new User(nick, password, email);
     public static String projectName = "zw2";
     public static String projectPath = "C:/ZW2";
+    public static String dialoguesPath = "C:/";
 
 
     public String getProjectName() {
@@ -513,9 +514,20 @@ public class Manager extends Application {
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         HBox.setHgrow(scrollPane, Priority.ALWAYS);
 
-        TextField projectPathLabelTextField = new TextField();
-        projectPathLabelTextField.setText("C:/ZW2");
+        String pathProjectData = projectPath +  "/" + projectName + "_projectdata.txt";
+        File projectDataFile = new File(pathProjectData);
+        try {
+            dialoguesPath = Files.readAllLines(Paths.get(projectDataFile.getAbsolutePath())).get(2);
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
 
+        TextField projectPathLabelTextField = new TextField();
+        if (dialoguesPath.length() > 0) {
+            projectPathLabelTextField.setText(dialoguesPath);
+        } else {
+            projectPathLabelTextField.setText("C:/ZW2");
+        }
 
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(new File("C:/ZW2"));
@@ -527,7 +539,7 @@ public class Manager extends Application {
             //System.out.println(selectedDirectory.getAbsolutePath());
         });
 
-        Button btnCreateProject = new Button("Create");
+        Button btnCreateProject = new Button("Convert");
         HBox hbBtnApply = new HBox(10);
         hbBtnApply.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtnApply.getChildren().add(btnCreateProject);
