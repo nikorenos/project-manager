@@ -7,6 +7,7 @@ import com.creativelabs.projectmanager.tasks.*;
 import com.creativelabs.projectmanager.fileshandling.*;
 import com.creativelabs.projectmanager.table.TaskInTable;
 import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -885,6 +886,13 @@ public class Manager extends Application {
             }
         });
 
+        CheckBox loggedCheckBox = new CheckBox("Stay logged");
+        //Setting action to check boxes
+        loggedCheckBox.selectedProperty().addListener(
+                (ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
+                    System.out.println("checked");
+                });
+
         Hyperlink link = new Hyperlink();
         final String url = "http://zlotewrota.org";
         link.setText(url);
@@ -1033,6 +1041,7 @@ public class Manager extends Application {
         grid.add(label, 3, 1, 2, 1);
         grid.add(createTask, 3, 4, 2, 1);
         grid.add(link, 3, 7, 2, 1);
+        grid.add(loggedCheckBox, 5, 1, 2, 1);
         grid.add(tableTasks, 3, 2, 2, 1);
 
         return grid;
