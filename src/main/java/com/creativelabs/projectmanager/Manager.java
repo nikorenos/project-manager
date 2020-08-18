@@ -1,5 +1,6 @@
 package com.creativelabs.projectmanager;
 
+import com.creativelabs.projectmanager.Npc.DialogueToScript;
 import com.creativelabs.projectmanager.table.EditingCell;
 import com.creativelabs.projectmanager.table.UserInTable;
 import com.creativelabs.projectmanager.tasks.*;
@@ -496,9 +497,8 @@ public class Manager extends Application {
         grid.setHgap(10);
         grid.setVgap(10);
 
-
         TextArea textArea = new TextArea();
-        textArea.setText("Put dialogue here.");
+        textArea.setPromptText("Put dialogue here...");
         textArea.setDisable(false);
         textArea.setPrefRowCount(4);
         textArea.setEditable(true);
@@ -507,7 +507,7 @@ public class Manager extends Application {
         });
         textArea.setText(textArea.getText());
         ScrollPane scrollPane = new ScrollPane(textArea);
-        scrollPane.setMinSize(600,400);
+        scrollPane.setMinSize(600,350);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -522,11 +522,18 @@ public class Manager extends Application {
             ioException.printStackTrace();
         }
 
-        TextField projectPathLabelTextField = new TextField();
+        Label dialogueNameText = new Label("Dialogue name:");
+
+        TextField dialogueName = new TextField();
+        dialogueName.setText("DIA_Test.d");
+
+        Label dialoguePathText = new Label("Dialogue path:");
+
+        TextField dialoguePathTextField = new TextField();
         if (dialoguesPath.length() > 0) {
-            projectPathLabelTextField.setText(dialoguesPath);
+            dialoguePathTextField.setText(dialoguesPath);
         } else {
-            projectPathLabelTextField.setText("C:/ZW2");
+            dialoguePathTextField.setText("C:/ZW2");
         }
 
         DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -535,7 +542,7 @@ public class Manager extends Application {
         Button buttonSelectDirectory = new Button("Select Directory");
         buttonSelectDirectory.setOnAction(e -> {
             File selectedDirectory = directoryChooser.showDialog(stage);
-            projectPathLabelTextField.setText(selectedDirectory.getAbsolutePath());
+            dialoguePathTextField.setText(selectedDirectory.getAbsolutePath());
             //System.out.println(selectedDirectory.getAbsolutePath());
         });
 
@@ -554,11 +561,13 @@ public class Manager extends Application {
 
             @Override
             public void handle(ActionEvent e) {
-                if (projectPathLabelTextField.getText().length() < 3) {
+                if (dialoguePathTextField.getText().length() < 3) {
                     actiontarget.setFill(Color.FIREBRICK);
                     actiontarget.setText("Select destination!");
                 } else {
-                    filesHandle.addDialoguePathToDataProjectFile(projectName, projectPath, projectPathLabelTextField.getText());
+                    filesHandle.addDialoguePathToDataProjectFile(projectName, projectPath, dialoguePathTextField.getText());
+                    DialogueToScript dialogueToScript = new DialogueToScript();
+                    dialogueToScript.convertDialogueToScript(dialogueName.getText(), textArea.getText(), dialoguePathTextField.getText());
                 }
 
             }
@@ -567,9 +576,12 @@ public class Manager extends Application {
 
 
         grid.add(scrollPane, 6, 3, 2, 1);
-        grid.add(projectPathLabelTextField, 10, 7);
-        grid.add(buttonSelectDirectory, 13, 7);
-        grid.add(hbBtnApply, 10, 8);
+        grid.add(dialogueNameText, 9, 10);
+        grid.add(dialogueName, 10, 10);
+        grid.add(dialoguePathText, 9, 11);
+        grid.add(dialoguePathTextField, 10, 11);
+        grid.add(buttonSelectDirectory, 11, 11);
+        grid.add(hbBtnApply, 10, 12);
 
         return grid;
     }

@@ -1,135 +1,164 @@
 package com.creativelabs.projectmanager.Npc;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class DialogueToScript {
 
-    public void convertDialogueToScript () {
-
-    }
-
-    public static void main(String[] args){
-
-        String text = "-Horn - Test- (dialog gdy zrobimy 3 zadania przed świętem łowów)\n" +
-                "\n" +
-                "M: Zrobiłem wszystko, co chciałeś.\n" +
-                "H: Nie wszystko.\n" +
-                "M: Jak to?\n" +
-                "H: Pojawiła się nowa rzecz.\n" +
-                "M: Co znowu?\n" +
-                "\n";
+    public void convertDialogueToScript (String dialogueName, String text, String dialoguesPath) {
 
         String findStr = ": ";
-        String findStr2 = "-";
         String npcName = "";
+        String previousNpcName = "Alrik";
         String diagoueName = "";
+        String previousDialogueName = "Hello";
+        String questName = "";
+        String entryText = "";
+        String choiceText = "";
         String textInput = text + findStr;
         int lastIndex = 0;
         int previousIndex = 0;
         int count = 0;
-        int count2 = 0;
-        String script1 = "\n" +
-                "///////////////////////////////////////////////////////////////////////\n" +
-                "//\tHagen Hallo\n" +
-                "///////////////////////////////////////////////////////////////////////\n" +
-                "INSTANCE DIA_Hagen_Hallo (C_INFO)\n" +
-                "{\n" +
-                "\tnpc\t\t\t = \tPAL_200_Hagen;\n" +
-                "\tnr\t\t\t = \t2;\n" +
-                "\tcondition\t = \tDIA_Hagen_Hallo_Condition;\n" +
-                "\tinformation\t = \tDIA_Hagen_Hallo_Info;\n" +
-                "\timportant\t = \tFALSE;\n" +
-                "\tpermanent\t = \tFALSE;\n" +
-                "\tdescription\t =  \"(to do)\";\n" +
-                "};\n" +
-                "func int DIA_Hagen_Hallo_Condition ()\n" +
-                "{\t\n" +
-                "\tif (Npc_KnowsInfo (other, DIA_Hagen_Armee))\n" +
-                "\t{ return TRUE; };\t\n" +
-                "};\n" +
-                "func void DIA_Hagen_Hallo_Info ()\n" +
-                "{\n";
+        int choiceCount = 1;
+        int choiceSection = 1;
+        int dialogueCount = 1;
 
+        String dialoguePath = dialoguesPath +  "/" + dialogueName;
 
+        try {
 
-        while(lastIndex != -1){
+            FileWriter writeDialogue = new FileWriter(dialoguePath);
 
-            lastIndex = textInput.indexOf(findStr2,lastIndex);
+            while(lastIndex != -1){
+                lastIndex = textInput.indexOf(findStr,lastIndex);
 
-            if(lastIndex != -1){
+                if(lastIndex != -1){
+                    count ++;
+                    lastIndex += findStr.length();
+                    if (count > 1) {
 
-                count ++;
-                lastIndex += findStr2.length();
-                if (count == 2) {
-                    npcName = textInput.substring(previousIndex, lastIndex-2);
-                    //System.out.print("1" + npcName + "1");
-                }
-                if (count == 3) {
-                    diagoueName = textInput.substring(previousIndex+1, lastIndex-1);
-                    //System.out.println("1" + diagoueName+ "1");
-                }
+                        if (textInput.charAt(previousIndex-3) == 'A') {
+                            npcName = textInput.substring(previousIndex, lastIndex - 4);
+                            choiceSection = 1; choiceCount = 1;
+                        }
 
-            }
-            previousIndex = lastIndex;
-        }
-        //System.out.println(script1);
-        System.out.println("///////////////////////////////////////////////////////////////////////");
-        System.out.println("// " + npcName + " " + diagoueName );
-        System.out.println("///////////////////////////////////////////////////////////////////////");
-        System.out.println("INSTANCE DIA_" + npcName + "_" + diagoueName + " (C_INFO)");
-        System.out.println("{");
-        System.out.println("\tnpc\t\t\t = \t" + npcName+ ";");
-        System.out.println("\tnr\t\t\t = \t2;");
-        System.out.println("\tcondition\t = \tDIA_" + npcName + "_" + diagoueName + "_Condition;");
-        System.out.println("\tinformation\t = \tDIA_" + npcName + "_" + diagoueName + "_Info;");
-        System.out.println("\timportant\t = \tFALSE;");
-        System.out.println("\tpermanent\t = \tFALSE;");
-        System.out.println("\tdescription\t = \t\"(to do)\";");
-        System.out.println("};");
-        System.out.println("func int DIA_" + npcName + "_" + diagoueName + "_Condition ()");
-        System.out.println("{");
-        System.out.println("if (Npc_KnowsInfo (other, Dia_Alrik_Hello))");
-        System.out.println("\t{ return TRUE; };\t");
-        System.out.println("};");
-        System.out.println("func void DIA_" + npcName + "_" + diagoueName + "_Info ()");
-        System.out.println("{");
+                        if (textInput.charAt(previousIndex-3) == 'D') {
 
+                            diagoueName = textInput.substring(previousIndex, lastIndex-2); //previousIndex + currentIndex);
+                            dialogueCount = dialogueCount + 1;
 
+                            if (count > 4) {
+                                writeDialogue.write("};");
+                                writeDialogue.write("\n");
+                            }
 
+                            count = 0;
 
+                            writeDialogue.write("///////////////////////////////////////////////////////////////////////" + "\n");
+                            writeDialogue.write("////////////////  " + npcName + " " + diagoueName  + "\n");
+                            writeDialogue.write("///////////////////////////////////////////////////////////////////////" + "\n");
+                            writeDialogue.write("INSTANCE DIA_" + npcName + "_" + diagoueName + " (C_INFO)" + "\n");
+                            writeDialogue.write("{" + "\n");
+                            writeDialogue.write("\tnpc\t\t\t = \t" + npcName+ ";" + "\n");
+                            writeDialogue.write("\tnr\t\t\t = \t2;" + "\n");
+                            writeDialogue.write("\tcondition\t = \tDIA_" + npcName + "_" + diagoueName + "_Condition;" + "\n");
+                            writeDialogue.write("\tinformation\t = \tDIA_" + npcName + "_" + diagoueName + "_Info;" + "\n");
+                            writeDialogue.write("\timportant\t = \tFALSE;" + "\n");
+                            writeDialogue.write("\tpermanent\t = \tFALSE;" + "\n");
+                            writeDialogue.write("\tdescription\t = \t\"(to do)\";" + "\n");
+                            writeDialogue.write("};" + "\n");
+                            writeDialogue.write("func int DIA_" + npcName + "_" + diagoueName + "_Condition ()" + "\n");
+                            writeDialogue.write("{" + "\n");
+                            writeDialogue.write("if (Npc_KnowsInfo (other, Dia_" + previousNpcName + "_"+ previousDialogueName + "))" + "\n");
+                            writeDialogue.write("\t{ return TRUE; };\t" + "\n");
+                            writeDialogue.write("};" + "\n");
+                            writeDialogue.write("func void DIA_" + npcName + "_" + diagoueName + "_Info ()" + "\n");
+                            writeDialogue.write("{" + "\n");
+                            previousNpcName = npcName;
+                            previousDialogueName = diagoueName;
+                        }
 
+                        if (textInput.charAt(previousIndex-3) == 'H') {
+                            if (count < 12) {
+                                writeDialogue.write("\tAI_Output (other, self, \"DIA_" + npcName + "_" + diagoueName + "_15_0" + (count - 2) + "\"); //" + textInput.substring(previousIndex, lastIndex - 3));
+                            }
+                            else {
+                                writeDialogue.write("\tAI_Output (other, self, \"DIA_" + npcName + "_" + diagoueName + "_15_" + (count - 2) + "\"); //" + textInput.substring(previousIndex, lastIndex - 3));
+                            }
+                        }
 
+                        if (textInput.charAt(previousIndex-3) == 'N') {
+                            if (count < 12) {
+                                writeDialogue.write("\tAI_Output (self, other, \"DIA_" + npcName + "_" + diagoueName + "_12_0" + (count - 2) + "\"); //" + textInput.substring(previousIndex, lastIndex - 3));
+                            }
+                            else {
+                                writeDialogue.write("\tAI_Output (self, other, \"DIA_" + npcName + "_" + diagoueName + "_12_" + (count - 2) + "\"); //" + textInput.substring(previousIndex, lastIndex - 3));
+                            }
 
+                        }
 
-        lastIndex = 0;
-        previousIndex = 0;
-        count = 0;
-        while(lastIndex != -1){
+                        if (textInput.charAt(previousIndex-3) == 'Q') {
+                            questName = textInput.substring(previousIndex, lastIndex-2);
+                        }
+                        if (textInput.charAt(previousIndex-3) == 'E') {
+                            entryText = textInput.substring(previousIndex, lastIndex-2);
+                            writeDialogue.write("\n");
+                            writeDialogue.write("\tNOTE (\"" + questName + "\", \"" + entryText + ".\");");
+                            writeDialogue.write("\n");
+                        }
 
-            lastIndex = textInput.indexOf(findStr,lastIndex);
+                        if (count > 3) {
 
-            if(lastIndex != -1){
+                            if (textInput.charAt(previousIndex - 3) == 'C') {
+                                choiceText = textInput.substring(previousIndex, lastIndex - 4);
+                                writeDialogue.write("\n");
+                                if (choiceCount == 1) {
+                                    writeDialogue.write("\tInfo_ClearChoices(Dia_" + npcName + "_" + diagoueName + ");" + "\n");
+                                }
 
-                count ++;
-                lastIndex += findStr.length();
+                                writeDialogue.write("\tInfo_AddChoice(Dia_" + npcName + "_" + diagoueName + ",\"" + choiceText + "\",Dia_" + npcName + "_" + diagoueName + "_" + choiceCount + ");");
+                                choiceCount = choiceCount+1;
+                            }
+                        }
 
-                if (count > 1) {
+                        if (textInput.charAt(previousIndex-3) == 'S') {
 
-                    for (int i = 0; i < textInput.length(); i++) {
+                            writeDialogue.write("\n");
+                            if (choiceSection == 1) {
+                                writeDialogue.write("};");
+                                count = count - 4;
+                            }
+                            if (choiceSection == 2) {
+                                writeDialogue.write("};");
+                                count = count - 1;
+                            }
+                            writeDialogue.write("\n");
+                            writeDialogue.write("FUNC VOID DIA_" + npcName + "_" + diagoueName + "_" + choiceSection + " ()" + "\n");
+                            writeDialogue.write("{");
+                            writeDialogue.write("\tInfo_ClearChoices(Dia_" + npcName + "_" + diagoueName + ");" + "\n");
 
+                            choiceSection = choiceSection+1;
+                        }
                     }
-                    if (text.charAt(previousIndex-3) == 'M') {
-                        System.out.print("\tAI_Output (other, self, \"DIA_" + npcName + "_" + diagoueName + "_15_0" + (count-2) + "\"); //" + textInput.substring(previousIndex, lastIndex - 3));
-                    } else {
-                        System.out.print("\tAI_Output (self, other, \"DIA_" + npcName + "_" + diagoueName + "_12_0" + (count-2) + "\"); //" + textInput.substring(previousIndex, lastIndex - 3));
-                    }
-
                 }
                 previousIndex = lastIndex;
             }
 
+            writeDialogue.write("\n");
+            writeDialogue.write("\n");
+            writeDialogue.write("};");
+            writeDialogue.write("\n");
+
+            writeDialogue.close();
+            System.out.println("Dialogue successfully wrote to the file.");
+
+        } catch (IOException e) {
+            System.out.println("An error with dialogue occurred.");
+            e.printStackTrace();
         }
-        System.out.println();
-        System.out.println("};");
-        System.out.println();
+    }
+
+    public static void main(String[] args){
 
     }
 }
