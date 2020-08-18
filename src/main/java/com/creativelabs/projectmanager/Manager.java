@@ -471,13 +471,13 @@ public class Manager extends Application {
         tabStats.setText("Stats");
         tabStats.setContent(tabStats());
 
-        tabDialogueToScript.setText("Diague");
+        tabDialogueToScript.setText("Dialogue");
         tabDialogueToScript.setContent(tabDialogueToScript());
 
         tabNPCAmbient.setText("NPC Ambient");
         tabNPCAmbient.setContent(tabNpcAmbient());
 
-        tabs.getTabs().addAll(tabNPCAmbient, tabDialogueToScript,tabTasks, tabUsers, tabStats);
+        tabs.getTabs().addAll(tabTasks, tabUsers, tabStats, tabNPCAmbient, tabDialogueToScript);
         tabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         Scene scene = new Scene(tabs, 1000, 600); // Manage scene size
@@ -715,11 +715,7 @@ public class Manager extends Application {
         Label dialoguePathText = new Label("Dialogue path:");
 
         TextField dialoguePathTextField = new TextField();
-        if (dialoguesPath.length() > 0) {
-            dialoguePathTextField.setText(dialoguesPath);
-        } else {
-            dialoguePathTextField.setText("C:/ZW2");
-        }
+        dialoguePathTextField.setText(dialoguesPath);
 
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(new File("C:/ZW2"));
@@ -753,6 +749,7 @@ public class Manager extends Application {
                     filesHandle.addDialoguePathToDataProjectFile(projectName, projectPath, dialoguePathTextField.getText());
                     DialogueToScript dialogueToScript = new DialogueToScript();
                     dialogueToScript.convertDialogueToScript(dialogueName.getText(), textArea.getText(), dialoguePathTextField.getText());
+                    textArea.setText("");
                 }
 
             }
@@ -1368,9 +1365,9 @@ public class Manager extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         Stage newBoard = new Stage();
-        createBoard();
+        //createBoard();
         //createNewProject(newBoard);
-        //signUser();
+        signUser();
 
 
 

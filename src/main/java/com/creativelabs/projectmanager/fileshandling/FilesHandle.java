@@ -39,6 +39,7 @@ public class FilesHandle {
             //create file with users data
             writeProjectData.write(projectName + "\n");
             writeProjectData.write(projectPath + "\n");
+            writeProjectData.write(projectPath + "\n");//replacement for dialoguePath
             writeProjectData.close();
             System.out.println("Project data successfully wrote to the file.");
 
