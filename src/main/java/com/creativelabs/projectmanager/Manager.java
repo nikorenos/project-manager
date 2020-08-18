@@ -481,7 +481,7 @@ public class Manager extends Application {
         tabs.getTabs().addAll(tabTasks, tabUsers, tabStats, tabNPCAmbient, tabDialogueToScript);
         tabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
-        Scene scene = new Scene(tabs, 1000, 600); // Manage scene size
+        Scene scene = new Scene(tabs, 1050, 600); // Manage scene size
 
         scene.setOnKeyPressed(this::keyPressed);
 
@@ -1303,7 +1303,7 @@ public class Manager extends Application {
 
 
 
-        stage.setTitle("Welcome " + getNick() + " " + getPassword());
+        stage.setTitle("Welcome " + admin.getUsername());
         stage.setScene(sceneCreateNewProject);
         stage.show();
 
