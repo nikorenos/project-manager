@@ -34,10 +34,10 @@ public class CreateNpcAmbient {
 
         for (int n = 1; n <= amount; n++) {
 
-            String waypoint = "HUNTER001";
+            String name = "NAME_HUNTER";
             String npcGuild = "SLD";
             String npcName = npcGuild + "_" + npcId + "_Hunter_M";
-            String name = "NAME_HUNTER";
+            String waypoint = "HUNTER001";
             int SetAttributesToChapter = 3;
             int voice = 1 + n;
             String fight_tactic = "MASTER"; // MASTER / STRONG / COWARD

@@ -475,9 +475,9 @@ public class Manager extends Application {
         tabDialogueToScript.setContent(tabDialogueToScript());
 
         tabNPCAmbient.setText("NPC Ambient");
-        tabNPCAmbient.setContent(tabDialogueToScript());
+        tabNPCAmbient.setContent(tabNpcAmbient());
 
-        tabs.getTabs().addAll(tabDialogueToScript,tabTasks, tabUsers, tabStats, tabNPCAmbient);
+        tabs.getTabs().addAll(tabNPCAmbient, tabDialogueToScript,tabTasks, tabUsers, tabStats);
         tabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         Scene scene = new Scene(tabs, 1000, 600); // Manage scene size
@@ -487,6 +487,191 @@ public class Manager extends Application {
         boardStage.setTitle("Project " + projectName);
         boardStage.setScene(scene);
         boardStage.show();
+    }
+
+    private Pane tabNpcAmbient() {
+        Stage stage = new Stage();
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(25, 25, 25, 25));
+
+
+        Label nameTitle = new Label("Name:");
+        nameTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        TextField nameTextField = new TextField();
+        nameTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        nameTextField.setText("NAME_HUNTER");
+
+        Label fileNameTitle = new Label("File Name:");
+        fileNameTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        TextField fileNameTextField = new TextField();
+        fileNameTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        fileNameTextField.setText("_Hunter_M");
+
+        Label guildTitle = new Label("Guild:");
+        guildTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        TextField guildTextField = new TextField();
+        guildTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        guildTextField.setText("SLD");
+
+        Label waypointTitle = new Label("Waypoint:");
+        waypointTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        TextField waypointTextField = new TextField();
+        waypointTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        waypointTextField.setText("HUNTER001");
+
+        Label attributesTitle = new Label("Chapter attributes:");
+        attributesTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        TextField attributesTextField = new TextField();
+        attributesTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        attributesTextField.setText("3");
+
+        Label voiceTitle = new Label("Voice:");
+        voiceTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        TextField voiceTextField = new TextField();
+        voiceTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        voiceTextField.setText("1");
+
+        Label fightTitle = new Label("Fight tactic:");
+        fightTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        TextField fightTextField = new TextField();
+        fightTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        fightTextField.setText("STRONG");
+
+        Label weaponTitle = new Label("Weapon:");
+        weaponTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        TextField weaponTextField = new TextField();
+        weaponTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        weaponTextField.setText("iron_dagger");
+
+        Label armorTitle = new Label("Armor:");
+        armorTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        TextField armorTextField = new TextField();
+        armorTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        armorTextField.setText("ItAr_Leather_L");
+
+        Label mdsTitle = new Label("Mdl_ApplyOverlayMds:");
+        mdsTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        TextField mdsTextField = new TextField();
+        mdsTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        mdsTextField.setText("Relaxed");
+
+        Label fightSkillTitle = new Label("FightSkills:");
+        fightSkillTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        TextField fightSkillTextField = new TextField();
+        fightSkillTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        fightSkillTextField.setText("45");
+
+        Label routineTitle = new Label("Routine:");
+        routineTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        TextField routineTextField = new TextField();
+        routineTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        routineTextField.setText("TA_Stand_Eating");
+
+        Label amountTitle = new Label("Amount:");
+        amountTitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 16));
+        TextField amountTextField = new TextField();
+        amountTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        amountTextField.setText("1");
+
+        Label idTitle = new Label("Id:");
+        idTitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 16));
+        TextField idTextField = new TextField();
+        idTextField.setFont(Font.font("Tahoma", FontWeight.NORMAL, 16));
+        idTextField.setText("773");
+
+
+
+        Button btnExitTask = new Button("Exit");
+        HBox hbBtnExitApply = new HBox(10);
+        hbBtnExitApply.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtnExitApply.getChildren().add(btnExitTask);
+
+        btnExitTask.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                stage.hide();
+            }
+        });
+
+        Button btnCreateTask = new Button("Create");
+        HBox hbBtnApply = new HBox(10);
+        hbBtnApply.setAlignment(Pos.BOTTOM_RIGHT);
+        hbBtnApply.getChildren().add(btnCreateTask);
+
+
+        //info when text is too short
+        final Text actiontarget = new Text();
+        grid.setColumnSpan(actiontarget, 2);
+        grid.setHalignment(actiontarget, RIGHT);
+        actiontarget.setId("actiontarget");
+
+        btnCreateTask.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent e) {
+
+
+                if (guildTextField.getText().length() < 3) {
+                    actiontarget.setFill(Color.FIREBRICK);
+                    actiontarget.setText("Fill all fields!");
+                } else {
+
+                    if (tasksList.getTasks().size() > 0) {
+                        taskNumber = tasksList.getTasks().get(tasksList.getTasks().size()-1).getId();
+                    }
+
+
+                    stage.hide();
+                }
+
+
+            }
+        });
+
+
+        grid.add(nameTitle, 1, 0);
+        grid.add(nameTextField, 1, 1);
+        grid.add(fileNameTitle, 1, 2);
+        grid.add(fileNameTextField, 1, 3);
+        grid.add(guildTitle, 1, 4);
+        grid.add(guildTextField, 1, 5);
+        grid.add(waypointTitle, 1, 6);
+        grid.add(waypointTextField, 1, 7);
+
+        grid.add(attributesTitle, 4, 0);
+        grid.add(attributesTextField, 4, 1);
+        grid.add(voiceTitle, 4, 2);
+        grid.add(voiceTextField, 4, 3);
+        grid.add(fightTitle, 4, 4);
+        grid.add(fightTextField, 4, 5);
+        grid.add(weaponTitle, 4, 6);
+        grid.add(weaponTextField, 4, 7);
+
+        grid.add(armorTitle, 7, 0);
+        grid.add(armorTextField, 7, 1);
+        grid.add(mdsTitle, 7, 2);
+        grid.add(mdsTextField, 7, 3);
+        grid.add(fightSkillTitle, 7, 4);
+        grid.add(fightSkillTextField, 7, 5);
+        grid.add(routineTitle, 7, 6);
+        grid.add(routineTextField, 7, 7);
+
+        grid.add(amountTitle, 10, 0);
+        grid.add(amountTextField, 10, 1);
+        grid.add(idTitle, 10, 2);
+        grid.add(idTextField, 10, 3);
+
+
+
+
+        //grid.add(btnCreateTask, 11, 9);
+
+
+
+        return grid;
     }
 
     private Pane tabDialogueToScript() {
