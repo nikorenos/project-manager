@@ -1,6 +1,6 @@
 package com.creativelabs.projectmanager;
 
-import com.creativelabs.projectmanager.Npc.DialogueToScript;
+import com.creativelabs.projectmanager.dialogue.DialogueToScript;
 import com.creativelabs.projectmanager.table.EditingCell;
 import com.creativelabs.projectmanager.table.UserInTable;
 import com.creativelabs.projectmanager.tasks.*;
@@ -38,14 +38,12 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 
 public class Manager extends Application {

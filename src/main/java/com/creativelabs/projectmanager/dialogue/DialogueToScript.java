@@ -1,4 +1,4 @@
-package com.creativelabs.projectmanager.Npc;
+package com.creativelabs.projectmanager.dialogue;
 
 import java.io.FileWriter;
 import java.io.IOException;
