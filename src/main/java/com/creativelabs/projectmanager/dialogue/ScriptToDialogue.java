@@ -61,8 +61,8 @@ public class ScriptToDialogue {
         String findStrC_INFO = " (C_INFO)";
         String findStrAI_Output = "AI_Output(";
         String textInput = script;
-        String npcName = "";
         String dialogueName = "";
+        String speaker = "";
 
         while (startDialogueNameIndex != -1) {
             startDialogueNameIndex = textInput.indexOf(findStrInstance, startDialogueNameIndex);
@@ -71,8 +71,6 @@ public class ScriptToDialogue {
             endDialogueNameIndex = textInput.indexOf(findStrC_INFO, endDialogueNameIndex);
             //System.out.println("Znalazłem (C_INFO) w indeksie: " + endDialogueNameIndex);
 
-            startAI_OutputIndex = textInput.indexOf(findStrAI_Output, startAI_OutputIndex);
-            //System.out.println("Znalazłem AI_Output w indeksie: " + startAI_OutputIndex);
 
 
 
@@ -84,18 +82,30 @@ public class ScriptToDialogue {
                 endDialogueNameIndex += findStrC_INFO.length();
                 /*endDialogueNameIndex = textInput.indexOf(findStrC_INFO, endDialogueNameIndex);
                 endDialogueNameIndex -= findStrC_INFO.length();*/
-                npcName = textInput.substring(startDialogueNameIndex + 4, endDialogueNameIndex - findStrC_INFO.length());
+                dialogueName = textInput.substring(startDialogueNameIndex + 4, endDialogueNameIndex - findStrC_INFO.length());
                 //dialogueName = textInput.substring(endDialogueNameIndex -5, endDialogueNameIndex + 15);
 
-                String[] dialogueparts = npcName.split("_");
+                String[] dialogueparts = dialogueName.split("_");
                 System.out.println();
                 System.out.print("///////////////////////////////////////////////////////////////////////" + "\n");
                 System.out.print("////////////////  " + dialogueparts[0] + " " + dialogueparts[1]  + "\n");
                 System.out.println("///////////////////////////////////////////////////////////////////////" + "\n");
                 System.out.println("A: " + dialogueparts[0] + " D: " + dialogueparts[1] + ":");
                 }
+
+                while (startAI_OutputIndex != -1) {
+                    startAI_OutputIndex = textInput.indexOf(findStrAI_Output, startAI_OutputIndex);
+                    //System.out.println("Znalazłem AI_Output w indeksie: " + startAI_OutputIndex);
+
+                    if (startAI_OutputIndex != -1) {
+
+                        startAI_OutputIndex += findStrAI_Output.length();
+                        speaker = textInput.substring(startAI_OutputIndex, startAI_OutputIndex + 5);
+                        System.out.println(speaker);
+                    }
+                }
             }
-            endDialogueNameIndex = startDialogueNameIndex;
+            endDialogueNameIndex = startAI_OutputIndex;
         }
 
         /*
