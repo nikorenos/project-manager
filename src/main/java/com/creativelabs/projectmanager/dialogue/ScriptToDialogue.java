@@ -52,27 +52,39 @@ public class ScriptToDialogue {
                 "\n" +
                 "};";
 
-        int lastIndex = 0;
-        int previousIndex = 0;
+        int startDialogueNameIndex = 0;
+        int endDialogueNameIndex = 0;
         int count = 0;
         String findStr = "instance ";
+        String findStr2 = " (C_INFO)";
         String textInput = script;
         String npcName = "";
         String dialogueName = "";
 
-        while (lastIndex != -1) {
-            lastIndex = textInput.indexOf(findStr, lastIndex);
+        while (startDialogueNameIndex != -1) {
+            startDialogueNameIndex = textInput.indexOf(findStr, startDialogueNameIndex);
+            System.out.println("Znalazłem instance w indeksie: " + startDialogueNameIndex);
+            endDialogueNameIndex = textInput.indexOf(findStr2, startDialogueNameIndex);
+            System.out.println("Znalazłem (C_INFO) w indeksie: " + endDialogueNameIndex);
 
 
 
-            if(lastIndex != -1){
+
+            if(startDialogueNameIndex != -1){
                 count ++;
-                lastIndex += findStr.length();
-                npcName = textInput.substring(lastIndex + 4, lastIndex + 9);
-                System.out.println("A: " + npcName + " D: " + dialogueName + ":");
+                startDialogueNameIndex += findStr.length();
+                System.out.println("Ustawiam startDialogueNameIndex na: " + startDialogueNameIndex);
+                endDialogueNameIndex += findStr2.length();
+                /*endDialogueNameIndex = textInput.indexOf(findStr2, endDialogueNameIndex);
+                endDialogueNameIndex -= findStr2.length();*/
+                npcName = textInput.substring(startDialogueNameIndex + 4, endDialogueNameIndex - findStr2.length());
+                //dialogueName = textInput.substring(endDialogueNameIndex -5, endDialogueNameIndex + 15);
+                System.out.println("A: <" + npcName + "> D: " + dialogueName + ":");
+                String[] parts = npcName.split("_");
+                System.out.println(parts[0] + parts[1]);
                 }
             }
-            previousIndex = lastIndex;
+            endDialogueNameIndex = startDialogueNameIndex;
         }
 
         /*
