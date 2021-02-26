@@ -54,34 +54,45 @@ public class ScriptToDialogue {
 
         int startDialogueNameIndex = 0;
         int endDialogueNameIndex = 0;
+        int startAI_OutputIndex = 0;
+        int startDialogueIndex = 0;
         int count = 0;
-        String findStr = "instance ";
-        String findStr2 = " (C_INFO)";
+        String findStrInstance = "instance ";
+        String findStrC_INFO = " (C_INFO)";
+        String findStrAI_Output = "AI_Output(";
         String textInput = script;
         String npcName = "";
         String dialogueName = "";
 
         while (startDialogueNameIndex != -1) {
-            startDialogueNameIndex = textInput.indexOf(findStr, startDialogueNameIndex);
-            System.out.println("Znalazłem instance w indeksie: " + startDialogueNameIndex);
-            endDialogueNameIndex = textInput.indexOf(findStr2, startDialogueNameIndex);
-            System.out.println("Znalazłem (C_INFO) w indeksie: " + endDialogueNameIndex);
+            startDialogueNameIndex = textInput.indexOf(findStrInstance, startDialogueNameIndex);
+            //System.out.println("Znalazłem instance w indeksie: " + startDialogueNameIndex);
+
+            endDialogueNameIndex = textInput.indexOf(findStrC_INFO, endDialogueNameIndex);
+            //System.out.println("Znalazłem (C_INFO) w indeksie: " + endDialogueNameIndex);
+
+            startAI_OutputIndex = textInput.indexOf(findStrAI_Output, startAI_OutputIndex);
+            //System.out.println("Znalazłem AI_Output w indeksie: " + startAI_OutputIndex);
 
 
 
 
             if(startDialogueNameIndex != -1){
                 count ++;
-                startDialogueNameIndex += findStr.length();
-                System.out.println("Ustawiam startDialogueNameIndex na: " + startDialogueNameIndex);
-                endDialogueNameIndex += findStr2.length();
-                /*endDialogueNameIndex = textInput.indexOf(findStr2, endDialogueNameIndex);
-                endDialogueNameIndex -= findStr2.length();*/
-                npcName = textInput.substring(startDialogueNameIndex + 4, endDialogueNameIndex - findStr2.length());
+                startDialogueNameIndex += findStrInstance.length();
+                //System.out.println("Ustawiam startDialogueNameIndex na: " + startDialogueNameIndex);
+                endDialogueNameIndex += findStrC_INFO.length();
+                /*endDialogueNameIndex = textInput.indexOf(findStrC_INFO, endDialogueNameIndex);
+                endDialogueNameIndex -= findStrC_INFO.length();*/
+                npcName = textInput.substring(startDialogueNameIndex + 4, endDialogueNameIndex - findStrC_INFO.length());
                 //dialogueName = textInput.substring(endDialogueNameIndex -5, endDialogueNameIndex + 15);
-                System.out.println("A: <" + npcName + "> D: " + dialogueName + ":");
-                String[] parts = npcName.split("_");
-                System.out.println(parts[0] + parts[1]);
+
+                String[] dialogueparts = npcName.split("_");
+                System.out.println();
+                System.out.print("///////////////////////////////////////////////////////////////////////" + "\n");
+                System.out.print("////////////////  " + dialogueparts[0] + " " + dialogueparts[1]  + "\n");
+                System.out.println("///////////////////////////////////////////////////////////////////////" + "\n");
+                System.out.println("A: " + dialogueparts[0] + " D: " + dialogueparts[1] + ":");
                 }
             }
             endDialogueNameIndex = startDialogueNameIndex;
