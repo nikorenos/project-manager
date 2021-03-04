@@ -8,7 +8,8 @@ public class ScriptToDialogue {
 
     public static void main(String[] args) {
 
-        String script = "///////////////////////////////////////////////////////\n" +
+        String script = "\n" +
+                "///////////////////////////////////////////////////////\n" +
                 "//////////////  Morris trip\n" +
                 "///////////////////////////////////////////////////////\n" +
                 "\n" +
@@ -55,14 +56,22 @@ public class ScriptToDialogue {
         int startDialogueNameIndex = 0;
         int endDialogueNameIndex = 0;
         int startAI_OutputIndex = 0;
+        int startAI_OutputIndexPrevious = 0;
         int startDialogueIndex = 0;
+        int startDialogueIndexPrevious = 0;
+        int emptyLineIndex = 0;
         int count = 0;
+        int count2 = 0;
         String findStrInstance = "instance ";
         String findStrC_INFO = " (C_INFO)";
         String findStrAI_Output = "AI_Output(";
-        String textInput = script;
+        String findStrDialogueStart = "); //";
+        String findStrEmptyLine = "    \t\n";
+        String textInput = script + findStrAI_Output;
         String dialogueName = "";
         String speaker = "";
+        String text = "";
+        String emptyLine = "";
 
         while (startDialogueNameIndex != -1) {
             startDialogueNameIndex = textInput.indexOf(findStrInstance, startDialogueNameIndex);
@@ -91,18 +100,39 @@ public class ScriptToDialogue {
                 System.out.print("////////////////  " + dialogueparts[0] + " " + dialogueparts[1]  + "\n");
                 System.out.println("///////////////////////////////////////////////////////////////////////" + "\n");
                 System.out.println("A: " + dialogueparts[0] + " D: " + dialogueparts[1] + ":");
+                System.out.println();
                 }
 
                 while (startAI_OutputIndex != -1) {
                     startAI_OutputIndex = textInput.indexOf(findStrAI_Output, startAI_OutputIndex);
-                    //System.out.println("Znalazłem AI_Output w indeksie: " + startAI_OutputIndex);
+                    startDialogueIndex = textInput.indexOf(findStrDialogueStart, startDialogueIndex);
+                    //emptyLineIndex = textInput.indexOf(findStrEmptyLine, emptyLineIndex);
 
                     if (startAI_OutputIndex != -1) {
-
+                        count2++;
                         startAI_OutputIndex += findStrAI_Output.length();
-                        speaker = textInput.substring(startAI_OutputIndex, startAI_OutputIndex + 5);
-                        System.out.println(speaker);
+                        startDialogueIndex += findStrDialogueStart.length();
+                        //emptyLineIndex += findStrEmptyLine.length();
+
+                        if (count2 == 1) {
+
+                        } else {
+                            speaker = textInput.substring(startAI_OutputIndexPrevious, startAI_OutputIndexPrevious + 5);
+                            text = textInput.substring(startDialogueIndexPrevious, startAI_OutputIndex -13);
+                            //emptyLine = textInput.substring(emptyLineIndex, emptyLineIndex + 5);
+
+                            if (speaker.equals("other")) {
+                                System.out.print("H: ");
+                            } else {
+                                System.out.print("N: ");
+                            }
+
+                            System.out.println("!" + text + "!");
+                            //System.out.println("<" + emptyLine + ">");
+                        }
                     }
+                    startAI_OutputIndexPrevious = startAI_OutputIndex;
+                    startDialogueIndexPrevious = startDialogueIndex;
                 }
             }
             endDialogueNameIndex = startAI_OutputIndex;
