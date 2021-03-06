@@ -29,6 +29,30 @@ public class ScriptToDialogue {
         return data;
     }
 
+    public String scriptToText(File obj) {
+        System.out.println("scripteToDialogue");
+        String data = "";
+        Scanner myReader = null;
+        try {
+            myReader = new Scanner(obj);
+        } catch (FileNotFoundException e) {
+            System.out.println("An error scripteToDialogue.");
+            e.printStackTrace();
+        }
+        while (myReader.hasNextLine()) {
+            if (myReader.nextLine().contains("instance")) {
+                data = data +  myReader.nextLine() + "\n";
+            }
+
+            if (myReader.nextLine().contains("AI_Output(")) {
+                data = data +  myReader.nextLine() + "\n";
+            }
+        }
+        myReader.close();
+
+        return data;
+    }
+
     public void stringIntoDialogue(String script) {
         int startDialogueNameIndex = 0;
         int endDialogueNameIndex = 0;
