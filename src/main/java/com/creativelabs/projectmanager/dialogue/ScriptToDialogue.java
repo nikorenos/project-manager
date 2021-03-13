@@ -7,7 +7,7 @@ public class ScriptToDialogue {
 
     public String[] convertInstance(String line) {
         String[] dialogueparts = null;
-        String dialogueName = "";
+        String dialogueName;
         int startDialogueNameIndex = 0;
         int endDialogueNameIndex = 0;
         String findStrInstance = "instance ";
@@ -25,6 +25,29 @@ public class ScriptToDialogue {
             }
         }
         return dialogueparts;
+    }
+
+    public String convertEntry(String line) {
+        int startMissionIndex = 0;
+        int startEntryIndex = 0;
+        String findStrStartMission = "NOTE";
+        String findStrEntry = "\", \"";
+        String questName = "";
+        String entry = "";
+
+        while (startMissionIndex != -1) {
+            startMissionIndex = line.indexOf(findStrStartMission, startMissionIndex);
+            startEntryIndex = line.indexOf(findStrEntry, startEntryIndex);
+
+            if (startMissionIndex != -1) {
+                startMissionIndex += findStrStartMission.length();
+                startEntryIndex += findStrEntry.length();
+                int endIndex = line.length();
+                questName = line.substring(startMissionIndex + 3, startEntryIndex - 4);
+                entry = line.substring(startEntryIndex, endIndex - 3);
+            }
+        }
+        return "[b]Quest:[/b] " + questName + " [b]Entry:[/b] " + entry;
     }
 
     public String convertStartMission(String line) {
@@ -65,8 +88,8 @@ public class ScriptToDialogue {
             if (startAI_OutputIndex != -1) {
                 startAI_OutputIndex += findStrAI_Output.length();
                 startDialogueIndex += findStrDialogueStart.length();
-                int endIndex = line.length();
-                speaker = line.substring(startAI_OutputIndex, endIndex);
+                speaker = line.substring(startAI_OutputIndex, startAI_OutputIndex + 5);
+                System.out.println(speaker);
                 if (speaker.equals("other")) {
                     speaker = "H: ";
                 } else {
@@ -81,6 +104,8 @@ public class ScriptToDialogue {
     public static void main(String[] args) {
 
         String path = "C:/input.d";
+        String startMission = "START_MISSION";
+        String note = "NOTE";
         File file = new File(path);
         ScriptToDialogue scriptToDialogue = new ScriptToDialogue();
         String dialoguePath = "C:/dialogue.d";
@@ -110,9 +135,14 @@ public class ScriptToDialogue {
                     writeDialogue.write(dialogueLine + "\n");
                 }
 
-                if (line.contains("START_MISSION")) {
+                if (line.contains(startMission)) {
                     String startMissionLine = scriptToDialogue.convertStartMission(line);
                     writeDialogue.write("\n" + startMissionLine + "\n" + "\n");
+                }
+
+                if (line.contains(note)) {
+                    String entryLine = scriptToDialogue.convertEntry(line);
+                    writeDialogue.write("\n" + entryLine + "\n" + "\n");
                 }
 
                 line = reader.readLine();
