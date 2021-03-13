@@ -27,6 +27,29 @@ public class ScriptToDialogue {
         return dialogueparts;
     }
 
+    public String convertStartMission(String line) {
+        int startMissionIndex = 0;
+        int startEntryIndex = 0;
+        String findStrStartMission = "START_MISSION";
+        String findStrEntry = "\", \"";
+        String questName = "";
+        String entry = "";
+
+        while (startMissionIndex != -1) {
+            startMissionIndex = line.indexOf(findStrStartMission, startMissionIndex);
+            startEntryIndex = line.indexOf(findStrEntry, startEntryIndex);
+
+            if (startMissionIndex != -1) {
+                startMissionIndex += findStrStartMission.length();
+                startEntryIndex += findStrEntry.length();
+                int endIndex = line.length();
+                questName = line.substring(startMissionIndex + 3, startEntryIndex - 4);
+                entry = line.substring(startEntryIndex, endIndex - 3);
+            }
+        }
+        return "[b]StartQuest:[/b] " + questName + " [b]Entry:[/b] " + entry;
+    }
+
     public String convertAIOutput(String line) {
         int startAI_OutputIndex = 0;
         int startDialogueIndex = 0;
@@ -78,13 +101,18 @@ public class ScriptToDialogue {
                     writeDialogue.write("///////////////////////////////////////////////////////////////////////" + "\n");
                     writeDialogue.write("////////////////  " + dialogueparts[0] + " " + dialogueparts[1] + "\n");
                     writeDialogue.write("///////////////////////////////////////////////////////////////////////" + "\n");
-                    writeDialogue.write("A: " + dialogueparts[0] + " D: " + dialogueparts[1] + ":");
+                    writeDialogue.write("[b]A: " + dialogueparts[0] + " D: " + dialogueparts[1] + ":[/b]");
                     writeDialogue.write("\n");
                     writeDialogue.write("\n");
                 }
                 if (line.contains("AI_Output")) {
                     String dialogueLine = scriptToDialogue.convertAIOutput(line);
                     writeDialogue.write(dialogueLine + "\n");
+                }
+
+                if (line.contains("START_MISSION")) {
+                    String startMissionLine = scriptToDialogue.convertStartMission(line);
+                    writeDialogue.write("\n" + startMissionLine + "\n" + "\n");
                 }
 
                 line = reader.readLine();
