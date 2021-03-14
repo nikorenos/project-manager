@@ -27,10 +27,37 @@ public class ScriptToDialogue {
         return dialogueparts;
     }
 
+    public String convertChoices(String line) {
+        int startString1 = 0;
+        int startString2 = 0;
+        int startString3 = 0;
+        String findString = ",\"";
+        String findString2 = "\",";
+        String findString3 = ");";
+        String option = "";
+        String optionNumber = "";
+
+        while (startString1 != -1) {
+            startString1 = line.indexOf(findString, startString1);
+            startString2 = line.indexOf(findString2, startString2);
+            startString3 = line.indexOf(findString3, startString3);
+
+            if (startString1 != -1) {
+                startString1 += findString.length();
+                startString2 += findString2.length();
+                option = line.substring(startString1, startString2 - 2);
+                optionNumber = line.substring(startString3 - 1, startString3);
+            }
+        }
+        return "C" + optionNumber + ": " + option;
+    }
+
     public String convertMissionEntry(String line, String findString) {
         int startMissionIndex = 0;
         int startEntryIndex = 0;
+        int findStr2Index = 0;
         String findStrEntry = "\", \"";
+        String findStr2 = "\");";
         String questName = "";
         String entry = "";
         String beginning = "[b]StartQuest:[/b] ";
@@ -38,13 +65,13 @@ public class ScriptToDialogue {
         while (startMissionIndex != -1) {
             startMissionIndex = line.indexOf(findString, startMissionIndex);
             startEntryIndex = line.indexOf(findStrEntry, startEntryIndex);
+            findStr2Index = line.indexOf(findStr2, findStr2Index);
 
             if (startMissionIndex != -1) {
                 startMissionIndex += findString.length();
                 startEntryIndex += findStrEntry.length();
-                int endIndex = line.length();
                 questName = line.substring(startMissionIndex + 3, startEntryIndex - 4);
-                entry = line.substring(startEntryIndex, endIndex - 3);
+                entry = line.substring(startEntryIndex, findStr2Index);
             }
         }
         if (findString.equals("NOTE")) {
@@ -72,7 +99,6 @@ public class ScriptToDialogue {
                 startAI_OutputIndex += findStrAI_Output.length();
                 startDialogueIndex += findStrDialogueStart.length();
                 speaker = line.substring(startAI_OutputIndex, startAI_OutputIndex + 5);
-                System.out.println(speaker);
                 if (speaker.equals("other")) {
                     speaker = "H: ";
                 } else {
@@ -83,6 +109,26 @@ public class ScriptToDialogue {
         }
         return speaker + text;
     }
+
+    public String convertExp(String line) {
+        int startString1 = 0;
+        int startString2 = 0;
+        String findString = "(";
+        String findString2 = ")";
+        String number = "";
+
+        while (startString1 != -1) {
+            startString1 = line.indexOf(findString, startString1);
+            startString2 = line.indexOf(findString2, startString2);
+
+            if (startString1 != -1) {
+                startString1 += findString.length();
+                number = line.substring(startString1, startString2);
+            }
+        }
+        return "EXP+" + number;
+    }
+
 
     public static void main(String[] args) {
 
@@ -131,6 +177,22 @@ public class ScriptToDialogue {
                 if (line.contains(closeMission)) {
                     String entryLine = scriptToDialogue.convertMissionEntry(line, closeMission);
                     writeDialogue.write("\n" + entryLine + "\n");
+                }
+                if (line.contains("Info_AddChoice")) {
+                    String entryChoice = scriptToDialogue.convertChoices(line);
+                    writeDialogue.write("\n" + entryChoice);
+                }
+
+                for (int i = 1; i < 11; i++) {
+                    if (line.contains("_" + i +" ")) {
+                        String entrySection = "S" + i + ":";
+                        writeDialogue.write("\n" + entrySection + "\n");
+                    }
+                }
+
+                if (line.contains("B_GivePlayerXP")) {
+                    String entryChoice = scriptToDialogue.convertExp(line);
+                    writeDialogue.write("\n" + entryChoice);
                 }
 
                 line = reader.readLine();
