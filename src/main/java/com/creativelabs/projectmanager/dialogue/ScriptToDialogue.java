@@ -60,7 +60,7 @@ public class ScriptToDialogue {
         String findStr2 = "\");";
         String questName = "";
         String entry = "";
-        String beginning = "[b]StartQuest:[/b] ";
+        String beginning = "[color=orange][b]StartQuest:[/b] ";
 
         while (startMissionIndex != -1) {
             startMissionIndex = line.indexOf(findString, startMissionIndex);
@@ -75,12 +75,12 @@ public class ScriptToDialogue {
             }
         }
         if (findString.equals("NOTE")) {
-            beginning = "[b]Quest:[/b] ";
+            beginning = "[color=orange][b]Quest:[/b] ";
         }
         if (findString.equals("CLOSE_MISSION")) {
-            beginning = "[b]Close Quest:[/b] ";
+            beginning = "[color=orange][b]Close Quest:[/b] ";
         }
-        return beginning + questName + " [b]Entry:[/b] " + entry;
+        return beginning + questName + " [b]Entry:[/b] " + entry + "[/color]";
     }
 
     public String convertAIOutput(String line) {
@@ -100,11 +100,12 @@ public class ScriptToDialogue {
                 startDialogueIndex += findStrDialogueStart.length();
                 speaker = line.substring(startAI_OutputIndex, startAI_OutputIndex + 5);
                 if (speaker.equals("other")) {
-                    speaker = "H: ";
+                    speaker = "[color=green]H: ";
+                    text = line.substring(startDialogueIndex) + "[/color]";
                 } else {
                     speaker = "N: ";
+                    text = line.substring(startDialogueIndex);
                 }
-                text = line.substring(startDialogueIndex);
             }
         }
         return speaker + text;
