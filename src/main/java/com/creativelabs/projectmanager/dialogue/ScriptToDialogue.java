@@ -27,50 +27,33 @@ public class ScriptToDialogue {
         return dialogueparts;
     }
 
-    public String convertEntry(String line) {
+    public String convertMissionEntry(String line, String findString) {
         int startMissionIndex = 0;
         int startEntryIndex = 0;
-        String findStrStartMission = "NOTE";
         String findStrEntry = "\", \"";
         String questName = "";
         String entry = "";
+        String beginning = "[b]StartQuest:[/b] ";
 
         while (startMissionIndex != -1) {
-            startMissionIndex = line.indexOf(findStrStartMission, startMissionIndex);
+            startMissionIndex = line.indexOf(findString, startMissionIndex);
             startEntryIndex = line.indexOf(findStrEntry, startEntryIndex);
 
             if (startMissionIndex != -1) {
-                startMissionIndex += findStrStartMission.length();
+                startMissionIndex += findString.length();
                 startEntryIndex += findStrEntry.length();
                 int endIndex = line.length();
                 questName = line.substring(startMissionIndex + 3, startEntryIndex - 4);
                 entry = line.substring(startEntryIndex, endIndex - 3);
             }
         }
-        return "[b]Quest:[/b] " + questName + " [b]Entry:[/b] " + entry;
-    }
-
-    public String convertStartMission(String line) {
-        int startMissionIndex = 0;
-        int startEntryIndex = 0;
-        String findStrStartMission = "START_MISSION";
-        String findStrEntry = "\", \"";
-        String questName = "";
-        String entry = "";
-
-        while (startMissionIndex != -1) {
-            startMissionIndex = line.indexOf(findStrStartMission, startMissionIndex);
-            startEntryIndex = line.indexOf(findStrEntry, startEntryIndex);
-
-            if (startMissionIndex != -1) {
-                startMissionIndex += findStrStartMission.length();
-                startEntryIndex += findStrEntry.length();
-                int endIndex = line.length();
-                questName = line.substring(startMissionIndex + 3, startEntryIndex - 4);
-                entry = line.substring(startEntryIndex, endIndex - 3);
-            }
+        if (findString.equals("NOTE")) {
+            beginning = "[b]Quest:[/b] ";
         }
-        return "[b]StartQuest:[/b] " + questName + " [b]Entry:[/b] " + entry;
+        if (findString.equals("CLOSE_MISSION")) {
+            beginning = "[b]Close Quest:[/b] ";
+        }
+        return beginning + questName + " [b]Entry:[/b] " + entry;
     }
 
     public String convertAIOutput(String line) {
@@ -105,7 +88,8 @@ public class ScriptToDialogue {
 
         String path = "C:/input.d";
         String startMission = "START_MISSION";
-        String note = "NOTE";
+        String entry = "NOTE";
+        String closeMission = "CLOSE_MISSION";
         File file = new File(path);
         ScriptToDialogue scriptToDialogue = new ScriptToDialogue();
         String dialoguePath = "C:/dialogue.d";
@@ -136,13 +120,17 @@ public class ScriptToDialogue {
                 }
 
                 if (line.contains(startMission)) {
-                    String startMissionLine = scriptToDialogue.convertStartMission(line);
-                    writeDialogue.write("\n" + startMissionLine + "\n" + "\n");
+                    String startMissionLine = scriptToDialogue.convertMissionEntry(line, startMission);
+                    writeDialogue.write("\n" + startMissionLine + "\n");
                 }
 
-                if (line.contains(note)) {
-                    String entryLine = scriptToDialogue.convertEntry(line);
-                    writeDialogue.write("\n" + entryLine + "\n" + "\n");
+                if (line.contains(entry)) {
+                    String entryLine = scriptToDialogue.convertMissionEntry(line, entry);
+                    writeDialogue.write("\n" + entryLine + "\n");
+                }
+                if (line.contains(closeMission)) {
+                    String entryLine = scriptToDialogue.convertMissionEntry(line, closeMission);
+                    writeDialogue.write("\n" + entryLine + "\n");
                 }
 
                 line = reader.readLine();
