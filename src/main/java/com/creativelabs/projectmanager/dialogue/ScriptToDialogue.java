@@ -130,6 +130,44 @@ public class ScriptToDialogue {
         return "EXP+" + number;
     }
 
+    public String convertGiveItem(String line) {
+        int startString1 = 0;
+        int startString2 = 0;
+        String findString1 = "self,";
+        String findString2 = ")";
+        String item = "";
+
+        while (startString1 != -1) {
+            startString1 = line.indexOf(findString1, startString1);
+            startString2 = line.indexOf(findString2, startString2);
+
+            if (startString1 != -1) {
+                startString1 += findString1.length();
+                item = line.substring(startString1, startString2);
+            }
+        }
+        return "[color=purple]GivenItem: " + item + "[/color]";
+    }
+
+    public String convertReceivedItem(String line) {
+        int startString1 = 0;
+        int startString2 = 0;
+        String findString1 = "(";
+        String findString2 = ")";
+        String item = "";
+
+        while (startString1 != -1) {
+            startString1 = line.indexOf(findString1, startString1);
+            startString2 = line.indexOf(findString2, startString2);
+
+            if (startString1 != -1) {
+                startString1 += findString1.length();
+                item = line.substring(startString1, startString2);
+            }
+        }
+        return "[color=purple]ReceivedItem: " + item + "[/color]";
+    }
+
 
     public static void main(String[] args) {
 
@@ -194,6 +232,14 @@ public class ScriptToDialogue {
                 if (line.contains("B_GivePlayerXP")) {
                     String entryChoice = scriptToDialogue.convertExp(line);
                     writeDialogue.write("\n" + entryChoice);
+                }
+                if (line.contains("B_GiveInvItems")) {
+                    String item = scriptToDialogue.convertGiveItem(line);
+                    writeDialogue.write(item + "\n");
+                }
+                if (line.contains("Create_And_Give")) {
+                    String item = scriptToDialogue.convertReceivedItem(line);
+                    writeDialogue.write(item + "\n");
                 }
 
                 line = reader.readLine();
