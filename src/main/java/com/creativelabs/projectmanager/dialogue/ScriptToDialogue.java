@@ -190,12 +190,12 @@ public class ScriptToDialogue {
 
             while (line != null) {
                 if (line.contains("instance")) {
-                    String[] dialogueparts = scriptToDialogue.convertInstance(line);
+                    String[] dialogueParts = scriptToDialogue.convertInstance(line);
                     writeDialogue.write("\n");
                     writeDialogue.write("///////////////////////////////////////////////////////////////////////" + "\n");
-                    writeDialogue.write("////////////////  " + dialogueparts[0] + " " + dialogueparts[1] + "\n");
+                    writeDialogue.write("////////////////  " + dialogueParts[0] + " " + dialogueParts[1] + "\n");
                     writeDialogue.write("///////////////////////////////////////////////////////////////////////" + "\n");
-                    writeDialogue.write("[b]A: " + dialogueparts[0] + " D: " + dialogueparts[1] + ":[/b]");
+                    writeDialogue.write("[b]A: " + dialogueParts[0] + " D: " + dialogueParts[1] + ":[/b]");
                     writeDialogue.write("\n");
                     writeDialogue.write("\n");
                 }
