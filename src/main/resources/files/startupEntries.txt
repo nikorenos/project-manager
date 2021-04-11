@@ -1,3 +1,1 @@
 
-Wld_InsertNpc 		(BDT_771_Bandit_M, "BANDITCAMP050");
-Wld_InsertNpc 		(SLD_773_Hunter_M, "HUNTER001");

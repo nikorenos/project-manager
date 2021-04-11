@@ -662,6 +662,7 @@ public class Manager extends Application {
         grid.add(amountTextField, 10, 1);
         grid.add(idTitle, 10, 2);
         grid.add(idTextField, 10, 3);
+        grid.add(btnCreateTask, 10, 12);
 
 
 
@@ -1372,9 +1373,9 @@ public class Manager extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         Stage newBoard = new Stage();
-        //createBoard();
+        createBoard();
         //createNewProject(newBoard);
-        signUser();
+        //signUser();
 
 
 

@@ -76,7 +76,7 @@ public class CreateNpc {
         String startupEntry = "Wld_InsertNpc \t\t(" + npcName + ", \"" + npcName.toUpperCase() + "\");";
 
         try {
-            String npcPath = "D:/Program Files/JoWood/Gothic2ZlotaEdycja/_Work/data/Scripts/Content/" +
+            String npcPath = "D:/Program Files (x86)/JoWood/Gothic2ZlotaEdycja/_Work/data/Scripts/Content/" +
                     "Story/NPC/SAM_" + npcGuild + "_" + npcId  + "_" + npcName +".d";
             FileWriter myWriter = new FileWriter(npcPath);
             myWriter.write(npcScript);

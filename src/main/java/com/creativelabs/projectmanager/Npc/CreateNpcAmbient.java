@@ -34,17 +34,17 @@ public class CreateNpcAmbient {
 
         for (int n = 1; n <= amount; n++) {
 
-            String name = "NAME_HUNTER";
+            String name = "NAME_LUMBERJACK";
             String npcGuild = "SLD";
-            String npcName = npcGuild + "_" + npcId + "_Hunter_M";
-            String waypoint = "HUNTER001";
+            String npcName = "LUMBERJACK_" + npcId + "_Ambient_MainCamp";
+            String waypoint = "LUMBERJACK001";
             int SetAttributesToChapter = 3;
             int voice = 1 + n;
-            String fight_tactic = "MASTER"; // MASTER / STRONG / COWARD
+            String fight_tactic = "STRONG"; // MASTER / STRONG / COWARD
             String weapon = "iron_dagger"; //ItMw_2h_Sld_Axe iron_mastersword
-            String armor = "Hunter"; //ITAR_BDT_H ITAR_BDT_M ItAr_Leather_L itar_prisoner
+            String armor = "ITAR_Lumberjack_01"; //ITAR_BDT_H ITAR_BDT_M ItAr_Leather_L itar_prisoner
             String Mdl_ApplyOverlayMds = "Relaxed"; // Tired / Militia / Mage / Arrogance / Relaxed
-            int FightSkills = 45;
+            int FightSkills = 35;
             String routine = "TA_Stand_Eating"; //TA_Smalltalk TA_Practice_Sword TA_Sit_Bench
 
             String npcScript = "\n" +
@@ -99,8 +99,8 @@ public class CreateNpcAmbient {
 
             try {
                 //create npc
-                String npcPath = "D:/Program Files/JoWood/Gothic2ZlotaEdycja/_Work/data/Scripts/Content/" +
-                        "Story/NPC/SAM_" + npcName + ".d";
+                String npcPath = "D:/Program Files (x86)/JoWood/Gothic2ZlotaEdycja/_Work/data/Scripts/Content/" +
+                        "Story/NPC/" + npcName + ".d";
                 FileWriter myWriter = new FileWriter(npcPath);
                 myWriter.write(npcScript);
 
@@ -137,7 +137,7 @@ public class CreateNpcAmbient {
     public static void main(String[] args) {
 
         CreateNpcAmbient createNpcAmbient = new CreateNpcAmbient();
-        createNpcAmbient.createNPC(1,773);
+        createNpcAmbient.createNPC(10,1);
 
     }
 }
