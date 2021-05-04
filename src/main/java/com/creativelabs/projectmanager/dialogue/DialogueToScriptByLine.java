@@ -5,7 +5,7 @@ import java.io.*;
 public class DialogueToScriptByLine {
 
     public String[] convertDialogueStart(String line) {
-        String[] dialogueparts = null;
+        String[] dialogueParts = null;
         String dialogueName;
         int startDialogueIndex = 0;
         String findStrInstance = "Dialogue: ";
@@ -16,10 +16,31 @@ public class DialogueToScriptByLine {
             if (startDialogueIndex != -1) {
                 startDialogueIndex += findStrInstance.length();
                 dialogueName = line.substring(startDialogueIndex);
-                dialogueparts = dialogueName.split("-");
+                dialogueParts = dialogueName.split("-");
             }
         }
-        return dialogueparts;
+        return dialogueParts;
+    }
+    
+    public String[] convertEntry(String line) {
+        String[] entryParts = null;
+        int questNameIndex = 0;
+        int entryIndex = 0;
+        String findStr1 = "Quest: ";
+        String findStr2 = "Entry: ";
+
+        while (questNameIndex != -1) {
+            questNameIndex = line.indexOf(findStr1, questNameIndex);
+            entryIndex = line.indexOf(findStr2, entryIndex);
+
+            if (questNameIndex != -1) {
+                questNameIndex += findStr1.length();
+                entryParts[0] = line.substring(questNameIndex, entryIndex-1);
+                entryParts[1] = line.substring(entryIndex+findStr2.length());
+
+            }
+        }
+        return entryParts;
     }
 
 
