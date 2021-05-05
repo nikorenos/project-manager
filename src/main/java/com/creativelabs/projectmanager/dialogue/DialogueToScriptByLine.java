@@ -54,8 +54,10 @@ public class DialogueToScriptByLine {
         int dialogueCounter = 0;
         int choiceCounter = 0;
         int sectionCounter = 0;
-        String npcName = "null";
-        String dialogueName = "null";
+        String npcName = "";
+        String dialogueName = "";
+        String previousNpcName = "";
+        String previousDialogueName = "";
 
         BufferedReader reader;
         try {
@@ -79,6 +81,9 @@ public class DialogueToScriptByLine {
                         if (instanceCounter > 1) {
                             writeDialogue.write("};");
                             writeDialogue.write("\n\n");
+                        } else {
+                            previousNpcName = npcName;
+                            previousDialogueName = dialogueName;
                         }
                         writeDialogue.write("///////////////////////////////////////////////////////////////////////" + "\n");
                         writeDialogue.write("////////////////  " + npcName + " " + dialogueName  + "\n");
@@ -95,11 +100,13 @@ public class DialogueToScriptByLine {
                         writeDialogue.write("};" + "\n");
                         writeDialogue.write("func int DIA_" + npcName + "_" + dialogueName + "_Condition ()" + "\n");
                         writeDialogue.write("{" + "\n");
-                        writeDialogue.write("if (Npc_KnowsInfo (other, Dia_" + npcName + "_"+ dialogueName + "))" + "\n");
+                        writeDialogue.write("if (Npc_KnowsInfo (other, Dia_" + previousNpcName + "_"+ previousDialogueName + "))" + "\n");
                         writeDialogue.write("\t{ return TRUE; };\t" + "\n");
                         writeDialogue.write("};" + "\n");
                         writeDialogue.write("func void DIA_" + npcName + "_" + dialogueName + "_Info ()" + "\n");
                         writeDialogue.write("{" + "\n");
+                        previousNpcName = npcName;
+                        previousDialogueName = dialogueName;
                     }
                     if (line.startsWith("H: ")) {
                         dialogueCounter+=1;
