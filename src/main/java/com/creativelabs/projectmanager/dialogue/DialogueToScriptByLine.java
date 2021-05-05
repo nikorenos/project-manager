@@ -21,23 +21,20 @@ public class DialogueToScriptByLine {
         }
         return dialogueParts;
     }
-    
+
     public String[] convertEntry(String line) {
         String[] entryParts = null;
         int questNameIndex = 0;
-        int entryIndex = 0;
         String findStr1 = "Quest: ";
-        String findStr2 = "Entry: ";
+        String entry;
 
         while (questNameIndex != -1) {
             questNameIndex = line.indexOf(findStr1, questNameIndex);
-            entryIndex = line.indexOf(findStr2, entryIndex);
 
             if (questNameIndex != -1) {
                 questNameIndex += findStr1.length();
-                entryParts[0] = line.substring(questNameIndex, entryIndex-1);
-                entryParts[1] = line.substring(entryIndex+findStr2.length());
-
+                entry = line.substring(questNameIndex);
+                entryParts = entry.split(" Entry: ");
             }
         }
         return entryParts;
@@ -58,6 +55,8 @@ public class DialogueToScriptByLine {
         String dialogueName = "";
         String previousNpcName = "";
         String previousDialogueName = "";
+        String questName;
+        String questEntry;
 
         BufferedReader reader;
         try {
@@ -100,8 +99,8 @@ public class DialogueToScriptByLine {
                         writeDialogue.write("};" + "\n");
                         writeDialogue.write("func int DIA_" + npcName + "_" + dialogueName + "_Condition ()" + "\n");
                         writeDialogue.write("{" + "\n");
-                        writeDialogue.write("if (Npc_KnowsInfo (other, Dia_" + previousNpcName + "_"+ previousDialogueName + "))" + "\n");
-                        writeDialogue.write("\t{ return TRUE; };\t" + "\n");
+                        writeDialogue.write("\tif (Npc_KnowsInfo (other, Dia_" + previousNpcName + "_"+ previousDialogueName + "))" + "\n");
+                        writeDialogue.write("\t\t{ return TRUE; };\t" + "\n");
                         writeDialogue.write("};" + "\n");
                         writeDialogue.write("func void DIA_" + npcName + "_" + dialogueName + "_Info ()" + "\n");
                         writeDialogue.write("{" + "\n");
@@ -129,6 +128,32 @@ public class DialogueToScriptByLine {
                         }
                     }
 
+                    if (line.startsWith("StartQuest")) {
+                        String[] entryParts = dialogue.convertEntry(line);
+                        questName = entryParts[0];
+                        questEntry = entryParts[1];
+                        writeDialogue.write("\n");
+                        writeDialogue.write("\tSTART_MISSION(" + questName + ", \"" + questEntry + "\");");
+                        writeDialogue.write("\n");
+                    }
+
+                    if (line.startsWith("Quest")) {
+                        String[] entryParts = dialogue.convertEntry(line);
+                        questName = entryParts[0];
+                        questEntry = entryParts[1];
+                        writeDialogue.write("\n");
+                        writeDialogue.write("\tENTRY_MISSION(" + questName + ", \"" + questEntry + "\");");
+                        writeDialogue.write("\n");
+                    }
+                    if (line.startsWith("FinishQuest")) {
+                        String[] entryParts = dialogue.convertEntry(line);
+                        questName = entryParts[0];
+                        questEntry = entryParts[1];
+                        writeDialogue.write("\n");
+                        writeDialogue.write("\tCLOSE_MISSION(" + questName + ", \"" + questEntry + "\");");
+                        writeDialogue.write("\n");
+                    }
+
                     if (line.startsWith("C")) {
                         choiceCounter+=1;
                         System.out.println("choice: " + choiceCounter);
@@ -148,6 +173,8 @@ public class DialogueToScriptByLine {
                         writeDialogue.write("{");
                         writeDialogue.write("\tInfo_ClearChoices(Dia_" + npcName + "_" + dialogueName + ");" + "\n");
                     }
+
+
 
 
 
