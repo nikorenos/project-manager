@@ -99,8 +99,12 @@ public class DialogueToScriptByLine {
                         writeDialogue.write("};" + "\n");
                         writeDialogue.write("func int DIA_" + npcName + "_" + dialogueName + "_Condition ()" + "\n");
                         writeDialogue.write("{" + "\n");
-                        writeDialogue.write("\tif (Npc_KnowsInfo (other, Dia_" + previousNpcName + "_"+ previousDialogueName + "))" + "\n");
-                        writeDialogue.write("\t\t{ return TRUE; };\t" + "\n");
+                        if (instanceCounter > 1) {
+                            writeDialogue.write("\tif (Npc_KnowsInfo (other, Dia_" + previousNpcName + "_" + previousDialogueName + "))" + "\n");
+                            writeDialogue.write("\t\t{ return TRUE; };\t" + "\n");
+                        } else {
+                            writeDialogue.write("\treturn TRUE; \t" + "\n");
+                        }
                         writeDialogue.write("};" + "\n");
                         writeDialogue.write("func void DIA_" + npcName + "_" + dialogueName + "_Info ()" + "\n");
                         writeDialogue.write("{" + "\n");
@@ -151,6 +155,11 @@ public class DialogueToScriptByLine {
                         questEntry = entryParts[1];
                         writeDialogue.write("\n");
                         writeDialogue.write("\tCLOSE_MISSION(" + questName + ", \"" + questEntry + "\");");
+                        writeDialogue.write("\n");
+                    }
+                    if (line.startsWith("EXP")) {
+                        String exp = line.substring(4);
+                        writeDialogue.write("\tB_GivePlayerXP (" + exp + ");");
                         writeDialogue.write("\n");
                     }
 
