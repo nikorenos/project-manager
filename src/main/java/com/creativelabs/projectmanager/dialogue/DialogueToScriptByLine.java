@@ -40,6 +40,24 @@ public class DialogueToScriptByLine {
         return entryParts;
     }
 
+    public String[] convertItem(String line) {
+        String[] itemParts = null;
+        int itemNameIndex = 0;
+        String findStr1 = "Item: ";
+        String entry;
+
+        while (itemNameIndex != -1) {
+            itemNameIndex = line.indexOf(findStr1, itemNameIndex);
+
+            if (itemNameIndex != -1) {
+                itemNameIndex += findStr1.length();
+                entry = line.substring(itemNameIndex);
+                itemParts = entry.split(",");
+            }
+        }
+        return itemParts;
+    }
+
 
     public static void main(String[] args) {
 
@@ -133,16 +151,14 @@ public class DialogueToScriptByLine {
                     }
 
                     if (line.startsWith("GivenItem")) {
-                        String item = line.substring(11, line.length()-2);
-                        String amount = line.substring(line.length()-1);
-                        writeDialogue.write("\tGive_And_Remove(" + item + "," + amount +");");
+                        String[] itemParts = dialogue.convertItem(line);
+                        writeDialogue.write("\tGive_And_Remove(" + itemParts[0] + "," + itemParts[1] + ");");
                         writeDialogue.write("\n");
                     }
 
                     if (line.startsWith("ReceivedItem")) {
-                        String item = line.substring(14, line.length()-2);
-                        String amount = line.substring(line.length()-1);
-                        writeDialogue.write("\tCreate_And_Give(" + item + "," + amount +");");
+                        String[] itemParts = dialogue.convertItem(line);
+                        writeDialogue.write("\tCreate_And_Give(" + itemParts[0] + "," + itemParts[1] + ");");
                         writeDialogue.write("\n");
                     }
 
