@@ -132,6 +132,20 @@ public class DialogueToScriptByLine {
                         }
                     }
 
+                    if (line.startsWith("GivenItem")) {
+                        String item = line.substring(11, line.length()-2);
+                        String amount = line.substring(line.length()-1);
+                        writeDialogue.write("\tGive_And_Remove(" + item + "," + amount +");");
+                        writeDialogue.write("\n");
+                    }
+
+                    if (line.startsWith("ReceivedItem")) {
+                        String item = line.substring(14, line.length()-2);
+                        String amount = line.substring(line.length()-1);
+                        writeDialogue.write("\tCreate_And_Give(" + item + "," + amount +");");
+                        writeDialogue.write("\n");
+                    }
+
                     if (line.startsWith("StartQuest")) {
                         String[] entryParts = dialogue.convertEntry(line);
                         questName = entryParts[0];
