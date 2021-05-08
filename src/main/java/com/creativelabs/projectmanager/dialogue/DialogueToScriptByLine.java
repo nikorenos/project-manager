@@ -162,7 +162,7 @@ public class DialogueToScriptByLine {
                         writeDialogue.write("\n");
                     }
 
-                    if (line.startsWith("StartQuest")) {
+                    if (line.startsWith("BeginQuest")) {
                         String[] entryParts = dialogue.convertEntry(line);
                         questName = entryParts[0];
                         questEntry = entryParts[1];
