@@ -213,10 +213,6 @@ public class DialogueToScriptByLine {
                         writeDialogue.write("\tInfo_ClearChoices(Dia_" + npcName + "_" + dialogueName + ");" + "\n");
                     }
 
-
-
-
-
                     line = reader.readLine();
                 }
                 writeDialogue.write("};");
