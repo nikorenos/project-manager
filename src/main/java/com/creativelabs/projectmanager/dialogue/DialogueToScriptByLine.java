@@ -150,6 +150,11 @@ public class DialogueToScriptByLine {
                         }
                     }
 
+                    if (line.startsWith("//")) {
+                        writeDialogue.write("\t" + line);
+                        writeDialogue.write("\n");
+                    }
+
                     if (line.startsWith("GivenItem")) {
                         String[] itemParts = dialogue.convertItem(line);
                         writeDialogue.write("\tGive_And_Remove(" + itemParts[0] + "," + itemParts[1] + ");");
