@@ -58,13 +58,8 @@ public class DialogueToScriptByLine {
         return itemParts;
     }
 
-
-    public static void main(String[] args) {
-
-        String path = "C:/input.d";
-        File file = new File(path);
-        DialogueToScriptByLine dialogue = new DialogueToScriptByLine();
-        String dialoguePath = "C:/dialogue.d";
+    public void writeScript(String dialoguePath, String scriptPath) {
+        File file = new File(dialoguePath);
         int instanceCounter = 0;
         int dialogueCounter = 0;
         int choiceCounter = 0;
@@ -83,7 +78,7 @@ public class DialogueToScriptByLine {
 
             try {
 
-                FileWriter writeDialogue = new FileWriter(dialoguePath);
+                FileWriter writeDialogue = new FileWriter(scriptPath);
 
                 while (line != null) {
                     if (line.startsWith("Dialogue: ")) {
@@ -91,7 +86,7 @@ public class DialogueToScriptByLine {
                         dialogueCounter = 0;
                         choiceCounter = 0;
                         sectionCounter = 0;
-                        String[] dialogueParts = dialogue.convertDialogueStart(line);
+                        String[] dialogueParts = convertDialogueStart(line);
                         npcName = dialogueParts[0];
                         dialogueName = dialogueParts[1];
 
@@ -137,7 +132,6 @@ public class DialogueToScriptByLine {
                         } else{
                             writeDialogue.write("\tAI_Output (other, self, \"DIA_" + npcName + "_" + dialogueName + "_15_" + dialogueCounter + "\"); //" + dialogueLine + "\n");
                         }
-
                     }
 
                     if (line.startsWith("N: ")) {
@@ -156,19 +150,19 @@ public class DialogueToScriptByLine {
                     }
 
                     if (line.startsWith("GivenItem")) {
-                        String[] itemParts = dialogue.convertItem(line);
+                        String[] itemParts = convertItem(line);
                         writeDialogue.write("\tGive_And_Remove(" + itemParts[0] + "," + itemParts[1] + ");");
                         writeDialogue.write("\n");
                     }
 
                     if (line.startsWith("ReceivedItem")) {
-                        String[] itemParts = dialogue.convertItem(line);
+                        String[] itemParts = convertItem(line);
                         writeDialogue.write("\tCreate_And_Give(" + itemParts[0] + "," + itemParts[1] + ");");
                         writeDialogue.write("\n");
                     }
 
                     if (line.startsWith("BeginQuest")) {
-                        String[] entryParts = dialogue.convertEntry(line);
+                        String[] entryParts = convertEntry(line);
                         questName = entryParts[0];
                         questEntry = entryParts[1];
                         writeDialogue.write("\n");
@@ -177,7 +171,7 @@ public class DialogueToScriptByLine {
                     }
 
                     if (line.startsWith("Quest")) {
-                        String[] entryParts = dialogue.convertEntry(line);
+                        String[] entryParts = convertEntry(line);
                         questName = entryParts[0];
                         questEntry = entryParts[1];
                         writeDialogue.write("\n");
@@ -185,7 +179,7 @@ public class DialogueToScriptByLine {
                         writeDialogue.write("\n");
                     }
                     if (line.startsWith("FinishQuest")) {
-                        String[] entryParts = dialogue.convertEntry(line);
+                        String[] entryParts = convertEntry(line);
                         questName = entryParts[0];
                         questEntry = entryParts[1];
                         writeDialogue.write("\n");
@@ -232,5 +226,12 @@ public class DialogueToScriptByLine {
             System.out.println("An error with dialogue occurred.");
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) {
+        DialogueToScriptByLine dialogue = new DialogueToScriptByLine();
+        String dialoguePath = "C:/input.d";
+        String scriptPath = "C:/dialogue.d";
+        dialogue.writeScript(dialoguePath, scriptPath);
     }
 }
