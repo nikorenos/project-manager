@@ -34,17 +34,17 @@ public class CreateNpcAmbient {
 
         for (int n = 1; n <= amount; n++) {
 
-            String name = "NAME_LUMBERJACK";
-            String npcGuild = "SLD";
-            String npcName = "LUMBERJACK_" + npcId + "_Ambient_MainCamp";
-            String waypoint = "LUMBERJACK001";
+            String name = "NAME_Buerger";
+            String npcGuild = "VLK";
+            String npcName = "CITY_" + npcId + "_CITIZEN_Ambient";
+            String waypoint = "CITY";
             int SetAttributesToChapter = 3;
             int voice = 1 + n;
-            String fight_tactic = "STRONG"; // MASTER / STRONG / COWARD
-            String weapon = "iron_dagger"; //ItMw_2h_Sld_Axe iron_mastersword
-            String armor = "ITAR_Lumberjack_01"; //ITAR_BDT_H ITAR_BDT_M ItAr_Leather_L itar_prisoner
+            String fight_tactic = "COWARD"; // MASTER / STRONG / COWARD
+            String weapon = "itmw_1h_bau_axe"; //ItMw_2h_Sld_Axe iron_mastersword
+            String armor = "ITAR_VLK_M2"; //ITAR_BDT_H ITAR_BDT_M ItAr_Leather_L itar_prisoner
             String Mdl_ApplyOverlayMds = "Relaxed"; // Tired / Militia / Mage / Arrogance / Relaxed
-            int FightSkills = 35;
+            int FightSkills = 45;
             String routine = "TA_Stand_Eating"; //TA_Smalltalk TA_Practice_Sword TA_Sit_Bench
 
             String npcScript = "\n" +
@@ -55,10 +55,10 @@ public class CreateNpcAmbient {
                     "\tguild \t\t= GIL_" + npcGuild + ";\n" +
                     "\tid \t\t\t= " + npcId + ";\n" +
                     "\tvoice \t\t= " + voice + ";\n" +
-                    "\tflags      \t= 0;\n" +
-                    "\tnpctype\t\t= NPCTYPE_AMBIENT;\n" +
+                    "\tflags      \t= NPC_FLAG_IMMORTAL;\n" +
+                    "\tnpctype\t\t= NPCTYPE_MAIN;\n" +
                     "\t\n" +
-                    "\t//---aivars-----\n" +
+                    "\t// ------ Aivars ------\n" +
                     "\t//aivar[AIV_NewsOverride] = TRUE;\n" +
                     "\t\n" +
                     "\t// ------ Attribute ------\n" +
@@ -74,8 +74,8 @@ public class CreateNpcAmbient {
                     "\tB_CreateAmbientInv (self); \n" +
                     "\t\n" +
                     "\t// ------ visuals ------\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n" +
-                    "\tB_SetNpcVisual \t\t(self, MALE, \"Hum_Head_Pony\", Face_N_NormalBart_Senyan, BodyTex_N, " + armor + ");\t\n" +
-                    "\tMdl_SetModelFatness\t(self, 0.5);\n" +
+                    "\tB_SetNpcVisual \t\t(self, MALE, \"Hum_Head_Bald\", Face_N_NormalBart_Senyan, BodyTex_N, " + armor + ");\t\n" +
+                    "\tMdl_SetModelFatness\t(self, 1.0);\n" +
                     "\tMdl_ApplyOverlayMds\t(self, \"Humans_" + Mdl_ApplyOverlayMds + ".mds\"); \n" +
                     "\n" +
                     "\t// ------ NSC-relevante Talente vergeben ------\n" +
@@ -103,25 +103,24 @@ public class CreateNpcAmbient {
                         "Story/NPC/" + npcName + ".d";
                 FileWriter myWriter = new FileWriter(npcPath);
                 myWriter.write(npcScript);
-
                 myWriter.close();
 
 
                 //create npc entry in startup
-                String startupEntryPath = "src/main/resources/files/startupEntries.txt";
-                File startupEntryPath2 = new File("src/main/resources/files/startupEntries.txt");
+                /*String startupEntryPath = "src/main/resources/files/startupEntries.txt";
+                File startupEntryFile = new File(startupEntryPath);
 
-                ArrayList<String> startupEntriesList = startupEntriesList(startupEntryPath2);
-                startupEntriesList.add(startupEntry);
-                FileWriter myWriterStartup = new FileWriter(startupEntryPath);
+                ArrayList<String> startupEntriesList = startupEntriesList(startupEntryFile);
+                startupEntriesList.add(startupEntryPath);
+                //FileWriter myWriterStartup = new FileWriter(startupEntryPath);
 
                 for (String entry : startupEntriesList) {
-                    myWriterStartup.write(entry + "\n");
-                    //System.out.println(entry);
-                }
-                myWriterStartup.close();
+                    //myWriterStartup.write(entry + "\n");
+                    System.out.println(entry);
+                }*/
+                //myWriterStartup.close();
 
-                System.out.println("Successfully wrote to the file.");
+                //System.out.println("Successfully wrote to the file.");
             } catch (IOException e) {
                 System.out.println("An error occurred.");
                 e.printStackTrace();
@@ -137,7 +136,7 @@ public class CreateNpcAmbient {
     public static void main(String[] args) {
 
         CreateNpcAmbient createNpcAmbient = new CreateNpcAmbient();
-        createNpcAmbient.createNPC(10,1);
+        createNpcAmbient.createNPC(30,40);
 
     }
 }
